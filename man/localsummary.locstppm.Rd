@@ -1,0 +1,69 @@
+\name{localsummary.locstppm}
+\alias{localsummary.locstppm}
+\title{Summary plots of the fitted coefficient of a local spatio-temporal Poisson process model}
+\usage{
+localsummary.locstppm(
+  x,
+  scaler = c("silverman", "IQR", "sd", "var"),
+  do.points = TRUE,
+  print.bw = FALSE,
+  zap = 1e-05,
+  par = TRUE
+)
+}
+\arguments{
+\item{x}{An object of class \code{locstppm}}
+
+\item{scaler}{Optional. Controls the value for a scalar representation of the
+spatial scale of the data.
+Either a character string, \code{"silverman"} (default), \code{"IQR"},
+ \code{"sd"}, or \code{"var"};
+or positive numeric value(s). See \link[sparr]{OS}.}
+
+\item{do.points}{Add points to plot}
+
+\item{print.bw}{It prints the estimated oversmoothing (\link[sparr]{OS}) bandwidth selector}
+
+\item{zap}{Noise threshold factor (default to 0.00001). A numerical value greater than or equal to 1.
+If the range of pixel values is less than \code{zap * .Machine$double.eps},
+ the image will be treated as constant. This avoids displaying images which
+ should be constant but contain small numerical errors.}
+
+\item{par}{Default to \code{TRUE}.}
+}
+\description{
+The function breaks up the contribution of the local estimates
+to the fitted intensity, by plotting the overall intensity and the
+density kernel smoothing of some artificial intensities, obtained by
+imputing the quartiles of the local parameters' distributions.
+}
+\value{No return value, called for side effects}
+\examples{
+\donttest{
+set.seed(2)
+pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
+             nsim = 1, seed = 2, verbose = TRUE)
+inh00_local <- locstppm(pin, formula = ~ 1)
+inh01_local <- locstppm(pin, formula = ~ x)
+
+localsummary.locstppm(inh00_local)
+localsummary.locstppm(inh01_local)
+
+}
+
+
+}
+\references{
+D'Angelo, N., Adelfio, G., and Mateu, J. (2023). Locally weighted minimum contrast estimation for spatio-temporal log-Gaussian Cox processes. Computational Statistics & Data Analysis, 180, 107679.
+
+Davies, T.M. and Hazelton, M.L. (2010). Adaptive kernel estimation of spatial relative risk, Statistics in Medicine, 29(23) 2423-2437.
+
+Terrell, G.R. (1990). The maximal smoothing principle in density estimation, Journal of the American Statistical Association, 85, 470-477.
+}
+\seealso{
+\link{locstppm}, \link{print.locstppm}, \link{summary.locstppm},
+\link{plot.locstppm}
+}
+\author{
+Nicoletta D'Angelo and Giada Adelfio
+}

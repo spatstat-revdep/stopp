@@ -1,0 +1,71 @@
+\name{plot.stlgcppm}
+\alias{plot.stlgcppm}
+\title{Plot of the fitted intensity of a LGCP model}
+\usage{
+\method{plot}{stlgcppm}(
+  x,
+  scaler = c("silverman", "IQR", "sd", "var"),
+  do.points = TRUE,
+  print.bw = FALSE,
+  zap = 1e-05,
+  par = TRUE,
+  ...
+)
+}
+\arguments{
+\item{x}{An object of class \code{stlgcppm}}
+
+\item{scaler}{Optional. Controls the value for a scalar representation of the
+spatial scale of the data.
+Either a character string, \code{"silverman"} (default), \code{"IQR"},
+ \code{"sd"}, or \code{"var"};
+or positive numeric value(s). See \link{OS}.}
+
+\item{do.points}{Add points to plot}
+
+\item{print.bw}{It prints the estimated oversmoothing (\link{OS}) bandwidth selector}
+
+\item{zap}{Noise threshold factor (default to 0.00001). A numerical value greater than or equal to 1.
+If the range of pixel values is less than \code{zap * .Machine$double.eps},
+ the image will be treated as constant. This avoids displaying images which
+ should be constant but contain small numerical errors.}
+
+\item{par}{Default to \code{TRUE}.}
+
+\item{...}{additional unused argument}
+}
+\description{
+The function plots the fitted intensity, displayed both in space and in space and time.
+ In the case of local covariance parameters, the function returns the
+ mean of the random intensity, displayed both in space and in space and time.
+}
+\value{No return value, called for side effects}
+\examples{
+\donttest{
+# Example with complex seismic point pattern
+data("greececatalog")
+
+lgcp2 <- stlgcppm(greececatalog, formula = ~ x, first = "local", second = "global")
+plot(lgcp2)
+
+}
+
+
+
+}
+\references{
+D'Angelo, N., Adelfio, G., and Mateu, J. (2023). Locally weighted minimum contrast estimation for spatio-temporal log-Gaussian Cox processes. Computational Statistics & Data Analysis, 180, 107679.
+
+Davies, T.M. and Hazelton, M.L. (2010), Adaptive kernel estimation of spatial relative risk, Statistics in Medicine, 29(23) 2423-2437.
+
+Siino, M., Adelfio, G., and Mateu, J. (2018). Joint second-order parameter estimation for spatio-temporal log-Gaussian Cox processes. Stochastic environmental research and risk assessment, 32(12), 3525-3539.
+
+Terrell, G.R. (1990). The maximal smoothing principle in density estimation, Journal of the American Statistical Association, 85, 470-477.
+}
+\seealso{
+\link{stlgcppm}, \link{print.stlgcppm}, \link{summary.stlgcppm},
+\link{localsummary.stlgcppm}, \link{localplot.stlgcppm}
+}
+\author{
+Nicoletta D'Angelo and Giada Adelfio
+}

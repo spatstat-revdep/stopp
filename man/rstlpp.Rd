@@ -1,0 +1,74 @@
+\name{rstlpp}
+\alias{rstlpp}
+\title{Simulate homogeneous and inhomogeneous spatio-temporal Poisson point patterns on linear networks}
+\usage{
+rstlpp(
+  lambda = 500,
+  nsim = 1,
+  seed = 2,
+  verbose = TRUE,
+  par = NULL,
+  minX = 0,
+  maxX = 1,
+  minY = 0,
+  maxY = 1,
+  minT = 0,
+  maxT = 1,
+  L
+)
+}
+\arguments{
+\item{lambda}{Expected number of points to simulate}
+
+\item{nsim}{Number of patterns to simulate. Default to 1.}
+
+\item{seed}{Seed to set, if ones wished to reproduce the analyses}
+
+\item{verbose}{Default to \code{TRUE}}
+
+\item{par}{Parameters of the reference intensity}
+
+\item{minX}{Minimum of x coordinate range}
+
+\item{maxX}{Maximum of x coordinate range}
+
+\item{minY}{Minimum of y coordinate range}
+
+\item{maxY}{Maximum of y coordinate range}
+
+\item{minT}{Minimum of t coordinate range}
+
+\item{maxT}{Maximum of t coordinate range}
+
+\item{L}{linear network}
+}
+\value{
+A \code{stp} object
+}
+\description{
+This function creates a \code{stlp} object, simulating a  spatio-temporal point pattern on
+a linear network
+ following either an
+homogeneous or inhomogeneous intensity
+}
+\examples{
+\donttest{
+
+# homogeneous Poisson processes
+
+h1 <- rstlpp(lambda = 500, nsim = 1, seed = 2, verbose = TRUE,
+L = chicagonet)
+
+h2 <- rstlpp(lambda = 50, nsim = 1, seed = 2, verbose = TRUE, L = stlnpp::easynet)
+
+# inhomogeneous Poisson process
+
+inh <- rstlpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(4, 1.5),
+nsim = 1, seed = 2, verbose = TRUE, L = stlnpp::easynet)
+}
+
+
+}
+\author{
+Nicoletta D'Angelo
+}
