@@ -42,58 +42,20 @@ spatio-temporal point pattern data occurring on the same linear network,
 D'Angelo et al. (2021).
 }
 \details{
-The test detects local differences between  \eqn{\textbf{x}} and \eqn{\textbf{z}}
-occurring on the same space-time region.
-This procedure was firstly introduced in Moraga and Montes (2011), extended in
-the spatio-temporal context by Siino at al, (2018). Finally,
- test has been made suitable also for spatio-temporal point patterns
-with spatial domain coinciding with a linear network by D'Angelo et al. (2021).
-
-
-In general, for each point \eqn{(\textbf{u},t)} in the spatio-temporal observed
-point pattern \eqn{\textbf{x}}, we test
-\deqn{
-\begin{cases}
-\mathcal{H}_{0}: & \text{no difference in the second-order local  structure of }  (\textbf{u},t) \quad   \text{   w.r.t  } \quad \{  \{  \textbf{x} \setminus    (\textbf{u},t)   \} \cup  \textbf{z} \}\\
-\mathcal{H}_{1}: &  \text{significant difference in the second-order local  }   \text{structure of} (\textbf{u},t) \quad \text{   w.r.t  } \quad \{  \{  \textbf{x} \setminus    (\textbf{u},t)   \} \cup  \textbf{z} \}
-\end{cases}}
-
-The sketch of the test is as follows:
-
-
-1. Set \eqn{k} as the number of permutations
-
-2. For each point  \eqn{(\textbf{u}_i,t_i) \in \textbf{x}, i = 1, \ldots, n}:
-
-2.1. Estimate the LISTA function  \eqn{\hat{L}^{(i)}(r,h)}
-  and Compute the local  deviation test
-  \eqn{T^i=\int_{0}^{t_0} \int_{0}^{r_0} \Big(
-    \hat{L}^{(i)}(r,h)- \hat{L}^{-(i)}_{H_0}(r,h)
-    \Big)^2 \text{d}r \text{d}h,
-  }
-    where  \eqn{\hat{L}^{-(i)}_{H_0}(r,h)}
-     is the LISTA function for the \eqn{i^{th}} point,
-      averaged over the \eqn{j=1,\dots,k} permutations
-
-2.2 Compute a \eqn{p}-value as
-      \eqn{p^i=\sum_{j=1}^{k}  \textbf{1}(T^{i,j}_{H_0} \geq T^i)/k}
-
-
-   The test ends providing a vector \eqn{p} of  \eqn{p}- values, one for each point
-   in \eqn{\textbf{x}}.
+The test detects local differences between two observed spatio-temporal point patterns occurring on the same space-time region.
 
  If the test is  performed for spatio-temporal point patterns as in
    Siino et al. (2018), that is, on an object of class \code{stp}, the LISTA
-   functions \eqn{\hat{L}^{(i)}} employed are the local functions of
+   functions employed are the local functions of
    Adelfio et al. (2020), documented in
  \link{KLISTAhat} and \link{LISTAhat} of the \code{stpp} package (Gabriel et al, 2013).
 
  If the function is applied to a \code{stlp} object, that is, on two spatio-temporal
  point patterns observed on the same linear network \code{L}, the LISTA function
-\eqn{\hat{L}^{(i)}} used are the ones proposed in D'Angelo et al. (2021), documented
+used are the ones proposed in D'Angelo et al. (2021), documented
 in  \link{localSTLKinhom} and \link{localSTLginhom}.
 
-Details on the performance of the test are found in Siino et al. (2018) and
+Details on the test and its performance are found in Siino et al. (2018) and
 D'Angelo et al. (2021), for Euclidean and network spaces, respectively.
 }
 \examples{
@@ -145,8 +107,6 @@ Adelfio, G., Siino, M., Mateu, J., and Rodríguez-Cortés, F. J. (2020). Some pr
 D’Angelo, N., Adelfio, G., and Mateu, J. (2021). Assessing local differences between the spatio-temporal second-order structure of two point patterns occurring on the same linear network. Spatial Statistics, 45, 100534.
 
 Gabriel, E., Rowlingson, B. S., and Diggle, P. J. (2013). stpp: An R Package for Plotting, Simulating and Analyzing Spatio-Temporal Point Patterns. Journal of Statistical Software, 53(2), 1–29. https://doi.org/10.18637/jss.v053.i02
-
-Moraga, P. and Montes, F. (2011). Detection of spatial disease clusters with lisa functions. Statistics in Medicine, 30(10):1057–1071
 
 Siino, M., Rodríguez‐Cortés, F. J., Mateu, J. ,and Adelfio, G. (2018). Testing for local structure in spatiotemporal point pattern data. Environmetrics, 29(5-6), e2463.
 }

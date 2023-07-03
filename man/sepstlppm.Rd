@@ -24,6 +24,5 @@ Fit a separable spatio-temporal Poisson process model on a linear network
 mod1 <- sepstlppm(valenciacrimes[1:2500, ], spaceformula = ~x,
 timeformula = ~ crime_hour + week_day, L = valencianet)
 
-
 }
 }

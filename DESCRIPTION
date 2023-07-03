@@ -1,8 +1,8 @@
 Package: stopp
 Title: Spatio-Temporal Point Pattern Methods, Model Fitting,
         Diagnostics, Simulation, Local Tests
-Version: 0.1.0
-Date: 2023-02-24
+Version: 0.1.1
+Date: 2023-07-03
 Type: Package
 Authors@R: c(person(given = "Nicoletta", family = "D'Angelo", email = "nicoletta.dangelo@unipa.it", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8878-5986")),
 	     person(given = "Giada", family = "Adelfio", role = "aut", comment = c(ORCID = "0000-0002-3194-4296")))
@@ -22,6 +22,6 @@ Maintainer: Nicoletta D'Angelo <nicoletta.dangelo@unipa.it>
 RoxygenNote: 7.2.3
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2023-02-24 10:22:22 UTC; nicol
+Packaged: 2023-07-03 08:38:11 UTC; nicol
 Repository: CRAN
-Date/Publication: 2023-02-24 19:30:02 UTC
+Date/Publication: 2023-07-03 08:50:02 UTC

@@ -1,4 +1,6 @@
 \name{stopp-package}
+\alias{stopp}
+\alias{stopp-package}
 \title{Spatio-Temporal Point Pattern Methods, Model Fitting, Diagnostics, Simulation, Local Tests}
 \description{
 Toolbox for different kinds of spatio-temporal analyses to be performed on observed point patterns, following the growing stream of literature on point process theory. This R package implements functions to perform different kinds of analyses on point processes, proposed in the papers: Siino, Adelfio, and Mateu (2018), Siino et al. (2018), Adelfio et al. (2020), D’Angelo, Adelfio, and Mateu (2021), D’Angelo, Adelfio, and Mateu (2022), and D’Angelo, Adelfio, and Mateu (2023). The main topics include modeling, statistical inference, and simulation issues on spatio-temporal point processes on Euclidean space and linear networks.

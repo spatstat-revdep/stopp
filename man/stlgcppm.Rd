@@ -88,33 +88,8 @@ Cox process is fitted by means of the *joint minimum contrast* procedure propose
 Siino et al. (2018).
 }
 \details{
-Following the inhomogeneous specification in Diggle et al. (2013),
-we consider LGCPs with intensity
-\deqn{
-\Lambda(\textbf{u},t)=\lambda(\textbf{u},t)\exp(S(\textbf{u},t)).
-}
-
-Following Siino et al. (2018), the second-order
-parameters \eqn{\boldsymbol{\psi}} are found by minimising
-\deqn{  M_J\{ \boldsymbol{\psi}\}=\int_{h_0}^{h_{max}} \int_{r_0}^{r_{max}} \phi(r,h) \{\nu[\hat{J}(r,h)]-\nu[J(r,h;\boldsymbol{\psi})]\}^2 \text{d}r \text{d}h,
-} where \eqn{\phi(r, h)} is a weight that depends on the space-time
-distance and \eqn{\nu} is a transformation function.
-
-They suggest \eqn{\phi(r,h)=1} and \eqn{\nu} as
-the identity function, while \eqn{r_{max}} and \eqn{h_{max}} are selected as 1/4
-of the maximum observable spatial and temporal distances.
-
-Following D'Angelo et al. (2023), we can fit a localised version of the LGCP,
-that is,  obtain a
-vector of parameters \eqn{\boldsymbol{\psi}_i} for each point \eqn{i}, by
-minimising \deqn{
-  M_{J,i}\{ \boldsymbol{\psi}_i \}=\int_{h_0}^{h_{max}}\int_{r_0}^{r_{max}}
-   \phi(r,h) \{ \nu[\bar{J}_i(r,h)]-\nu[J(r,h;\boldsymbol{\psi})]\}^2 \text{d}r \text{d}h,
-} where \eqn{ \bar{J}_i(r,h)= \frac{\sum_{i=1}^{n}\hat{J}_i(r,h)w_i}{\sum_{i=1}^{n}w_i}} is the average of the local functions
-\eqn{\hat{J}_i(r,h)}, weighted by some point-wise kernel estimates.
-
-  In particular, we consider \eqn{\hat{J}_i(\cdot)} as the local
-spatio-temporal pair correlation function (Gabriel et al, 2013) documented in \link{LISTAhat}.
+We consider the local
+spatio-temporal pair correlation function of Gabriel et al. (2013), documented  in \link{LISTAhat}, as the local characteristics used in the fitting procedure.
 }
 \examples{
 

@@ -58,12 +58,7 @@ An object of class \code{locstppm}. A list of
 \description{
 This function fits a Poisson process model to an observed spatio-temporal
 point pattern stored in a \code{stp} object, that is, a Poisson model with
-a set of parameters \eqn{\theta_i} for each point \eqn{i}.
-
-We assume that the template model is a Poisson process, with a parametric
-intensity or rate function \eqn{\lambda(\textbf{u}, t; \theta_i)}  with space
-and time locations \eqn{\textbf{u} \in
-W,  t \in T} and parameters \eqn{\theta_i \in \Theta.}
+a set of parameters for each point.
 
 Estimation is performed through the fitting of a \code{glm} using a localized
 version of the quadrature scheme by Berman and Turner (1992), firstly introduced
@@ -73,60 +68,8 @@ framework by D'Angelo et al. (2023).
 See the 'Details' section.
 }
 \details{
-The local log-likelihood associated with the  spatio-temporal location
-\eqn{(\textbf{v},s)} is given by
-\deqn{
-\log L((\textbf{v},s);\theta) = \sum_i w_{\sigma_s}(\textbf{u}_i - \textbf{v}) w_{\sigma_t}(t_i - s)
-\lambda(\textbf{u}_i, t_i; \theta)  - \int_W \int_T
-\lambda(\textbf{u}, t; \theta) w_{\sigma_s}(\textbf{u}_i - \textbf{v}) w_{\sigma_t}(t_i - s) \text{d}t \text{d}u
-}
-where \eqn{w_{\sigma_s}} and \eqn{w_{\sigma_t}} are weight functions, and
-\eqn{\sigma_s, \sigma_t > 0} are the smoothing bandwidths. It is not
-necessary to assume that \eqn{w_{\sigma_s}} and \eqn{w_{\sigma_t}}
- are probability densities. For simplicity, we shall consider only kernels of fixed
-bandwidth, even though spatially adaptive kernels could also be used.
-
-Note that if the template model is the homogeneous Poisson process with intensity
-\eqn{\lambda}, then the local
-likelihood estimate \eqn{\hat{\lambda}(\textbf{v}, s)}
-reduces to the kernel estimator of the point process intensity with
-kernel proportional to \eqn{w_{\sigma_s}w_{\sigma_t}}.
-
-We now use an  approximation similar to
-\eqn{
-\log L(\theta) \approx
-\sum_j
-a_j
-(y_j \log \lambda(\textbf{u}_j, t_j; \theta) - \lambda(\textbf{u}_j, t_j; \theta))
-+
-  \sum_j
-a_j,}
-but for the local log-likelihood associated
-with each desired location \eqn{(\textbf{v},s) \in W \times T}, that is:
-  \deqn{
-\log L((\textbf{v},s); \theta) \approx
-\sum_j
-w_j(\textbf{v},s)a_j
-(y_j \log \lambda(\textbf{u}_j,t_j; \theta) - \lambda(\textbf{u}_j,t_j; \theta))
-+
-  \sum_j
-w_j(\textbf{v},s)a_j   ,}
-where \eqn{w_j(\textbf{v},s) = w_{\sigma_s}(\textbf{v} - \textbf{u}_j)
-w_{\sigma_t}(s - t_j)}.
-
-Basically, for each
-desired location \eqn{(\textbf{v},s)},
- we replace the vector of quadrature weights \eqn{a_j} by
- \eqn{a_j(\textbf{v},s)= w_j(\textbf{v},s)a_j} where
-\eqn{w_j (\textbf{v},s) = w_{\sigma_s}(\textbf{v} - \textbf{u}_j)w_{\sigma_t}(s - t_j)},
- and use the GLM software to fit the Poisson regression.
-
-The local likelihood is defined at any location \eqn{(\textbf{v},s)} in continuous space.
-In practice it is sufficient to
-consider a grid of points \eqn{(\textbf{v},s)}.
-
-We refer to D'Angelo et al. (2023) for further discussion on bandwidth selection
-and on computational costs.
+We refer to D'Angelo et al. (2023) for model fitting details and further discussion on bandwidth selection
+and computational costs.
 }
 \examples{
 

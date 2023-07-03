@@ -53,54 +53,7 @@ and \link{infl}
 functions.
 }
 \details{
-Adelfio et al. (2020) derived the expectation of the local
-inhomogeneous spatio-temporal K-function, under the Poisson case:
-\eqn{\mathbb{E}[\hat{K}^i(r,h) ]= \pi r^ 2 h.}
-
-Moreover, they found that when the local estimator is weighted by the true
- intensity function,
- its
-expectation, \eqn{\mathbb{E}[\hat{K}_{I}^i(r,h)]}, is the same as the expectation of
-\eqn{\hat{K}^i(r,h)}.
-
-These results motivate the usage of such local estimator
-\eqn{\hat{K}_{I}^i(r,h)} as a diagnostic tool for general spatio-temporal
-point processes for assessing the goodness-of-fit of spatio-temporal
-point processes of any generic first-order
-intensity function \eqn{\lambda}.
-
-Indeed, if the estimated intensity function
-used for weighting in our proposed LISTA functions is
-the true one, then the LISTA functions should behave as the
-corresponding ones of a homogeneous Poisson process,
-resulting in small discrepancies between the two.
-
-Therefore, this function computes such discrepancies
-by means of the \eqn{\chi_i^2} values, obtained following the expression
-\deqn{
-  \chi_i^2=\int_L \int_T \Bigg(
-    \frac{\big(\hat{K}^i_{I}(r,h)- \mathbb{E}[\hat{K}^i(r,h) ]
-    \big)^2}{\mathbb{E}[\hat{K}^i(r,h) ]}
-    \Bigg) \text{d}h \text{d}r ,
-  }
-    one for each point in the point pattern.
-
-Basically, departures of the LISTA functions \eqn{\hat{K}_{I}^i(r,h)} from
-the Poisson expected value \eqn{rh} directly suggest the unsuitability of
-the intensity function \eqn{\lambda(\cdot)} used in the weighting of the
-LISTA functions for that specific point. This can be referred to as  an *outlying point*.
-
-
-Given that D'Angelo et al. (2022) proved the same results for the network case,
-that is,
-\eqn{\mathbb{E}[\hat{K}_{L}^i(r,h) ]= rh} and
- \eqn{\mathbb{E}[\hat{K}_{L,I}^i(r,h) ]=\mathbb{E}[\hat{K}_{L}^i(r,h) ] }
-when \eqn{\hat{K}_{L,I}^i(r,h) } is weighted by the true intensity function,
-we implemented the same above-mentioned diagnostics procedure to work on
-intensity functions fitted on spatio-temporal point patterns occurring on
-linear networks.
-
-Note that the Euclidean procedure is implemented by the
+The Euclidean procedure is implemented by the
 local K-functions of
    Adelfio et al. (2020), documented in
  \link{KLISTAhat} of the \code{stpp} package (Gabriel et al, 2013).
