@@ -4,8 +4,10 @@
 #'
 #' @description
 #' This function simulates a spatio-temporal ETAS
-#' (Epidemic Type Aftershock Sequence) process on a linear network.
-#' It is firstly introduced ans employed for simulation studies in D'Angelo et al. (2021).
+#' (Epidemic Type Aftershock Sequence) process on a linear network
+#'  as a \code{stpm} object.
+#'  
+#' It is firstly introduced and employed for simulation studies in D'Angelo et al. (2021).
 #'
 #' It follows the generating scheme for simulating a pattern from an
 #' Epidemic Type Aftershocks-Sequences (ETAS) process
@@ -15,8 +17,6 @@
 #'
 #' The simulation on the network is guaranteed by the homogeneous spatial
 #' Poisson processes being generated on the network.
-#'
-#' See the 'Details' section.
 #'
 #'
 #' @details
@@ -59,8 +59,7 @@
 #' values of magnitude are surely recorded in the catalogue.
 #'
 #'
-#' @param cat NULL
-#' @param params A vector of parameters of the ETAS model to be simulated.
+#' @param pars A vector of parameters of the ETAS model to be simulated.
 #'  See the 'Details' section.
 #' @param betacov Numerical array. Parameters of the covariates ETAS model
 #' @param m0 Parameter for the background general intensity of the ETAS model.
@@ -69,15 +68,13 @@
 #' @param b 1.0789
 #' @param t.lag 200
 #' @param tmin Minimum value of time.
-#' @param xmin Minimum of x coordinate range
-#' @param xmax Maximum of x coordinate range
-#' @param ymin Minimum of y coordinate range
-#' @param ymax Maximum of y coordinate range
-#' @param iprint Default \code{TRUE}
-#' @param covdiag Default \code{FALSE}
 #' @param covsim Default \code{FALSE}
 #' @param L linear network
-#' @return A \code{stlp} object
+#' @param all.marks Logical value indicating whether to store
+#' all the simulation information as marks in the \code{stlpm} object.
+#' If \code{FALSE} (default option) only the magnitude is returned.
+#' @param seed Seed to set, if ones wished to reproduce the analyses
+#' @return A \code{stlpm} object
 #' @export
 #'
 #' @author Nicoletta D'Angelo and Marcello Chiodi
@@ -86,14 +83,8 @@
 #' @examples
 #'
 #'\dontrun{
-#'L0 = domain(spatstat.data::chicago)
-#'set.seed(5)
-#'X <- rETASlp(cat = NULL, params = c(0.1293688525, 0.003696, 0.013362, 1.2,0.424466,  1.164793),
-#'                          betacov = 0.5, m0 = 2.5, b = 1.0789, tmin = 0, t.lag = 200,
-#'                          xmin = 600, xmax = 2200, ymin = 4000, ymax = 5300, iprint = TRUE,
-#'                          covdiag = FALSE, covsim = FALSE, L = L0)
-#'
-#'plot(X)
+#' X <- rETASlp(pars = c(0.1293688525, 0.003696, 0.013362, 1.2,0.424466,  1.164793),
+#'      seed = 95, L = chicagonet)
 #'}
 #'
 #' @references
@@ -104,36 +95,33 @@
 #' Ogata, Y., and Katsura, K. (1988). Likelihood analysis of spatial inhomogeneity for marked point patterns. Annals of the Institute of Statistical Mathematics, 40(1), 29-39.
 #'
 
-rETASlp <- function(cat=NULL
-                        , params = c(0.078915, 0.003696,  0.013362,  1.2,0.424466,  1.164793)
+rETASlp <- function(pars = NULL
                         , betacov = 0.39
                         , m0 = 2.5
                         , b = 1.0789
                         , tmin = 0
                         , t.lag = 200
-                        , xmin = 600
-                        , xmax = 2200
-                        , ymin = 4000
-                        , ymax = 5300
-                        , iprint = TRUE
-                        , covdiag = FALSE
                         , covsim = FALSE
-                        , L){
+                        , L, all.marks = FALSE,
+                    seed = NULL){
+  set.seed(seed)
+  if(is.null(pars)) stop("Please provide some parameters")
+  
+  cat = NULL
 
   xmin = L$window$xrange[1]
   xmax = L$window$xrange[2]
   ymin = L$window$yrange[1]
   ymax = L$window$yrange[2]
 
-  mu	= params[1]
-  k0  	= params[2]
-  c   	= params[3]
-  p   	= params[4]
+  mu	= pars[1]
+  k0  	= pars[2]
+  c   	= pars[3]
+  p   	= pars[4]
   gamma   =0
-  d       = params[5]
-  q       = params[6]
+  d       = pars[5]
+  q       = pars[6]
   ncov    = length(betacov)
-  covdiag =! covsim
   beta    = log(10) * b
   mm      = (ymax - ymin) / (xmax - xmin)
   qq      = ymin - mm * xmin
@@ -152,7 +140,6 @@ rETASlp <- function(cat=NULL
     lgen       = array(0, nstart)
     ind     = array(0, nstart)
     father  = array(0, nstart)
-
 
     tback   = runif(n0, tmin, tmax)
     rand <- spatstat.random::datagen.runifpointOnLines(n0, spatstat.geom::as.psp(L))
@@ -186,7 +173,6 @@ rETASlp <- function(cat=NULL
     i = 0
     while(!prod(cat.new$ind)){
       i   = i + 1
-      if (iprint & ((i %% 100) == 0)) print(c(i, cat.new$time[i]))
       cat.new$ind[i]  = TRUE
       pred            = (cat.new$magn1[i] - m0) * betacov[1]
       if (ncov > 1) pred = pred + cat.new$cov2[i] * betacov[2]
@@ -225,13 +211,18 @@ rETASlp <- function(cat=NULL
           cat.son = as.data.frame(cat.son)
           cat.new = rbind(cat.new, cat.son)
           cat.new = cat.new[order(cat.new$time), ]
+          colnames(cat.new)   = colnames(cat.son) 
 
         }
       }
     }
   }
   nson = nrow(cat.new) - n0
-   return(stp(cbind(cat.new$long, cat.new$lat, cat.new$time),  L))
-
-
+  cat.new[, 1:3] <- cat.new[c(2, 3, 1)]
+  if(all.marks){
+    return(stpm(cat.new, names = colnames(cat.new)[-c(1:3)], L = L))
+  } else {
+    return(stpm(cat.new[, 1:4], names = "Magnitude", L = L))
+  }
+   
 }

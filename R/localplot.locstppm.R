@@ -17,14 +17,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(2)
-#' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#'              nsim = 1, seed = 2, verbose = TRUE)
-#' inh00_local <- locstppm(pin, formula = ~ 1)
-#' inh01_local <- locstppm(pin, formula = ~ x)
-#'
-#' localplot.locstppm(inh00_local)
-#' localplot.locstppm(inh01_local)
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
+#'              par = c(0.005, 5), seed = 2)
+#' inh_local <- locstppm(inh, formula = ~ x)
+#' 
+#' localplot.locstppm(inh_local)
 #'
 #'}
 #'
@@ -36,8 +33,8 @@
 #'
 #'
 localplot.locstppm <- function(x, par = TRUE){
-  if(!any(class(x) == "locstppm")) stop("class(x) must be locstppm")
-
+  if (!inherits(x, c("locstppm"))) stop("x should be from class locstppm")
+  
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
 
@@ -82,7 +79,7 @@ localplot.locstppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = id,
                         xlab="x",ylab="y",zlab="t",
-                        main = names(x$IntCoefs_local)[i])#TeX(r"($\theta_t$)")
+                        main = names(x$IntCoefs_local)[i])
       par(mar = c(5, 4, 4, 2) + 0.1)
       if(par != TRUE){
         par(ask = FALSE)

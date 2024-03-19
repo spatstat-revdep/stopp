@@ -8,7 +8,7 @@
 #' @param par Parameters of the reference intensity
 #' @param nsim Number of patterns to simulate. Default to 1.
 #' @param seed Seed to set, if ones wished to reproduce the analyses
-#' @param verbose Default to \code{TRUE}
+#' @param verbose Default to \code{FALSE}
 #' @param minX Minimum of x coordinate range
 #' @param maxX Maximum of x coordinate range
 #' @param minY Minimum of y coordinate range
@@ -22,36 +22,36 @@
 #' @author Nicoletta D'Angelo
 #'
 #' @seealso
-#' \link{stppm}, \link{AIC.stppm}, \link{BIC.stppm}
+#' \link{stppm}
 #'
 #'
 #' @examples
 #' \dontrun{
 #'
 #' # homogeneous Poisson processes
-#' h1 <- rstpp(lambda = 500, nsim = 1, seed = 2, verbose = TRUE)
+#' h1 <- rstpp(lambda = 500, seed = 2)
 #'
-#' h2 <- rstpp(lambda = 500, nsim = 1, seed = 2, verbose = TRUE, minX = 0,
+#' h2 <- rstpp(lambda = 500, seed = 2, minX = 0,
 #'              maxX = 2, minY = 3, maxY = 5, minT = 1, maxT = 9)
 #'
 #' h3 <- rstpp(lambda = 900, nsim = 3, seed = 2, verbose = TRUE)
 #'
 #' # inhomogeneous Poisson process
 #' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#'              nsim = 1, seed = 2, verbose = TRUE)
+#'              seed = 2)
 #' }
 #'
-rstpp <- function(lambda = 500, nsim = 1, seed = 2, verbose = TRUE,  par = NULL,
+rstpp <- function(lambda = 500, nsim = 1, seed = NULL, verbose = FALSE,  par = NULL,
                   minX = 0, maxX = 1, minY = 0, maxY = 1, minT = 0, maxT = 1){
-
-
+  
+  
   if(is.numeric(lambda)){
     par <- log(lambda)
     lambda <- function(x,y,t, a) {exp(a[1])}
   }
-
+  
   if(nsim != 1){pp0 <- list(l = nsim)}
-
+  
   set.seed(seed)
   for(i in 1:nsim){
     if(verbose == T) progressreport(i, nsim)
@@ -74,8 +74,8 @@ rstpp <- function(lambda = 500, nsim = 1, seed = 2, verbose = TRUE,  par = NULL,
     } else {
       pp0 <- stp(cbind(lon, lat, t))
     }
-
+    
   }
-
+  
   return(pp0)
 }

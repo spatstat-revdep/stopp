@@ -23,7 +23,7 @@
 #' @author Nicoletta D'Angelo and Giada Adelfio
 #'
 #' @seealso
-#' \link{stppm}, \link{print.stppm}, \link{summary.stppm}, \link{coef.stppm}
+#' \link{stppm}, \link{print.stppm}, \link{summary.stppm}
 #'
 #'
 #'
@@ -56,6 +56,8 @@ plot.stppm <- function(x,
                        zap = 0.00001,
                        par = TRUE,
                        ...){
+  
+  if(!inherits(x,"stppm")) stop("class(x) must be stppm")
 
   if(inherits(x$IntCoefs, "numeric") & length(x$IntCoefs) == 1){
     stop("Constant intensity, no plot to show")
@@ -87,7 +89,7 @@ plot.stppm <- function(x,
                       col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                           range = range(mark_int)),
                                  "stuff")$outputs,
-                      ticktype = "detailed", pch = 19,
+                      ticktype = "detailed", pch = 20,
                       colvar = mark_int,
                       xlab="x",ylab="y",zlab="t",
                       main = c("Intensity in space-time \n Pointwise computation"))
@@ -108,7 +110,7 @@ plot.stppm <- function(x,
                       col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                           range = range(mark_int)),
                                  "stuff")$outputs,
-                      ticktype = "detailed", pch = 19,
+                      ticktype = "detailed", pch = 20,
                       colvar = mark_int,
                       xlab="x",ylab="y",zlab="t",
                       main = c("Intensity in space-time \n Pointwise computation"))

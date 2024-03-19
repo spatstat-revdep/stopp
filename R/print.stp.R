@@ -12,25 +12,17 @@
 #' @author Nicoletta D'Angelo
 #'
 #' @seealso
-#' \link{stp}, \link{summary.stp}, \link{plot.stp},
-#' \link{as.stp}, \link{as.stpp}
+#' \link{stp}, \link{summary.stp}, \link{plot.stp}
 #'
 #' @examples
 #'
 #' \dontrun{
 #'
-#' set.seed(12345)
-#' rpp1 <- rpp(lambda = 200, replace = FALSE)
-#' df0 <- cbind(rpp1$xyt[, 1], rpp1$xyt[, 2], rpp1$xyt[, 3])
-#' stp1 <- stp(df0)
-#'
+#' set.seed(2)
+#' df <- data.frame(cbind(runif(100), runif(100), runif(100)))
+#' 
+#' stp1 <- stp(df)
 #' stp1
-#'
-#' # Spatio-temporal point pattern
-#' # 208 points
-#' # Enclosing window: rectangle = [0.0011366, 0.9933775] x [0.0155277,
-#' #                                                          0.9960438] units
-#' # Time period: [0.004, 0.997]
 #'
 #' }
 #'
@@ -39,9 +31,8 @@
 #'
 print.stp <- function(x, ...)
 {
-
-  if(!any(class(x) == "stp")) stop("class(x) must be stp")
-
+  if (!inherits(x, c("stp"))) stop("X should be from class stp")
+  
   cat("Spatio-temporal point pattern \n")
   {cat(paste0(nrow(x$df)," ", "points"),"\n")}
   print(spatstat.geom::owin(range(x$df$x), range(x$df$y)), prefix = "Enclosing window: ")

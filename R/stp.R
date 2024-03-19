@@ -19,52 +19,46 @@
 #' @author Nicoletta D'Angelo
 #'
 #' @seealso
-#' \link{stppm}, \link{AIC.stppm}, \link{BIC.stppm},
+#' \link{stppm},
 #' \link{print.stp}, \link{summary.stp}, \link{plot.stp},
-#' \link{as.stp}, \link{as.stpp}, \link{print.stlp},
-#' \link{summary.stlp}, \link{plot.stlp}, \link{as.stlp},  \link{as.stlpp}
+#' \link{print.stlp},
+#' \link{summary.stlp}, \link{plot.stlp}
 #'
 #' @examples
 #'
 #' \dontrun{
 #'
-#' # stp
-#'
-#' set.seed(12345)
-#' rpp1 <- rpp(lambda = 200, replace = FALSE)
-#' df0 <- cbind(rpp1$xyt[, 1], rpp1$xyt[, 2], rpp1$xyt[, 3])
-#' stp1 <- stp(df0)
-#'
-#'
-#'
-#' #stlp
-#'
-#' set.seed(12345)
-#' stlpp1 <- rpoistlpp(.2, a = 0, b = 5, L = easynet)
-#' df0 <- cbind(stlpp1$data$x, stlpp1$data$y, stlpp1$data$t)
-#' L0 <- stlpp1$domain
-#' stlp1 <- stp(df0, L0)
+#' set.seed(2)
+#' df <- data.frame(runif(100), runif(100), runif(100))
+#' 
+#' stp1 <- stp(df)
+#' 
+#' set.seed(2)                       
+#' df_net <- data.frame(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100))
+#' 
+#' stlp1 <- stp(df_net, L = chicagonet)
 #'
 #' }
 #'
 #'
 stp <- function(df, L){
-
+  
   colnames(df) <- c("x", "y", "t")
   df <- data.frame(df)
-
+  
   if(missing(L)){
     out <- list(df = df)
     class(out) <- "stp"
   } else {
-    out <- list(df = df, L = L)
+    suppressWarnings(lpp_new <- spatstat.linnet::lpp(df, L))
+    df_new <- data.frame(x = lpp_new$data[, 1], y = lpp_new$data[, 2 ], t = df[, 3])
+    out <- list(df = df_new, L = L)
     class(out) <- "stlp"
   }
-
+  
   return(out)
-
+  
 }
-
 
 
 

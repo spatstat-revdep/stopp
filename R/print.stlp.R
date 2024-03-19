@@ -16,32 +16,21 @@
 #'
 #' \dontrun{
 #'
-#' set.seed(12345)
-#' stlpp1 <- rpoistlpp(.2, a = 0, b = 5, L = easynet)
-#' df0 <- cbind(stlpp1$data$x, stlpp1$data$y, stlpp1$data$t)
-#' L0 <- stlpp1$domain
-#' stlp1 <- stp(df0, L0)
+#' set.seed(2)
+#' df_net <- data.frame(cbind(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100)))
 #'
+#' stlp1 <- stp(df_net, L = chicagonet)
 #' stlp1
-#'
-#' # Spatio-temporal point pattern on a linear network
-#' # 43 points
-#' # Linear network with 19 vertices and 26 lines
-#' # Enclosing window: rectangle = [-0.01, 5.1] x [-0.01, 5.1] units
-#' # Time period: [0.043, 4.93]
-#'
 #' }
 #'
 #' @seealso
-#' \link{stp}, \link{plot.stlp}, \link{summary.stlp},
-#' \link{as.stlpp}, \link{as.stlp}
+#' \link{stp}, \link{plot.stlp}, \link{summary.stlp}
 #'
 #'
 print.stlp <- function(x, ...)
 {
-
-  if(!any(class(x) == "stlp")) stop("class(x) must be stlp")
-
+  if (!inherits(x, c("stlp"))) stop("X should be from class stlp")
+  
   cat("Spatio-temporal point pattern on a linear network \n")
   {cat(paste0(nrow(x$df)," ", "points"),"\n")}
   print(x$L)

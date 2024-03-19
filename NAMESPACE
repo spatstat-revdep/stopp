@@ -1,68 +1,72 @@
 importFrom("stats", "bw.nrd0", "as.formula", "dist", "dnorm", "glm", "median",
            "poisson", "predict", "quantile", "rexp", "rnorm", "rpois", "runif",
-           "AIC", "BIC", "terms")
+           "AIC", "BIC", "terms", "binomial", "coef")
 importFrom("MASS", "bandwidth.nrd")
+importFrom("mgcv", "gam")
 importFrom("stpp", "KLISTAhat", "LISTAhat", "rpp")
 importFrom("fields", "image.plot")
 importFrom("grDevices", "hcl.colors")
 importFrom("plot3D", "scatter3D")
-importFrom("gmp", "factorize")
 importFrom("graphics", "image", "abline", "axis", "barplot", "box", "hist", "par", "points", "rug", "title")
 importFrom("utils", "txtProgressBar")
 importFrom("stlnpp", "as.stlpp", "as.lpp.stlpp", "rpoistlpp")
-importFrom("spatstat.geom", "domain", "npoints", "pairdist", "box3", "progressreport", "ppp", "colourmap", "unmark", "owin", "volume", "as.psp")
-importFrom("spatstat.linnet", "default.linnet.tolerance", "countends", "pairdist.lpp", "runiflpp", "lppm")
+importFrom("spatstat.geom", "domain", "npoints", "pairdist", "box3", "progressreport", "ppp", "colourmap", "unmark", "owin", "volume", "as.psp", "pp3", "marks")
+importFrom("spatstat.linnet", "default.linnet.tolerance", "countends", "pairdist.lpp", "runiflpp", "lppm", "linequad", "lpp")
 importFrom("spatstat.explore", "dkernel", "Smooth")
 importFrom("spatstat.random", "datagen.runifpointOnLines")
 importFrom("spatstat.model", "ppm")
+importFrom("spatstat.utils", "primefactors")
 importFrom("splancs", "sbox", "npts")
 importFrom("sparr", "OS")
 importFrom("KernSmooth", "dpik")
 importFrom("optimx", "optimx")
-importFrom("latex2exp", "TeX")
-importFrom("etasFLP", "etasclass")
+importFrom("parallel", "parSapply", "makeCluster", "clusterExport", "stopCluster")
 
-export(AIC.stppm, as.stlp, as.stlpp, as.stp, as.stpp, BIC.stppm, coef.locstppm,
-       coef.stppm, globaldiag, infl, is.stlp, is.stp, localdiag,
+export(display, globaldiag, infl, localdiag,
        localplot.locstppm, localplot.stlgcppm, localSTLKinhom, localSTLginhom,
        localsummary.locstppm, localsummary.stlgcppm, localtest, locstppm,
-       plot.localdiag, plot.localtest, plot.locstppm, plot.sepstlppm,
-       plot.sepstppm, plot.stlgcppm, plot.stlp, plot.stp, plot.stppm,
-       predict.locstppm, predict.stppm,
-       print.localdiag, print.localtest, print.locstppm, print.stlgcppm,
-       print.stlp, print.stp, print.stppm,
+       plot.localdiag, plot.localtest, plot.locstppm, plot.stcov, plot.sepstlppm,
+       plot.sepstppm, plot.stlgcppm, plot.stlp, plot.stlpm, plot.stp, plot.stppm, plot.stpm,
+       print.localdiag, print.localtest, print.locstppm, print.stcov, print.stlgcppm,
+       print.stlp, print.stlpm, print.stp, print.stppm,
        rETASlp, rETASp, rstlpp, rstpp, sepstlppm, sepstppm, stlgcppm, stp, stppm,
-       summary.localdiag, summary.localtest, summary.locstppm, summary.stlgcppm,
-       summary.stlp, summary.stp, summary.stppm)
+       summary.localdiag, summary.localtest, summary.locstppm, 
+       summary.stlgcppm, summary.stcov,
+       summary.stlp, summary.stlpm, summary.stp, summary.stppm, stcov, stpm)
 
-S3method(AIC, stppm)
-S3method(BIC, stppm)
-S3method(coef, locstppm)
-S3method(coef, stppm)
+
 S3method(plot, localdiag)
 S3method(plot, localtest)
 S3method(plot, locstppm)
+S3method(plot, stcov)
+S3method(plot, stcov)
 S3method(plot, stlgcppm)
 S3method(plot, stlp)
+S3method(plot, stlpm)
 S3method(plot, stp)
+S3method(plot, stpm)
 S3method(plot, stppm)
 S3method(plot, sepstlppm)
 S3method(plot, sepstppm)
-S3method(predict, locstppm)
-S3method(predict, stppm)
 S3method(print, localdiag)
 S3method(print, localtest)
 S3method(print, locstppm)
+S3method(print, stcov)
 S3method(print, stlgcppm)
 S3method(print, stlp)
+S3method(print, stlpm)
 S3method(print, stp)
+S3method(print, stpm)
 S3method(print, stppm)
 S3method(summary, localdiag)
 S3method(summary, localtest)
 S3method(summary, locstppm)
+S3method(summary, stcov)
 S3method(summary, stlgcppm)
 S3method(summary, stlp)
+S3method(summary, stlpm)
 S3method(summary, stp)
+S3method(summary, stpm)
 S3method(summary, stppm)
 
 

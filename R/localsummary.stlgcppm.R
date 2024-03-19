@@ -30,11 +30,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Example with complex seismic point pattern
-#' data("greececatalog")
+#' catsub <- stp(greececatalog$df[1:100, ])
+#' 
+#' lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
 #'
-#' lgcp2 <- stlgcppm(greececatalog, formula = ~ x, first = "local", second = "global")
-#' localsummary.stlgcppm(lgcp2)
+#' localsummary.stlgcppm(lgcp_loc)
 #'
 #'}
 #'
@@ -52,7 +52,8 @@ localsummary.stlgcppm <- function(x,
                                   print.bw = FALSE,
                                   zap = 0.00001,
                                   par = TRUE){
-  if(!any(class(x) == "stlgcppm")) stop("class(x) must be stlgcppm")
+  if(!inherits(x,"stlgcppm")) stop("class(x) must be stlgcppm")
+  
   if(inherits(x$IntCoefs, "numeric")){
     if(x$formula == "~1"){
       stop("No inhomogeneous intensity to summarise")
@@ -81,16 +82,16 @@ localsummary.stlgcppm <- function(x,
 
   ppx_int <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_int,
                                 window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
-  ppx_Min <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Min,
-                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
-  ppx_1stQu <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_1stQu,
-                                  window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
-  ppx_Median <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Median,
-                                   window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
-  ppx_3rdQu <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_3rdQu,
-                                  window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
-  ppx_Max <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Max,
-                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_Min <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Min,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_1stQu <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_1stQu,
+                                  window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_Median <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Median,
+                                   window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_3rdQu <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_3rdQu,
+                                  window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_Max <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Max,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
 
   sig <- sparr::OS(unmark(ppx_int), scaler = scaler)
 

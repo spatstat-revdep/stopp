@@ -32,43 +32,15 @@
 #'
 #' \dontrun{
 #'
-#' #load data
-#' set.seed(12345)
-#' id <- sample(1:nrow(etasFLP::catalog.withcov), 200)
-#' cat <- etasFLP::catalog.withcov[id, ]
-#' stp1 <- stp(cat[, 5:3])
-#'
-#' #fit two competitor models
-#' # and extract the fitted spatio-temporal intensity
-#'
-#' lETAS <- etasFLP::etasclass(cat.orig = cat, magn.threshold = 2.5, magn.threshold.back = 3.9,
-#' mu = 0.3, k0 = 0.02, c = 0.015, p = 1.01, gamma = 0, d = 1,
-#' q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE,
-#'                         TRUE), formula1 = "time ~  magnitude- 1",
-#'                         declustering = TRUE,
-#'                         thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE,
-#'                         is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE,
-#'                         compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)$l
-#'
-#' lPOIS <- etasFLP::etasclass(cat.orig = cat, magn.threshold = 2.5, magn.threshold.back = 3.9,
-#' mu = 0.3, k0 = 0.02, c = 0.015, p = 1.01, gamma = 0, d = 1,
-#' q = 1.5, params.ind = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-#'                         FALSE), formula1 = "time ~  magnitude- 1",
-#'                         declustering = TRUE,
-#'                         thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE,
-#'                         is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE,
-#'                         compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)$l
-#'
-#' # let's identify the outlying points at a .9 percentile
-#'
-#' resETAS <- localdiag(stp1, lETAS, p = .9)
-#' resPOIS <- localdiag(stp1, lPOIS, p = .9)
-#'
-#' plot(resETAS)
-#' plot(resPOIS)
-#'
-#' plot(resETAS, marg = FALSE)
-#' plot(resPOIS, marg = FALSE)
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
+#'              par = c(.3, 6), seed = 2)
+#' 
+#' mod1 <- stppm(inh, formula = ~ 1)
+#' 
+#' resmod1 <- localdiag(inh, mod1$l, p = .9)
+#' 
+#' plot(resmod1)
+#' plot(resmod1, marg = FALSE)
 #'
 #' }
 #'
@@ -80,7 +52,8 @@
 #'
 plot.localdiag <- function(x, marg = TRUE, col = "grey", col2 = "red",
                            cols = "lightgrey", ...){
-  if(!any(class(x) == "localdiag")) stop("class(x) must be localdiag")
+  if (!inherits(x, c("localdiag"))) stop("x should be from class localdiag")
+  
 
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
@@ -101,7 +74,7 @@ plot.localdiag <- function(x, marg = TRUE, col = "grey", col2 = "red",
 
   par(mar = c(5, 4, 4, 2) + 0.1)
 
-  hist(x$x2, breaks = breaksx, main = TeX(r"(Obj = $\chi_i^2$)"),
+  hist(x$x2, breaks = breaksx, main =quote(Obj == chi[i]^2),
        xlab = " ")
 
   q <- quantile(x$x2, x$p)
@@ -113,7 +86,7 @@ plot.localdiag <- function(x, marg = TRUE, col = "grey", col2 = "red",
   par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 1))
 
   plot3D::scatter3D(x$X$df$x[mask == "0"], x$X$df$y[mask == "0"], x$X$df$t[mask == "0"],
-                    theta = - 45, phi = 20, pch = 16,
+                    theta = - 45, phi = 20, pch = 20,
                     ticktype = "detailed",
                     col = col,
                     main = paste("Points with Obj >", round(q, 3)),
@@ -122,7 +95,7 @@ plot.localdiag <- function(x, marg = TRUE, col = "grey", col2 = "red",
   par(mar = c(5, 4, 4, 2) + 0.1)
 
   plot3D::scatter3D(x$X$df$x[mask == "1"], x$X$df$y[mask == "1"], x$X$df$t[mask == "1"],
-                    add = TRUE, colkey = FALSE, pch = 19,
+                    add = TRUE, colkey = FALSE, pch = 20,
                     col = col2)
 
   if(marg == TRUE){
@@ -138,13 +111,13 @@ plot.localdiag <- function(x, marg = TRUE, col = "grey", col2 = "red",
     axis(2)
     box()
 
-    points(x$X$df$x[mask == 0], x$X$df$y[mask == 0], col = col, pch = 16)
-    points(x$X$df$x[mask == 1], x$X$df$y[mask == 1], col = col2, pch = 19)
+    points(x$X$df$x[mask == 0], x$X$df$y[mask == 0], col = col, pch = 20)
+    points(x$X$df$x[mask == 1], x$X$df$y[mask == 1], col = col2, pch = 20)
 
     plot(x$X$df$t[mask == 0], rep(1, length(x$X$df$t[mask == 0])),
-         main = "Temporal point pattern", pch = 16,
+         main = "Temporal point pattern", pch = 20,
          xlab = "t", ylab = "", yaxt = "n", col = col)
     points(x$X$df$t[mask == 1], rep(1, length(x$X$df$t[mask == 1])),
-           col = col2, pch = 19)
+           col = col2, pch = 20)
   }
 }

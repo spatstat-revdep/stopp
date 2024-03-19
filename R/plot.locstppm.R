@@ -27,14 +27,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(2)
-#' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#'              nsim = 1, seed = 2, verbose = T)
-#' inh00_local <- locstppm(pin, formula = ~ 1)
-#' inh01_local <- locstppm(pin, formula = ~ x)
-#'
-#' plot(inh00_local)
-#' plot(inh01_local)
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
+#'              par = c(0.005, 5), seed = 2)
+#' inh_local <- locstppm(inh, formula = ~ x)
+#' 
+#' plot(inh_local)
 #'
 #'}
 #'
@@ -56,6 +53,8 @@ plot.locstppm <- function(x,
                           zap = 0.00001,
                           par = TRUE,
                           ...){
+  
+  if(!inherits(x,"locstppm")) stop("class(x) must be locstppm")
 
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
@@ -83,7 +82,7 @@ plot.locstppm <- function(x,
                       col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                           range = range(mark_int)),
                                  "stuff")$outputs,
-                      ticktype = "detailed", pch = 19,
+                      ticktype = "detailed", pch = 20,
                       colvar = mark_int,
                       xlab="x",ylab="y",zlab="t",
                       main = c("First-order Intensity in space-time \n Pointwise computation"))
@@ -104,7 +103,7 @@ plot.locstppm <- function(x,
                       col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                           range = range(mark_int)),
                                  "stuff")$outputs,
-                      ticktype = "detailed", pch = 19,
+                      ticktype = "detailed", pch = 20,
                       colvar = mark_int,
                       xlab="x",ylab="y",zlab="t",
                       main = c("First-order Intensity in space-time \n Pointwise computation"))

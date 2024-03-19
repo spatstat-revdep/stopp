@@ -19,11 +19,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Example with complex seismic point pattern
-#' data("greececatalog")
+#' catsub <- stp(greececatalog$df[1:100, ])
+#' 
+#' lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
 #'
-#' lgcp2 <- stlgcppm(greececatalog, formula = ~ x, first = "local", second = "global")
-#' localplot.stlgcppm(lgcp2)
+#' localplot.stlgcppm(lgcp_loc)
 #'
 #'}
 #'
@@ -35,11 +35,12 @@
 #'
 #'
 localplot.stlgcppm <- function(x, par = TRUE){
-  if(!any(class(x) == "stlgcppm")) stop("class(x) must be stlgcppm")
+  if (!inherits(x, c("stlgcppm"))) stop("x should be from class stlgcppm")
+  
   if(inherits(x$IntCoefs, "numeric") & inherits(x$CovCoefs, "numeric")){
     stop("No local parameters to plot")
   }
-
+  
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
 
@@ -119,7 +120,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$sigma,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\sigma$)"))
+                        main = expression(sigma))
 
       if(par != TRUE){
         par(ask = TRUE)
@@ -132,7 +133,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$alpha,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\alpha$)"))
+                        main = expression(alpha))
       if(par != TRUE){
         par(ask = TRUE)
       }
@@ -145,7 +146,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$beta,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\beta$)"))
+                        main = expression(beta))
       par(mar = c(5, 4, 4, 2) + 0.1)
       if(par != TRUE){
         par(ask = FALSE)
@@ -171,7 +172,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$sigma,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\sigma$)"))
+                        main = expression(sigma))
 
       if(par != TRUE){
         par(ask = TRUE)
@@ -184,7 +185,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$alpha,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\alpha$)"))
+                        main = expression(alpha))
       par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 0))
 
       if(par != TRUE){
@@ -198,7 +199,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$beta,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\beta$)"))
+                        main = expression(beta))
 
       if(par != TRUE){
         par(ask = TRUE)
@@ -211,7 +212,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$gamma_s,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\gamma_s$)"))
+                        main = expression(gamma))
 
       if(par != TRUE){
         par(ask = TRUE)
@@ -224,7 +225,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$gamma_t,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\gamma_t$)"))
+                        main = expression(gamma[t]))
       par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 0))
 
       if(par != TRUE){
@@ -238,7 +239,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
                         ticktype = "detailed", pch = 19,
                         colvar = x$CovCoefs$delta,
                         xlab="x",ylab="y",zlab="t",
-                        main = latex2exp::TeX(r"($\delta$)"))
+                        main = expression(delta))
       par(mar = c(5, 4, 4, 2) + 0.1)
       if(par != TRUE){
         par(ask = FALSE)

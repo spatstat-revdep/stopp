@@ -12,39 +12,19 @@
 #'
 #' @seealso
 #' \link{stppm}, \link{print.stppm},
-#' \link{plot.stppm}, \link{coef.stppm}
+#' \link{plot.stppm}
 #'
 #'
 #'
 #' @examples
 #' \dontrun{
-#' ## Homogeneous
-#' set.seed(2)
-#' ph <- rstpp(lambda = 200, nsim = 1, seed = 2, verbose = T)
-#' hom1 <- stppm(ph, formula = ~ 1)
-#'
-#' hom1
-#'
-#' # Homogeneous Poisson process
-#' # with Intensity: 202.093
-#' #
-#' # Estimated coefficients:
-#' #   (Intercept)
-#' # 5.309
-#'
-#' ## Inhomogeneous
+#' 
 #' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#' nsim = 1, seed = 2, verbose = T)
+#'              seed = 2)
 #' inh1 <- stppm(pin, formula = ~ x)
-#'
+#' 
 #' inh1
-#'
-#' # Inhomogeneous Poisson process
-#' # with Trend: ~x
-#' #
-#' # Estimated coefficients:
-#' #   (Intercept)           x
-#' # 2.180       5.783
+#' 
 #'}
 #'
 #'
@@ -54,7 +34,8 @@
 #'
 #'
 print.stppm <- function(x, ...){
-  if(!any(class(x) == "stppm")) stop("class(x) must be stppm")
+  if (!inherits(x, c("stppm"))) stop("X should be from class stppm")
+  
   if(length(x$IntCoefs) == 1){
     cat("Homogeneous Poisson process \n")
     cat("with Intensity: ")

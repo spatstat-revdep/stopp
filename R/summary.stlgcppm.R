@@ -20,64 +20,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Example with complex seismic point pattern
-#' data("greececatalog")
-#'
-#' lgcp1 <- stlgcppm(greececatalog, formula = ~ 1, first = "global", second = "global")
-#' lgcp2 <- stlgcppm(greececatalog, formula = ~ x, first = "local", second = "global")
+#' 
+#' catsub <- stp(greececatalog$df[1:100, ])
+#' 
+#' lgcp1 <- stlgcppm(catsub)
 #'
 #' summary(lgcp1)
-#'
-#'
-#' # Joint minimum contrast fit
-#' # for a log-Gaussian Cox process with
-#' # global first-order intensity and
-#' # global second-order intensity
-#' # --------------------------------------------------
-#' #   Homogeneous Poisson process
-#' # with Intensity: 0.0064
-#' #
-#' # Estimated coefficients of the first-order intensity:
-#' #   (Intercept)
-#' # -5.052
-#' # --------------------------------------------------
-#' #   Covariance function: separable
-#' #
-#' # Estimated coefficients of the second-order intensity:
-#' #   sigma  alpha   beta
-#' # 10.984  0.224 47.076
-#' # --------------------------------------------------
-#' #   Model fitted in 0.873 minutes
-#'
-#'
-#' summary(lgcp2)
-#'
-#'
-#' # Joint minimum contrast fit
-#' # for a log-Gaussian Cox process with
-#' # local first-order intensity and
-#' # global second-order intensity
-#' # --------------------------------------------------
-#' #   Inhomogeneous Poisson process
-#' # with Trend: ~x
-#' #
-#' # Summary of estimated coefficients of the first-order intensity
-#' # (Intercept)           x
-#' # Min.   :-6.282   Min.   :-0.96831
-#' # 1st Qu.:-2.387   1st Qu.:-0.36685
-#' # Median : 2.122   Median :-0.25871
-#' # Mean   : 2.052   Mean   :-0.26309
-#' # 3rd Qu.: 4.569   3rd Qu.:-0.07325
-#' # Max.   :17.638   Max.   : 0.10269
-#' # --------------------------------------------------
-#' #   Covariance function: separable
-#' #
-#' # Estimated coefficients of the second-order intensity:
-#' #   sigma  alpha   beta
-#' # 2.612  0.001 36.415
-#' # --------------------------------------------------
-#' #   Model fitted in 3.503 minutes
-#'
+#' 
 #'}
 #'
 #'
@@ -88,7 +37,8 @@
 #'
 #'
 summary.stlgcppm <- function(object, ...){
-  if(!any(class(object) == "stlgcppm")) stop("class(object) must be stlgcppm")
+  if (!inherits(object, c("stlgcppm"))) stop("X should be from class stlgcppm")
+  
   cat("\nJoint minimum contrast fit \n")
   cat("for a log-Gaussian Cox process with \n")
   if(inherits(object$IntCoefs, "numeric")){ cat("global ")} else { cat("local ")}

@@ -3,39 +3,29 @@
 \alias{greececatalog}
 \title{Catalog of Greek earthquakes}
 \format{
-A \code{stp} object for a spatio-temoral point pattern with 1111 points
+A \code{stp} object for a spatio-temporal point pattern with 1111 points
 }
 \usage{
 data(greececatalog)
 }
 \description{
 A dataset in \code{stp} format containing the catalog of Greek earthquakes
-of magnitude at least 4.0 from year 2005 to year 2014, analysed by mean of local
-log-Gaussian Cox processes in D'Angelo et al. (2022) and D'Angelo et al. (2023).
-
+of magnitude at least 4.0 from year 2005 to year 2014. 
 Data come from the Hellenic Unified Seismic Network (H.U.S.N.).
-
-The same data have been analysed in Siino et al. (2017) by hybrids of Gibbs models,
-and more recently by Gabriel et al. (2022).
 }
 \details{
 The variables are as follows:
 \itemize{
   \item x. longitude, ranging from 20.02 to 27.98
   \item y. latitude, ranging from 33.75 to 40.45
-  \item t. time, rangin from 38354, 42000
+  \item t. time, ranging from 38354, 42000
 }
 }
 \examples{
 
 data(greececatalog)
 
-# Spatio-temporal point pattern
-# 1111 points
-# Enclosing window: rectangle = [20.02, 27.98] x [33.75, 40.45] units
-# Time period: [38353.906, 42000.338]
-
-plot(greececatalog, tcum = TRUE)
+plot(greececatalog)
 
 }
 \references{

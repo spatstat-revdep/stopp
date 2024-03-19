@@ -16,10 +16,14 @@
 #' @examples
 #' \dontrun{
 #'
-#' mod1 <- sepstlppm(valenciacrimes[1:2500, ], spaceformula = ~x,
-#' timeformula = ~ crime_hour + week_day, L = valencianet)
-#'
-#' plot.sepstlppm(mod1)
+#' crimesub <- stpm(valenciacrimes$df[101:200, ],
+#'            names = colnames(valenciacrimes$df)[-c(1:3)],
+#' L = valencianet)
+#' 
+#' mod1 <- sepstlppm(crimesub, spaceformula = ~x ,
+#'                   timeformula = ~ day)
+#'                   
+#' plot(mod1)
 #'
 #' }
 plot.sepstlppm <- function(x,
@@ -39,16 +43,16 @@ plot.sepstlppm <- function(x,
     par(mar = c(5, 4, 4, 2) + 0.1 - c(4, 1 , 1, 1))
     plot(x$spaceint_plot, col = grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
          main = c("Intensity in space \n Density Kernel Smoothing"))
-    if(do.points == TRUE){points(x$x$x, x$x$y, pch = ".")}
+    if(do.points == TRUE){points(x$x$df$x, x$x$df$y, pch = ".")}
 
     par(mar = c(5, 4, 4, 2) + 0.1 - c(4, 1 , 1, -0.5))
 
-    plot3D::scatter3D(x$x$x, x$x$y, x$x$t,
+    plot3D::scatter3D(x$x$df$x, x$x$df$y, x$x$df$t,
                       theta = - 45, phi = 20,
                       col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                           range = range(mark_int)),
                                  "stuff")$outputs,
-                      ticktype = "detailed", pch = 19,
+                      ticktype = "detailed", pch = 20,
                       colvar = mark_int,
                       xlab="x",ylab="y",zlab="t",
                       main = c("Intensity in space-time \n Pointwise computation"))
@@ -58,15 +62,15 @@ plot.sepstlppm <- function(x,
     par(ask = TRUE)
     plot(x$spaceint_plot, col = grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
          main = c("Intensity in space \n Density Kernel Smoothing"))
-    if(do.points == TRUE){points(x$x$x, x$x$y, pch = ".")}
+    if(do.points == TRUE){points(x$x$df$x, x$x$df$y, pch = ".")}
     par(ask = TRUE)
     par(mar = c(5, 4, 4, 2) + 0.1 - c(4, 1 , 1, -0.5))
-    plot3D::scatter3D(x$x$x, x$x$y, x$x$t,
+    plot3D::scatter3D(x$x$df$x, x$x$df$y, x$x$df$t,
                       theta = - 45, phi = 20,
                       col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                           range = range(mark_int)),
                                  "stuff")$outputs,
-                      ticktype = "detailed", pch = 19,
+                      ticktype = "detailed", pch = 20,
                       colvar = mark_int,
                       xlab="x",ylab="y",zlab="t",
                       main = c("Intensity in space-time \n Pointwise computation"))

@@ -1,6 +1,6 @@
 #' Fit a separable spatio-temporal Poisson process model
 #'
-#' @param x A dataframe
+#' @param x A \code{stpm} object
 #' @param spaceformula A formula for the spatial component. See \link{ppm} for details
 #' @param timeformula A formula for the temporal component. It fits a log-linear model with the \link{glm} function
 #'
@@ -9,25 +9,29 @@
 #'
 #' @examples
 #' \dontrun{
-#' df1 <- valenciacrimes[valenciacrimes$x < 210000 & valenciacrimes$x > 206000
-#' & valenciacrimes$y < 4377000 & valenciacrimes$y > 4373000, ]
-#'
-#' mod1 <- sepstppm(df1, spaceformula = ~x * y,
-#'                 timeformula = ~ crime_hour + week_day)
+#' crimesub <- stpm(valenciacrimes$df[101:200, ],
+#'            names = colnames(valenciacrimes$df)[-c(1:3)])
+#' 
+#' mod1 <- sepstppm(crimesub, spaceformula = ~x ,
+#'                   timeformula = ~ day)
 #' }
 #'
 #'
 #'
 sepstppm <- function(x, spaceformula, timeformula){
 
-  if (!inherits(x, "data.frame")) stop("x should a dataframe")
+  if (!inherits(x, "stpm")) stop("x should a stpm object")
+  
+  x0 <- x
 
+  x <- x$df
+  
   ot <- x$t
 
   n <- nrow(x)
 
-  X <- spatstat.geom::ppp(x$x, x$y,
-                          spatstat.geom::owin(range(x$x), range(x$y)))
+  X <- suppressWarnings(spatstat.geom::ppp(x$x, x$y,
+                          spatstat.geom::owin(range(x$x), range(x$y))))
   spacemod <- spatstat.model::ppm(as.formula(paste("X", paste(spaceformula, collapse = " "), sep = " ")))
   spaceint <- predict(spacemod, locations = X)
   spaceint_plot <- predict(spacemod)
@@ -42,13 +46,14 @@ sepstppm <- function(x, spaceformula, timeformula){
 
   newdata0 <- data.frame(apply(x[, all.vars(timeformula), drop = F], 2, as.factor))
   timeint <- exp(predict(timemod, newdata = newdata0))
+  
+  m <- prod(apply(stab.expanse1[ - dim(stab.expanse1)[2]], 2,
+                  function(x) length(unique(x))))
+  timeint <- n * timeint / m
 
-  stint <-  spaceint * timeint
+  stint <- spaceint * timeint #/ n
 
-  stint <-  as.numeric(stint / sum(stint) * n)
-
-
-  out = list(l = stint, x = x, spaceformula = spaceformula, timeformula = timeformula,
+  out = list(l = stint, x = x0, spaceformula = spaceformula, timeformula = timeformula,
              spacemod = spacemod, timemod = timemod, spaceint = spaceint, timeint = timeint)
   class(out) <- "sepstppm"
   return(out)

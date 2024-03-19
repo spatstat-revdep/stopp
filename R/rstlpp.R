@@ -9,7 +9,7 @@
 #' @param par Parameters of the reference intensity
 #' @param nsim Number of patterns to simulate. Default to 1.
 #' @param seed Seed to set, if ones wished to reproduce the analyses
-#' @param verbose Default to \code{TRUE}
+#' @param verbose Default to \code{FALSE}
 #' @param minX Minimum of x coordinate range
 #' @param maxX Maximum of x coordinate range
 #' @param minY Minimum of y coordinate range
@@ -26,23 +26,14 @@
 #' @examples
 #' \dontrun{
 #'
-#' # homogeneous Poisson processes
-#'
-#' h1 <- rstlpp(lambda = 500, nsim = 1, seed = 2, verbose = TRUE, L = domain(spatstat.data::chicago))
-#' plot(h1, tcum=TRUE)
-#'
-#' h2 <- rstlpp(lambda = 50, nsim = 1, seed = 2, verbose = TRUE, L = stlnpp::easynet)
-#' plot(h2, tcum=TRUE)
-#'
-#' # inhomogeneous Poisson process
+#' h1 <- rstlpp(lambda = 500, seed = 2, L = chicagonet)
 #'
 #' inh <- rstlpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(4, 1.5),
-#' nsim = 1, seed = 2, verbose = TRUE, L = stlnpp::easynet)
-#' plot(inh,tcum=TRUE)
+#'         seed = 2, L = chicagonet)
 #' }
 #'
 #'
-rstlpp <- function(lambda = 500, nsim = 1, seed = 2, verbose = TRUE,  par = NULL,
+rstlpp <- function(lambda = 500, nsim = 1, seed = NULL, verbose = FALSE,  par = NULL,
                   minX = 0, maxX = 1, minY = 0, maxY = 1, minT = 0, maxT = 1, L){
 
 

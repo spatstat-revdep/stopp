@@ -1,14 +1,16 @@
-
-.counting.weights <- function(id, volumes) {
+.counting.weights <- function(id, volumes, lsr = FALSE) {
   id <- as.integer(id)
-  fid <- factor(id, levels = seq_along(volumes))
-  counts <- table(fid)
-  w <- volumes[id] / counts[id]
+  if(lsr){
+    w <- volumes[id] 
+  } else {
+    fid <- factor(id, levels = seq_along(volumes))
+    counts <- table(fid)
+    w <- volumes[id] / counts[id]
+  }
   w <- as.vector(w)
   names(w) <- NULL
   return(w)
 }
-
 
 
 
@@ -329,6 +331,212 @@ STLKinhom_i <- function(X, lambda = lambda, normalize = FALSE, r = NULL, t = NUL
   return(arr)
 }
 
+# aggiunte nella seconda versione
+scale_to_range <- function(x, new_min = 0, new_max = 1) {
+  ((x - min(x)) / (max(x) - min(x))) * (new_max - new_min) + new_min
+}
+
+distD <- function(A, B, d){
+  a <- switch(as.character(d), 
+              "1" = sqrt((B$x - A$xx) ^ 2),
+              "2" = sqrt((B$x - A$xx) ^ 2+ (B$y - A$xy) ^ 2),
+              "3" = sqrt((B$x - A$xx) ^ 2+ (B$y - A$xy) ^ 2 + (B$t - A$xt) ^ 2))
+  a
+}
+
+
+idw3D <- function(points, covs, p, iid, d, parallel, cl){
+  nV <- dim(covs)[1]
+  wi <- vector(length = nV)
+  dd <- if(parallel) {
+    parSapply(cl, 1:nV, function(i) distD(points[iid, ], covs[i, 1:d, 
+                                                              drop = FALSE], 
+                                          d))
+  } else {
+    sapply(1:nV, function(i) distD(points[iid, ], covs[i, 1:d, 
+                                                       drop = FALSE], d))
+  }
+  wi <- 1 / (dd) ^ p
+  wi
+}
+
+
+interp3D <- function(points, covs, p, d, verbose = FALSE, parallel, cl){
+  nU <- dim(points)[1]
+  gu <- vector(length = nU)
+  if(verbose) cat("Interpolating covariate values at point locations: \n")
+  wi <- sapply(1:nU, function(j) idw3D(points, covs, p, iid = j, d, 
+                                       parallel = parallel, cl = cl))
+  gu <- apply(wi, 2 , function(p) sum(p * covs[, 4]) / sum(p))
+  gu 
+}
+
+
+
+interpMin <- function(dati, covariate, parallel = parallel, cl = cl){
+  # dati e covariate sono due matrici con 3 colonne l'uno (x,y,z) e righe diverse
+  # colnames(dati)[1:3] <- c("xx", "xy", "xt")
+  # colnames(covariate)[1:3] <- c("x", "y", "z")
+  nV <- nrow(covariate)
+  dd <- if(parallel) {
+    parSapply(cl, 1:nV, function(i) distD(dati, covariate[i, ], d = 3))
+  } else {
+    sapply(1:nV, function(i) distD(dati, covariate[i, ], d = 3))
+  }
+  id <- apply(dd, 1, which.min)
+  gu <- covariate[, 4][id]
+  gu
+}
+
+
+cartesian_3d_N_Mark <- function(pp3_obj, box_3d, list_levels_marks) {
+  
+  grid_marks_coord_x <- list_levels_marks
+  grid_marks_coord_x$x <- pp3_obj$data$x
+  coord_x <- do.call(expand.grid, grid_marks_coord_x)
+  
+  grid_marks_coord_y <- list_levels_marks
+  grid_marks_coord_y$y <- pp3_obj$data$y
+  coord_y <- do.call(expand.grid, grid_marks_coord_y)
+  
+  grid_marks_coord_t <- list_levels_marks
+  grid_marks_coord_t$t <- pp3_obj$data$z
+  coord_t <- do.call(expand.grid, grid_marks_coord_t)
+  
+  result <- pp3(x = coord_x$x, y = coord_y$y, z = coord_t$t, box_3d, 
+                marks = coord_x[, c(1:length(list_levels_marks)), drop = FALSE])
+  return(result)
+}
+
+dummy.marked.result <- function(X, formula, dummy_points, Wdum, Wdat, ndata, ndummy) {
+  
+  marks_name <- names(X[,-c(1,2,3), drop=F])
+  marks_in_formula <- marks_name %in% all.vars(formula)
+  marks.name.formula <- marks_name[marks_in_formula]
+  
+  df_marks <- as.data.frame(matrix(NA, nrow = nrow(X), ncol = length(marks.name.formula)))
+  colnames(df_marks) <- marks.name.formula
+  j <- 1
+  for (i in (3 + which(marks_in_formula))) {
+    df_marks[,j] <- X[,i]
+    j <- j+1
+  }
+  
+  for(i in 1:ncol(df_marks)) {
+    df_marks[,i] <- as.factor(df_marks[,i])
+  }
+  
+  list_levels_marks0 <- lapply(df_marks, function(col) levels(as.factor(col)))
+  
+  n_levels_marks <- NULL
+  for(i in 1:ncol(df_marks)) {
+    n_levels_marks[i] <- length(levels(as.factor(df_marks[,i])))
+  }
+  
+  n_comb_levels <- prod(n_levels_marks)
+  
+  b_dummy_3d <- box3(range(dummy_points$x),range(dummy_points$y),range(dummy_points$t)) 
+  dummy_3d <- pp3(dummy_points$x, dummy_points$y, dummy_points$t, b_dummy_3d)
+  
+  dumdum <- cartesian_3d_N_Mark(dummy_3d, b_dummy_3d, list_levels_marks0)
+  Wdumdum <- rep.int(Wdum, n_comb_levels)
+  Idumdum <- rep.int(ndata + seq_len(ndummy), n_comb_levels)
+  
+  b_data_3d <- box3(range(X$x),range(X$y),range(X$t)) 
+  data_3d <- pp3(X$x, X$y, X$t, b_data_3d)
+  
+  dumdat <- cartesian_3d_N_Mark(data_3d, b_data_3d, list_levels_marks0)
+  Wdumdat <- rep.int(Wdat, n_comb_levels)
+  Mdumdat <- marks(dumdat)
+  Mdumdat <- as.data.frame(Mdumdat)
+  Idumdat <- rep.int(1:ndata, n_comb_levels)
+  
+  Mrepdat <- do.call(rbind, replicate(n_comb_levels, df_marks, simplify = FALSE))
+  
+  casi_uguali <- apply(Mdumdat == Mrepdat, 1, all)
+  
+  dumdat <- dumdat[-c(which(casi_uguali == T)),]
+  Wdumdat <- Wdumdat[-c(which(casi_uguali == T))]
+  Idumdat <- Idumdat[-c(which(casi_uguali == T))]
+  
+  total_dummy_marks <- as.data.frame(matrix(NA, nrow = nrow(dumdum$data)+nrow(dumdat$data), 
+                                            ncol = length(4:ncol(dumdum$data))))
+  colnames(total_dummy_marks) <- colnames(dumdum$data[,4:ncol(dumdum$data)])
+  
+  df_dumdum <- as.data.frame(dumdum$data)
+  df_dumdat <- as.data.frame(dumdat$data)
+  k <- 1 
+  for(i in 4:ncol(dumdum$data)) {
+    total_dummy_marks[,k] <- c(df_dumdum[,i], df_dumdat[,i])
+    k <- k+1
+  }
+  
+  for(i in 1:ncol(total_dummy_marks)) {
+    total_dummy_marks[,i] <- as.factor(total_dummy_marks[,i])
+  }
+  
+  dumb <- pp3(c(dumdum$data$x, dumdat$data$x), 
+              c(dumdum$data$y, dumdat$data$y),
+              c(dumdum$data$z, dumdat$data$z),
+              b_dummy_3d, marks = total_dummy_marks)
+  
+  Wdumb <- c(Wdumdum, Wdumdat)
+  Idumb <- c(Idumdum, Idumdat)
+  
+  result.dummy.marked <- list(dumb = dumb, Wdumb = Wdumb, df_marks = df_marks, 
+                              total_dummy_marks = total_dummy_marks, 
+                              n_comb_levels = n_comb_levels)
+  return(result.dummy.marked)
+}
+
+
+
+interp.covariate <- function(X, dummy_points, covs, formula, parallel, interp,
+                             xx, xy, xt, ncores, verbose) {
+  dati.interpolati <- rbind(X[,1:3], dummy_points)
+  colnames(dati.interpolati) <- c("x", "y", "t")
+  
+  cc <- vector(length = length(covs))
+  for(ki in 1:length(covs)){
+    cc[ki] <- c(names(covs[[ki]]$df)[4])
+  } 
+  names(covs) <- cc
+  ff <- which(names(covs) %in% all.vars(formula)) 
+  covs <- covs[ff]                               
+  
+  for(k in names(covs)){  
+    kk <- which(names(covs)  == k)
+    if(verbose) {cat("Covariate", k, "\n")}
+    if(interp) {
+      covs0 <- covs[[k]]$df
+      colnames(covs0) <- c("x", "y", "t", names(covs[[k]]$df)[4])
+      if(parallel) {
+        on.exit({stopCluster(cl)}, add = TRUE, after = TRUE)
+        cl <- makeCluster(getOption("cl.cores", ncores))
+        clusterExport(cl = cl, c('distD'))
+        gu <- interpMin(data.frame(xx, xy, xt), covs0, parallel = TRUE, cl = cl)
+      } else {
+        gu <- interpMin(data.frame(xx, xy, xt), covs0, parallel = FALSE)}
+    } else {
+      df0 <- data.frame(covs0$x, covs0$y, covs0$t)
+      colnames(df0) <- c("xx", "xy", "xt")
+      covs0 <- covs[[k]]$df
+      colnames(covs0) <- c("x", "y", "t", names(covs[[k]])[4])
+      if(parallel) {
+        on.exit({stopCluster(cl)}, add = TRUE, after = TRUE)
+        cl <- makeCluster(getOption("cl.cores", ncores))
+        clusterExport(cl = cl, c('distD'))
+        gu <- interpMin(df0, covs0, parallel = TRUE, cl = cl)
+      } else {
+        gu <- interpMin(df0, covs0, parallel = FALSE)
+      }
+      gu <- c(gu, covs[[k]]$df[, 4])
+    }
+    dati.interpolati <- cbind(dati.interpolati, gu)
+    colnames(dati.interpolati)[3 + kk] <- k
+  }
+  return(dati.interpolati)
+}
 
 
 
@@ -340,19 +548,43 @@ STLKinhom_i <- function(X, lambda = lambda, normalize = FALSE, r = NULL, t = NUL
 
 
 
+as.stpp <- function(x){
+  if(!inherits(x,"stp")) stop("class(x) must be stp")
+  
+  out <- cbind(x$df$x, x$df$y, x$df$t)
+  colnames(out) <- c("x", "y", "t")
+  class(out) <- "stpp"
+  return(out)
+}
 
 
+as.stp <- function(x){
+  if(!inherits(x,"stpp")) stop("class(x) must be stpp")
+  
+  stp(cbind(x[, 1], x[, 2], x[, 3]))
+}
 
 
+as.stlpp <- function(x){
+  if(!inherits(x,"stlp")) stop("class(x) must be stlp")
+  
+  stlnpp::as.stlpp(x$df$x, x$df$y, x$df$t, x$L)
+}
+
+as.stlp <- function(x){
+  if(!inherits(x,"stlpp")) stop("class(x) must be stlpp")
+  
+  stp(cbind(x$data$x, x$data$y, x$data$t), x$domain)
+}
 
 
+is.stp <- function(x){
+  inherits(x,"stp")
+}
 
-
-
-
-
-
-
+is.stlp <- function(x){
+  inherits(x,"stlp")
+}
 
 
 

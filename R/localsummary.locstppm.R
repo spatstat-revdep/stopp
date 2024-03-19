@@ -30,14 +30,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' set.seed(2)
-#' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#'              nsim = 1, seed = 2, verbose = T)
-#' inh00_local <- locstppm(pin, formula = ~ 1)
-#' inh01_local <- locstppm(pin, formula = ~ x)
-#'
-#' localsummary.locstppm(inh00_local)
-#' localsummary.locstppm(inh01_local)
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
+#'              par = c(0.005, 5), seed = 2)
+#' inh_local <- locstppm(inh, formula = ~ x)
+#' 
+#' localsummary.locstppm(inh_local)
 #'
 #'}
 #'
@@ -55,8 +52,8 @@ localsummary.locstppm <- function(x,
                                   print.bw = FALSE,
                                   zap = 0.00001,
                                   par = TRUE){
-  if(!any(class(x) == "locstppm")) stop("class(x) must be locstppm")
-
+  if(!inherits(x,"locstppm")) stop("class(x) must be locstppm")
+  
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
 

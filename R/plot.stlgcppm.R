@@ -31,12 +31,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Example with complex seismic point pattern
-#' data("greececatalog")
+#' catsub <- stp(greececatalog$df[1:100, ])
+#' 
+#' lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
 #'
-#' lgcp2 <- stlgcppm(greececatalog, formula = ~ x, first = "local", second = "global")
-#' plot(lgcp2)
-#'
+#' plot(lgcp_loc)
+#' 
 #'}
 #'
 #'
@@ -59,6 +59,8 @@ plot.stlgcppm <- function(x,
                           zap = 0.00001,
                           par = TRUE,
                           ...){
+  
+  if(!inherits(x,"stlgcppm")) stop("class(x) must be stlgcppm")
 
   if(inherits(x$CovCoefs, "numeric") & inherits(x$IntCoefs, "numeric") & length(x$IntCoefs) == 1){
     stop("Constant intensity, no plot to show")
@@ -94,7 +96,7 @@ plot.stlgcppm <- function(x,
                         col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                             range = range(mark_int)),
                                    "stuff")$outputs,
-                        ticktype = "detailed", pch = 19,
+                        ticktype = "detailed", pch = 20,
                         colvar = mark_int,
                         xlab="x",ylab="y",zlab="t",
                         main = c("First-order Intensity in space-time \n Pointwise computation"))
@@ -115,7 +117,7 @@ plot.stlgcppm <- function(x,
                         col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                             range = range(mark_int)),
                                    "stuff")$outputs,
-                        ticktype = "detailed", pch = 19,
+                        ticktype = "detailed", pch = 20,
                         colvar = mark_int,
                         xlab="x",ylab="y",zlab="t",
                         main = c("First-order Intensity in space-time \n Pointwise computation"))
@@ -152,7 +154,7 @@ plot.stlgcppm <- function(x,
                         col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                             range = range(mark_all)),
                                    "stuff")$outputs,
-                        ticktype = "detailed", pch = 19,
+                        ticktype = "detailed", pch = 20,
                         colvar = mark_all,
                         xlab="x",ylab="y",zlab="t",
                         main = c("Mean Function of Lambda in space-time \n Pointwise computation"))
@@ -187,7 +189,7 @@ plot.stlgcppm <- function(x,
                         col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                             range = range(mark_int)),
                                    "stuff")$outputs,
-                        ticktype = "detailed", pch = 19,
+                        ticktype = "detailed", pch = 20,
                         colvar = mark_int,
                         xlab="x",ylab="y",zlab="t",
                         main = c("First-order Intensity in space-time \n Pointwise computation"))
@@ -213,7 +215,7 @@ plot.stlgcppm <- function(x,
                         col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
                                                             range = range(mark_all)),
                                    "stuff")$outputs,
-                        ticktype = "detailed", pch = 19,
+                        ticktype = "detailed", pch = 20,
                         colvar = mark_all,
                         xlab="x",ylab="y",zlab="t",
                         main = c("Mean Function of Lambda in space-time \n Pointwise computation"))

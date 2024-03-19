@@ -4,6 +4,8 @@
 #' This function fits a Poisson process model to an observed spatio-temporal
 #' point pattern stored in a \code{stp} object.
 #'
+#' @details
+#' 
 #' We assume that the template model is a Poisson process, with a parametric
 #' intensity or rate function \eqn{\lambda(\textbf{u}, t; \theta)}  with space
 #' and time locations \eqn{\textbf{u} \in
@@ -13,64 +15,7 @@
 #' Estimation is performed through the fitting of a \code{glm} using a spatio-temporal
 #' version of the quadrature scheme by Berman and Turner (1992).
 #'
-#' See the 'Details' section.
-#'
-#' @details
-#'
-#' The log-likelihood of the template model is
-#' \deqn{\log L(\theta) = \sum_i
-#' \lambda(\textbf{u}_i, t_i; \theta) - \int_W\int_T
-#' \lambda(\textbf{u}, t; \theta) \text{d}t\text{d}u}
-#' up to an additive constant, where the sum is over all points \eqn{\textbf{u}_i}
-#'  in the spatio-temporal point process \eqn{X}.
-#'
-#' Following Berman and Turner (1992), we use a finite quadrature approximation
-#' to the log-likelihood. Renaming the data points as \eqn{\textbf{x}_1,\dots ,
-#' \textbf{x}_n} with \eqn{(\textbf{u}_i,t_i) = \textbf{x}_i} for \eqn{i = 1, \dots , n},
-#' then generate \eqn{m}  additional 'dummy points' \eqn{(\textbf{u}_{n+1},t_{n+1})
-#' \dots , (\textbf{u}_{m+n},t_{m+n})} to
-#' form a set of \eqn{n + m} quadrature points (where \eqn{m > n}).
-#'
-#' Then we determine quadrature weights \eqn{a_1, \dots , a_m}
-#' so that integrals in the log-likelihood can be approximated by a Riemann sum
-#' \deqn{ \int_W \int_T \lambda(\textbf{u},t;\theta)\text{d}t\text{d}u \approx \sum_{k = 1}^{n + m}a_k\lambda(\textbf{u}_{k},t_{k};\theta)}
-#' where \eqn{a_k} are the quadrature weights such that
-#' \eqn{\sum_{k = 1}^{n + m}a_k = l(W \times T)} where \eqn{l} is the Lebesgue measure.
-#'
-#' Then the log-likelihood  of the template model can be approximated by
-#' \deqn{ \log L(\theta)   \approx \sum_i \log \lambda(\textbf{x}_i; \theta) +\sum_j(1 - \lambda(\textbf{u}_j,t_j; \theta))a_j=\sum_je_j \log \lambda(\textbf{u}_j, t_j; \theta) + (1 - \lambda(\textbf{u}_j, t_j; \theta))a_j}
-#' where \eqn{e_j = 1\{j \leq n\}} is the indicator that equals \eqn{1} if
-#' \eqn{u_j} is a data point. Writing \eqn{y_j = e_j/a_j} this becomes
-#' \deqn{
-#' \log L(\theta) \approx
-#' \sum_j
-#' a_j
-#' (y_j \log \lambda(\textbf{u}_j, t_j; \theta) - \lambda(\textbf{u}_j, t_j; \theta))
-#' +
-#'   \sum_j
-#' a_j.}
-#'
-#' Apart from the constant \eqn{\sum_j a_j}, this expression is formally equivalent
-#'  to the weighted log-likelihood of
-#' a Poisson regression model with responses \eqn{y_j} and means
-#' \eqn{\lambda(\textbf{u}_j,t_j; \theta) = \exp(\theta Z(\textbf{u}_j,t_j) +
-#'  B(\textbf{u}_j,t_j))}.
-#'
-#'   This is
-#' maximised by this function by using standard GLM software.
-#'
-#'
-#' In detail, we define the spatio-temporal quadrature scheme by considering a
-#' spatio-temporal
-#' partition of \eqn{W \times T} into cubes \eqn{C_k} of equal volume \eqn{\nu},
-#'  assigning the weight \eqn{a_k=\nu/n_k}
-#'  to each quadrature point (dummy or data) where \eqn{n_k} is the number of
-#'  points that lie in the same cube as the point \eqn{u_k} (Raeisi et al, 2021).
-#'
-#' The number of dummy points should be sufficient for an accurate estimate of the
-#' likelihood. Following Baddeley et al. (2000) and Raeisi et al. (2021),
-#' we start with a number of dummy points \eqn{m \approx 4 n}, increasing it until
-#' \eqn{\sum_k a_k = l(W \times T)}.
+#' @seealso \link{plot.stppm}, \link{print.stppm}, \link{summary.stppm}
 #'
 #'
 #'
@@ -79,10 +24,33 @@
 #' a symbolic description of the model to be fitted.
 #' The current version only supports formulas depending on the spatial and temporal coordinates:
 #' \code{x}, \code{y}, \code{t}.
-#' @param verbose Default to \code{TRUE}
+#' @param covs A list containing \code{stcov} objects of possible spatio-temporal covariates.
+#' It is advisable to construct the \code{stcov} objects with \code{stcov}. 
+#' Each \code{stcov} object should contain the spatio-temporal coordinates and the
+#' covariate values as the fourth column, named as the covariate called in the 
+#' formula.
+#' @param marked Logical value indicating whether the point process model to be 
+#' fit is multitype. Default to \code{FALSE}.
+#' @param verbose Default to \code{FALSE}.
+#' @param spatial.cov Logical value indicating whether the point process model to be 
+#' fit depends on spatio-temporal covariates. Default to \code{FALSE}.
 #' @param mult The multiplicand of the number of data points,
 #'  for setting the number of dummy
-#' points to generate for the quadrature scheme
+#' points to generate for the quadrature scheme.
+#' @param interp Logical value indicating whether to interpolate covariate values 
+#' to dummy points or to use the covariates locations as dummies.
+#'  Default to \code{TRUE}.
+#' @param parallel Logical values indicating whether to use parallelization to 
+#' interpolate covariates. Default to \code{FALSE}.
+#' @param sites .....
+#' @param seed The seed used for the simulation of the dummy points. Default to
+#'  \code{NULL}.
+#' @param ncube Number of cubes used for the cubature scheme.
+#' @param grid Logical value indicating whether to generate dummy points on a 
+#'  regular grid or randomly. Default to \code{FALSE}.
+#' @param ncores Number of cores to use, if parallelizing. Default to 2.
+#' @param lsr Logical value indicating whether to use Logistic Spatio-Temporal
+#' Regression or Poisson regression. Default to \code{FALSE}.  
 #'
 #' @return An object of class \code{stppm}. A list of
 #' \describe{
@@ -101,23 +69,53 @@
 #'
 #' @export
 #'
-#' @author Nicoletta D'Angelo
+#' @author Nicoletta D'Angelo and Marco Tarantino
 #'
 #' @seealso
-#' \link{locstppm}, \link{AIC.stppm}, \link{BIC.stppm}
+#' \link{locstppm}
 #'
 #' @examples
 #'
 #' \dontrun{
-#' ## Homogeneous
-#' set.seed(2)
-#' ph <- rstpp(lambda = 200, nsim = 1, seed = 2, verbose = TRUE)
+#' 
+#' ph <- rstpp(lambda = 200, seed = 2)
 #' hom1 <- stppm(ph, formula = ~ 1)
-#'
+#' 
 #' ## Inhomogeneous
 #' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#' nsim = 1, seed = 2, verbose = TRUE)
+#'              seed = 2)
 #' inh1 <- stppm(pin, formula = ~ x)
+#' 
+#' ## Inhomogeneous depending on external covariates
+#' 
+#' set.seed(2)
+#' df1 <- data.frame(runif(100), runif(100), runif(100), rpois(100, 15))
+#' df2 <- data.frame(runif(100), runif(100), runif(100), rpois(100, 15))
+#'
+#' obj1 <- stcov(df1, names = "cov1")
+#' obj2 <- stcov(df2, names = "cov2")
+#'
+#' covariates <- list(cov1 = obj1, cov2 = obj2)
+#'
+#' inh2 <- stppm(pin, formula = ~ x + cov2, covs = covariates, spatial.cov = TRUE)
+#'
+#' ## Inhomogeneous semiparametric
+#' 
+#' inh3 <- stppm(pin, formula = ~ s(x, k = 30))
+#' 
+#' ## Multitype
+#' 
+#' set.seed(2)
+#' dfA <- data.frame(x = runif(100), y = runif(100), t = runif(100), 
+#'                   m1 = rep(c("A"), times = 100))
+#' dfB <- data.frame(x = runif(50), y = runif(50), t = runif(50), 
+#'                   m1 = rep(c("B"), each = 50))
+#' 
+#' stpm1 <- stpm(rbind(dfA, dfB))
+#' 
+#' inh4 <- stppm(stpm1, formula = ~ x + s(m1, bs = "re"), marked = TRUE)
+#' 
+#' 
 #' }
 #'
 #' @references
@@ -127,85 +125,179 @@
 #'
 #' D'Angelo, N., Adelfio, G., and Mateu, J. (2023). Locally weighted minimum contrast estimation for spatio-temporal log-Gaussian Cox processes. Computational Statistics & Data Analysis, 180, 107679.
 #'
-#' Raeisi, M., Bonneu, F., and Gabriel, E. (2021). A spatio-temporal multi-scale model for geyer saturation point process: application to forest fire occurrences. Spatial Statistics, 41:100492.
-#'
-#'
-stppm <- function(X, formula, verbose = TRUE, mult = 4){
+stppm <- function(X, formula, covs = NULL, marked = F, spatial.cov = F,
+                  verbose = FALSE, mult = 4, interp = TRUE,
+                  parallel = FALSE, sites = 1, seed = NULL, ncube = NULL,
+                  grid = FALSE, ncores = 2, lsr = FALSE){
+  
+  if (!inherits(X, c("stp", "stpm"))) stop("x should be either of class stp or stpm")
+  
   time1 <- Sys.time()
-  nX <- nrow(X$df)
-
-  x <- X$df$x
-  y <- X$df$y
-  t <- X$df$t
-
-  s.region <- splancs::sbox(cbind(x, y), xfrac = 0.01, yfrac = 0.01)
-  xr = range(t, na.rm = TRUE)
-  xw = diff(xr)
-  t.region <- c(xr[1] - 0.01 * xw, xr[2] + 0.01 * xw)
-
-  HomLambda <- nX
-
-  rho <- mult * HomLambda
-
-  dummy_points <- rstpp(lambda = rho, nsim = 1, seed = 2, verbose = F,
-                        minX = s.region[1, 1], maxX = s.region[2, 1],
-                        minY = s.region[1, 2], maxY = s.region[3, 2],
-                        minT = t.region[1], maxT = t.region[2])$df
-
-
-  quad_p <- rbind(X$df, dummy_points)
-
-  z <- c(rep(1, nX), rep(0, dim(dummy_points)[1]))
-
-  xx   <- quad_p[, 1]
-  xy   <- quad_p[, 2]
-  xt   <- quad_p[, 3]
+  X0 <- X
+  X <- X$df
+  
+  nX <- nrow(X)
+  
+  x <- X[,1]
+  y <- X[,2]
+  t <- X[,3]
+  
+  if(interp){
+    s.region <- splancs::sbox(cbind(x, y), xfrac = 0.01, yfrac = 0.01)
+    xr = range(t, na.rm = TRUE)
+    xw = diff(xr)
+    t.region <- c(xr[1] - 0.01 * xw, xr[2] + 0.01 * xw)
+    HomLambda <- nX
+    rho <- mult * HomLambda
+    
+    if (grid == TRUE){
+      ff <- floor(rho ^ (1/3))
+      x0 <- y0 <- t0 <- 1:ff
+      
+      scale_to_range <- function(x, new_min, new_max) {
+        ((x - min(x)) / (max(x) - min(x))) * (new_max - new_min) + new_min
+      }
+      
+      x0 <- scale_to_range(x0, s.region[1, 1], s.region[2, 1])
+      y0 <- scale_to_range(y0, s.region[1, 2], s.region[3, 2])
+      t0 <- scale_to_range(t0, t.region[1], t.region[2])
+      df0 <- expand.grid(x0, y0, t0)
+      dummy_points <- stp(cbind(df0$Var1, df0$Var2, df0$Var3))$df
+    } else {
+      dummy_points <- rstpp(lambda = rho, nsim = 1, seed = seed, verbose = F,
+                            minX = s.region[1, 1], maxX = s.region[2, 1],
+                            minY = s.region[1, 2], maxY = s.region[3, 2],
+                            minT = t.region[1], maxT = t.region[2])$df
+    }
+  } else {
+    dummy_points <- stp(cbind(covs[[sites]][, 1], covs[[sites]][, 2],
+                              covs[[sites]][, 3]))$df
+  }
+  
+  quad_p <- rbind(X[,1:3], dummy_points)
+  
+  xx <- quad_p[, 1]
+  xy <- quad_p[, 2]
+  xt <- quad_p[, 3]
   win <- spatstat.geom::box3(xrange = range(xx), yrange = range(xy), zrange = range(xt))
-
-  ncube <- .default.ncube(quad_p)
-  length(ncube) == 1
+  
+  if (is.null(ncube)) {ncube <- .default.ncube(quad_p)}
   ncube <- rep.int(ncube, 3)
   nx <- ncube[1]
   ny <- ncube[2]
   nt <- ncube[3]
-
+  
   nxyt <- nx * ny * nt
-  cubevolume <-  spatstat.geom::volume(win) / nxyt
+  cubevolume <-  spatstat.geom::volume(win) / nxyt  
   volumes <- rep.int(cubevolume, nxyt)
-
-  id <- .grid.index(xx, xy, xt,
-                    win$xrange, win$yrange, win$zrange, nx, ny, nt)$index
-
-  w <- .counting.weights(id, volumes)
-
-  y_resp <- z / w
-
-  dati.modello <- cbind(y_resp, w, quad_p[, 1], quad_p[, 2], quad_p[, 3])
-  colnames(dati.modello) <- c("y_resp", "w", "x", "y", "t")
-
-  dati.modello <- as.data.frame(dati.modello)
-
-  suppressWarnings(mod_global <- try(glm(as.formula(paste("y_resp", paste(formula, collapse = " "), sep = " ")),
-                        weights = w, family = poisson, data = dati.modello), silent = T))
-  res_global <- mod_global$coefficients
-  pred_global <- predict(mod_global, newdata = dati.modello[1:nX, ])
-
+  
+  id <- .grid.index(xx, xy, xt, win$xrange, win$yrange, win$zrange, nx, ny, nt)$index
+  
+  w <- .counting.weights(id, volumes, lsr)
+  
+  Wdat <- w[1:nX]
+  Wdum <- w[-c(1:nX)]
+  ndata <- nrow(X)
+  ndummy <- nrow(dummy_points)
+  
+  if(marked == T & spatial.cov == T) {
+    
+    dati.interpolati <- interp.covariate(X, dummy_points, covs, formula, parallel,
+                                         interp, xx, xy, xt, ncores, verbose = verbose)
+    
+    marked.process <- dummy.marked.result(X, formula, dummy_points, Wdum, Wdat, ndata, ndummy)
+    
+    z <- c(rep(1, ndata), rep(0, length(marked.process$dumb$data$x)))
+    w_final <- c(w[1:ndata], marked.process$Wdumb)
+    y_resp <-  if(lsr){z} else {z / w_final}
+    
+    dati.modello <- data.frame(y_resp, w_final,
+                               c(X$x, marked.process$dumb$data$x),
+                               c(X$y, marked.process$dumb$data$y),
+                               c(X$t, marked.process$dumb$data$z))
+    
+    colnames(dati.modello) <- c("y_resp", "w", "x", "y", "t")
+    
+    dati.modello <- cbind(dati.modello, rbind(marked.process$df_marks,
+                                              marked.process$total_dummy_marks))
+    
+    dati.interpolati.rep <- as.data.frame(matrix(NA, nrow = nrow(dati.modello), ncol = ncol(dati.interpolati)-3))
+    colnames(dati.interpolati.rep) <- names(dati.interpolati)[-c(1,2,3)]
+    q <- 1
+    for(i in 4:ncol(dati.interpolati)) {
+      dati.interpolati.rep[,q] <- c(dati.interpolati[1:nX,i],
+                                    rep(dati.interpolati[(nX+1):nrow(dati.interpolati),i], marked.process$n_comb_levels),
+                                    rep(dati.interpolati[1:nX,i], marked.process$n_comb_levels-1))
+      q <- q + 1
+    }
+    dati.cov.marks <- cbind(dati.modello, dati.interpolati.rep)
+    
+  } else if(marked == F & spatial.cov == T){
+    
+    dati.interpolati <- interp.covariate(X, dummy_points, covs, formula, parallel,
+                                         interp, xx, xy, xt, ncores, verbose = verbose)
+    z <- c(rep(1, ndata), rep(0, nrow(dummy_points)))
+    y_resp <-  if(lsr){z} else {z / w}
+    dati.cov.marks <- cbind(y_resp, w, dati.interpolati)
+    
+  } else if(marked == F & spatial.cov == F) {
+    colnames(quad_p) <- c("x", "y", "t")
+    z <- c(rep(1, ndata), rep(0, nrow(dummy_points)))
+    y_resp <-  if(lsr){z} else {z / w}
+    dati.cov.marks <- cbind(y_resp, w, quad_p)
+    
+  } else if(marked == T & spatial.cov == F) {
+    
+    marked.process <- dummy.marked.result(X, formula, dummy_points, Wdum, Wdat, ndata, ndummy)
+    
+    z <- c(rep(1, ndata), rep(0, length(marked.process$dumb$data$x)))
+    w_final <- c(w[1:ndata], marked.process$Wdumb)
+    y_resp <-  if(lsr){z} else {z / w_final}
+    
+    dati.modello <- data.frame(y_resp, w_final,
+                               c(X$x, marked.process$dumb$data$x),
+                               c(X$y, marked.process$dumb$data$y),
+                               c(X$t, marked.process$dumb$data$z))
+    
+    colnames(dati.modello) <- c("y_resp", "w", "x", "y", "t")
+    
+    dati.modello <- cbind(dati.modello, rbind(marked.process$df_marks,
+                                              marked.process$total_dummy_marks))
+    dati.cov.marks <- dati.modello
+  }
+  
+  if(lsr){
+    suppressWarnings(mod_global <- try(gam(as.formula(paste("y_resp", paste(formula, collapse = " "),
+                                                            "+ offset(log(w))", sep = " ")),
+                                           family = binomial,
+                                           data = dati.cov.marks), silent = T))
+  } else {
+    suppressWarnings(mod_global <- try(gam(as.formula(paste("y_resp", paste(formula, collapse = " "), sep = " ")),
+                                           weights = w,
+                                           family = poisson,
+                                           data = dati.cov.marks), silent = T))
+  }
+  
+  
+  res_global <- coef(mod_global)
+  pred_global <- exp(predict(mod_global, newdata = dati.cov.marks[1:nX, ]))
+  
   time2 <- Sys.time()
-
-    list.obj <- list(IntCoefs = res_global,
-                     X = X,
-                     nX = nX,
-                     I = z,
-                     y_resp = y_resp,
-                     formula = formula,
-                     l = as.vector(pred_global),
-                     mod_global = mod_global,
-                     newdata = dati.modello[1:nX, ],
-                     time = paste0(round(as.numeric(difftime(time1 = time2, time2 = time1, units = "mins")), 3), " minutes"))
-
+  
+  list.obj <- list(IntCoefs = res_global,
+                   X = X0,
+                   nX = ndata,
+                   I = z,
+                   y_resp = y_resp,
+                   formula = formula,
+                   l = as.vector(pred_global),
+                   mod_global = mod_global,
+                   newdata = dati.cov.marks[1:ndata, ],
+                   ncube = ncube,
+                   time = paste0(round(as.numeric(difftime(time1 = time2,
+                                                           time2 = time1,
+                                                           units = "sec")), 3)," sec"))
   class(list.obj) <- "stppm"
   return(list.obj)
-
+  
 }
-
-

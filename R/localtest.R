@@ -23,43 +23,9 @@
 #' @details
 #' The test detects local differences between  \eqn{\textbf{x}} and \eqn{\textbf{z}}
 #' occurring on the same space-time region.
-#' This procedure was firstly introduced in Moraga and Montes (2011), extended in
-#' the spatio-temporal context by Siino at al, (2018). Finally,
-#'  test has been made suitable also for spatio-temporal point patterns
-#' with spatial domain coinciding with a linear network by D'Angelo et al. (2021).
 #'
-#'
-#' In general, for each point \eqn{(\textbf{u},t)} in the spatio-temporal observed
-#' point pattern \eqn{\textbf{x}}, we test
-#' \deqn{
-#' \begin{cases}
-#' \mathcal{H}_{0}: & \text{no difference in the second-order local  structure of }  (\textbf{u},t) \quad   \text{   w.r.t  } \quad \{  \{  \textbf{x} \setminus    (\textbf{u},t)   \} \cup  \textbf{z} \}\\
-#' \mathcal{H}_{1}: &  \text{significant difference in the second-order local  }   \text{structure of} (\textbf{u},t) \quad \text{   w.r.t  } \quad \{  \{  \textbf{x} \setminus    (\textbf{u},t)   \} \cup  \textbf{z} \}
-#' \end{cases}}
-#'
-#' The sketch of the test is as follows:
-#'
-#'
-#' 1. Set \eqn{k} as the number of permutations
-#'
-#' 2. For each point  \eqn{(\textbf{u}_i,t_i) \in \textbf{x}, i = 1, \ldots, n}:
-#'
-#' 2.1. Estimate the LISTA function  \eqn{\hat{L}^{(i)}(r,h)}
-#'   and Compute the local  deviation test
-#'   \eqn{T^i=\int_{0}^{t_0} \int_{0}^{r_0} \Big(
-#'     \hat{L}^{(i)}(r,h)- \hat{L}^{-(i)}_{H_0}(r,h)
-#'     \Big)^2 \text{d}r \text{d}h,
-#'   }
-#'     where  \eqn{\hat{L}^{-(i)}_{H_0}(r,h)}
-#'      is the LISTA function for the \eqn{i^{th}} point,
-#'       averaged over the \eqn{j=1,\dots,k} permutations
-#'
-#' 2.2 Compute a \eqn{p}-value as
-#'       \eqn{p^i=\sum_{j=1}^{k}  \textbf{1}(T^{i,j}_{H_0} \geq T^i)/k}
-#'
-#'
-#'    The test ends providing a vector \eqn{p} of  \eqn{p}- values, one for each point
-#'    in \eqn{\textbf{x}}.
+#'  The test ends providing a vector \eqn{p} of  \eqn{p}- values, one for each point
+#'  in \eqn{\textbf{x}}.
 #'
 #'  If the test is  performed for spatio-temporal point patterns as in
 #'    Siino et al. (2018), that is, on an object of class \code{stp}, the LISTA
@@ -84,7 +50,7 @@
 #' \item{\code{alpha}}{The threshold given in input}
 #' \item{\code{Xsig}}{A \code{stp} object storing the resulting significant points}
 #' \item{\code{Xnosig}}{A \code{stp} object storing the resulting non-significant points}
-#' \item{\code{id}}{The ids of the resulting significan points}
+#' \item{\code{id}}{The ids of the resulting significant points}
 #' }
 #'
 #'
@@ -101,42 +67,11 @@
 #'
 #'
 #'\dontrun{
-#' # background pattern
-#' set.seed(12345)
-#' X <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(.05, 4),
-#'            nsim = 1, seed = 2, verbose = TRUE)
-#'
-#' # alternative pattern
-#' set.seed(12345)
-#' Z <- rstpp(lambda = 25, nsim = 1, seed = 2, verbose = T)
-#'
-#'
-#' # run the local test
-#' test <- localtest(X, Z, method = "K", k = 9)
-#'
-#' ## Example on a linear network
-#'
-#' # fix the linear network
-#' L0 <- spatstat.geom::domain(spatstat.data::chicago)
-#'
-#' # background pattern
-#' set.seed(12345)
-#' X <- retastlp(cat = NULL, params = c(0.078915 / 1.95, 0.003696,  0.013362,  1.2,
-#'                                         0.424466,  1.164793),
-#'                  betacov = 0.5, m0 = 2.5, b = 1.0789, tmin = 0, t.lag = 200,
-#'                  xmin = 600, xmax = 2200, ymin = 4000, ymax = 5300,
-#'                  iprint = TRUE, covdiag = FALSE, covsim = FALSE, L = L0)
-#'
-#' # alternative pattern, on the same linear network
-#' l <- 20 / (spatstat.geom::volume(L0) * (200 - 25))
-#' set.seed(12345)
-#' stlppPOIS <- stlnpp::rpoistlpp(lambda = l, a = 25, b = 200, L = L0)
-#' Z <- as.stlp(stlppPOIS)
-#'
-#' # run the local test
-#' test <- localtest(X, Z, method = "K", k = 9)
-#'
-#'
+#' X <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)},
+#'             par = c(.005, 5), seed = 2)
+#' Z <- rstpp(lambda = 30, seed = 2)
+#' 
+#' test <- localtest(X, Z, method = "K", k = 3)
 #'
 #'}
 #'
@@ -148,12 +83,14 @@
 #'
 #' Gabriel, E., Rowlingson, B. S., and Diggle, P. J. (2013). stpp: An R Package for Plotting, Simulating and Analyzing Spatio-Temporal Point Patterns. Journal of Statistical Software, 53(2), 1–29. https://doi.org/10.18637/jss.v053.i02
 #'
-#' Moraga, P. and Montes, F. (2011). Detection of spatial disease clusters with lisa functions. Statistics in Medicine, 30(10):1057–1071
-#'
 #' Siino, M., Rodríguez‐Cortés, F. J., Mateu, J. ,and Adelfio, G. (2018). Testing for local structure in spatiotemporal point pattern data. Environmetrics, 29(5-6), e2463.
 #'
-localtest <- function(X, Z, method = "K", k, alpha = 0.05, verbose = TRUE){
+localtest <- function(X, Z, method = c("K", "g"), k, alpha = 0.05, verbose = TRUE){
+  
+  if (!inherits(X, c("stp", "stlp"))) stop("X should be either from class stp or stlp")
 
+  method <- match.arg(method)
+  
   nX <- nrow(X$df)
   nZ <- nrow(Z$df)
   perm <- c(rep(1, nZ), rep(2, nX - 1))

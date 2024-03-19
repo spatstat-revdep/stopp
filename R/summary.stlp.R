@@ -13,27 +13,24 @@
 #' @author Nicoletta D'Angelo
 #'
 #' @seealso
-#' \link{stp}, \link{plot.stlp}, \link{print.stlp},
-#' \link{as.stlpp}, \link{as.stlp}
+#' \link{stp}, \link{plot.stlp}, \link{print.stlp}
 #'
 #' @examples
 #'
 #' \dontrun{
 #'
-#' set.seed(12345)
-#' stlpp1 <- rpoistlpp(.2, a = 0, b = 5, L = easynet)
-#' df0 <- cbind(stlpp1$data$x, stlpp1$data$y, stlpp1$data$t)
-#' L0 <- stlpp1$domain
-#' stlp1 <- stp(df0, L0)
+#' set.seed(2)                       
+#' df_net <- data.frame(cbind(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100)))
 #'
+#' stlp1 <- stp(df_net, L = chicagonet)
 #' summary(stlp1)
 #'
 #' }
 #'
 summary.stlp <- function(object, ...)
 {
-  if(!any(class(object) == "stlp")) stop("class(object) must be stlp")
-
+  if (!inherits(object, c("stlp"))) stop("X should be from class stlp")
+  
   cat("Spatio-temporal point pattern on a linear network \n")
   {cat(paste0(nrow(object$df)," ", "points"),"\n")}
   print(object$L)

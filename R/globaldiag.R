@@ -7,6 +7,7 @@
 #' provided intensity to diagnose, its theoretical value,
 #' and their difference.
 #'
+#' @details
 #' If applied to a \code{stp} object, it resorts to  the
 #' spatio-temporal inhomogeneous K-function (Gabriel and Diggle, 2009)
 #'  documented by the function
@@ -47,60 +48,15 @@
 #' @examples
 #' \donttest{
 #'
-#' #load data
-#' set.seed(12345)
-#' id <- sample(1:nrow(etasFLP::catalog.withcov), 200)
-#' cat <- etasFLP::catalog.withcov[id, ]
-#' stp1 <- stp(cat[, 5:3])
-#'
-#' #fit two competitor models
-#' # and extract the fitted spatio-temporal intensity
-#'
-#' lETAS <- etasFLP::etasclass(cat.orig = cat, magn.threshold = 2.5, magn.threshold.back = 3.9,
-#' mu = 0.3, k0 = 0.02, c = 0.015, p = 1.01, gamma = 0, d = 1,
-#' q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE,
-#'                         TRUE), formula1 = "time ~  magnitude- 1",
-#'                         declustering = TRUE,
-#'                         thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE,
-#'                         is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE,
-#'                         compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)$l
-#'
-#' lPOIS <- etasFLP::etasclass(cat.orig = cat, magn.threshold = 2.5, magn.threshold.back = 3.9,
-#' mu = 0.3, k0 = 0.02, c = 0.015, p = 1.01, gamma = 0, d = 1,
-#' q = 1.5, params.ind = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-#'                         FALSE), formula1 = "time ~  magnitude- 1",
-#'                         declustering = TRUE,
-#'                         thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE,
-#'                         is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE,
-#'                         compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)$l
-#'
-#' globaldiag(stp1, lETAS)
-#'
-#'
-#' globaldiag(stp1, lPOIS)
-#'
-#'
-#' globaldiag(stp1, lPOIS, samescale = FALSE)
-#'
-#' ## Network case
-#'
-#' L0 <- spatstat.geom::domain(spatstat.data::chicago)
-#' set.seed(12345)
-#' stlp1 <- retastlp(cat = NULL, params = c(0.078915 / 2, 0.003696,  0.013362,  1.2,
-#'                                              0.424466,  1.164793),
-#'                       betacov = 0.5, m0 = 2.5, b = 1.0789, tmin = 0, t.lag = 200,
-#'                       xmin = 600, xmax = 2200, ymin = 4000, ymax = 5300,
-#'                       iprint = TRUE, covdiag = FALSE, covsim = FALSE, L = L0)
-#'
-#' globaldiag(stlp1, intensity = density(as.stlpp(stlp1),
-#' at = "points"))
-#'
-#' globaldiag(stlp1, intensity = density(as.stlpp(stlp1),
-#'                                           at = "points"), samescale = FALSE)
-#'
-#'
-#'
-#'
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
+#'                par = c(.3, 6), seed = 2)
+#' 
+#' mod1 <- stppm(inh, formula = ~ 1)
+#' mod2 <- stppm(inh, formula = ~ x)
+#' 
+#' globaldiag(inh, mod1$l)
+#' globaldiag(inh, mod2$l)
+#' 
 #' }
 #'
 #'
@@ -120,6 +76,8 @@
 #'
 #'
 globaldiag <- function(X, intensity, samescale = TRUE){
+  
+  if (!inherits(X, c("stp", "stlp"))) stop("X should be either from class stp or stlp")
 
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
@@ -144,7 +102,7 @@ globaldiag <- function(X, intensity, samescale = TRUE){
 
   diffK <- est - theo
 
-  lims <- if(samescale == T){
+  lims <- if(samescale){
     range(c(as.numeric(est), as.numeric(theo), as.numeric(diffK)))
   } else {
     NULL
@@ -152,26 +110,26 @@ globaldiag <- function(X, intensity, samescale = TRUE){
 
   par(mfrow = c(1, 3))
 
-  fields::image.plot(dist, times, est, main = paste("Estimated"), xlab = "r",
+  fields::image.plot(dist, times, est, main = "Estimated", xlab = "r",
                      ylab = "h",
                      col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
                      zlim = lims,
                      legend.mar =  12)
   box()
-  fields::image.plot(dist, times, theo, main = paste("Theoretical"), xlab = "r",
+  fields::image.plot(dist, times, theo, main = "Theoretical", xlab = "r",
                      ylab = "h",
                      col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
                      zlim = lims,
                      legend.mar =  12)
   box()
 
-  fields::image.plot(dist, times, diffK, main = paste("Difference"), xlab = "r",
+  fields::image.plot(dist, times, diffK, main = "Difference", xlab = "r",
                      ylab = "h",
                      col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
                      zlim = lims,
                      legend.mar =  15)
   box()
 
-  paste("Sum of squared differences = ", sum(diffK ^ 2 / (est)))
+  paste("Sum of squared differences = ", round(sum(diffK ^ 2 / (est)), 3))
 
 }

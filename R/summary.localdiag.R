@@ -22,55 +22,15 @@
 #' @examples
 #' \dontrun{
 #'
-#' #load data
-#' set.seed(12345)
-#' id <- sample(1:nrow(catalog.withcov), 200)
-#' cat <- catalog.withcov[id, ]
-#' stp1 <- stp(cat[, 5:3])
-#'
-#' #fit two competitor models
-#' # and extract the fitted spatio-temporal intensity
-#'
-#' lETAS <- etasclass(cat.orig = cat, magn.threshold = 2.5, magn.threshold.back = 3.9,
-#' mu = 0.3, k0 = 0.02, c = 0.015, p = 1.01, gamma = 0, d = 1,
-#' q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE,
-#'                         TRUE), formula1 = "time ~  magnitude- 1",
-#'                         declustering = TRUE,
-#'                         thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE,
-#'                         is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE,
-#'                         compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)$l
-#'
-#' lPOIS <- etasclass(cat.orig = cat, magn.threshold = 2.5, magn.threshold.back = 3.9,
-#' mu = 0.3, k0 = 0.02, c = 0.015, p = 1.01, gamma = 0, d = 1,
-#' q = 1.5, params.ind = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-#'                         FALSE), formula1 = "time ~  magnitude- 1",
-#'                         declustering = TRUE,
-#'                         thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE,
-#'                         is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE,
-#'                         compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)$l
-#'
-#' # let's identify the outlying points at a .9 percentile
-#'
-#' resETAS <- localdiag(stp1, lETAS, p = .9)
-#' resPOIS <- localdiag(stp1, lPOIS, p = .9)
-#'
-#' summary(resETAS)
-#'
-#' # Points outlying from the 0.9 percentile
-#' # of the anaysed spatio-temporal point pattern
-#' # --------------------------------------
-#' #   Analysed pattern X: 200 points
-#' # 20 outlying points
-#'
-#'
-#' summary(resPOIS)
-#'
-#' # Points outlying from the 0.9 percentile
-#' # of the anaysed spatio-temporal point pattern
-#' # --------------------------------------
-#' #   Analysed pattern X: 200 points
-#' # 20 outlying points
-#'
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
+#'              par = c(.3, 6), seed = 2)
+#' 
+#' mod1 <- stppm(inh, formula = ~ 1)
+#' 
+#' resmod1 <- localdiag(inh, mod1$l, p = .9)
+#' 
+#' summary(resmod1)
+#' 
 #' }
 #'
 #'
@@ -85,14 +45,15 @@
 #'
 #'
 summary.localdiag <- function(object, ...){
-  if(!any(class(object) == "localdiag")) stop("class(object) must be localdiag")
+  if (!inherits(object, c("localdiag"))) stop("X should be from class localdiag")
+  
   if(inherits(object$X, "stlp")){
     cat(paste("Points outlying from the", object$p , "percentile\n"))
-    cat("of the anaysed spatio-temporal point pattern on a linear network \n")
+    cat("of the analysed spatio-temporal point pattern on a linear network \n")
     cat("--------------------------------------------------\n")
   } else {
     cat(paste("Points outlying from the", object$p , "percentile\n"))
-    cat("of the anaysed spatio-temporal point pattern \n")
+    cat("of the analysed spatio-temporal point pattern \n")
     cat("--------------------------------------\n")
   }
   cat(paste("Analysed pattern X:",nrow(object$X$df), "points \n"))
