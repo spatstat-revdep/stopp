@@ -109,7 +109,7 @@ we consider LGCPs with intensity
 
 \dontrun{
 
-catsub <- stp(greececatalog$df[1:100, ])
+catsub <- stp(greececatalog$df[1:200, ])
 
 lgcp1 <- stlgcppm(catsub)
 
@@ -129,8 +129,8 @@ Gabriel, E., Rowlingson, B. S., and Diggle, P. J. (2013). stpp: An R Package for
 Siino, M., Adelfio, G., and Mateu, J. (2018). Joint second-order parameter estimation for spatio-temporal log-Gaussian Cox processes. Stochastic environmental research and risk assessment, 32(12), 3525-3539.
 }
 \seealso{
-\link{print.stlgcppm}, \link{summary.stlgcppm}, \link{localsummary.stlgcppm},
- \link{plot.stlgcppm}, \link{localplot.stlgcppm}
+\link{print.stlgcppm}, \link{summary.stlgcppm}, \link{localsummary},
+ \link{plot.stlgcppm}, \link{localplot}
 }
 \author{
 Nicoletta D'Angelo, Giada Adelfio, and Marianna Siino

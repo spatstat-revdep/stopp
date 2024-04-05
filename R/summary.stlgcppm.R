@@ -13,15 +13,15 @@
 #' @author Nicoletta D'Angelo and Giada Adelfio
 #'
 #' @seealso
-#' \link{stlgcppm}, \link{print.stlgcppm}, \link{localsummary.stlgcppm},
-#' \link{plot.stlgcppm}, \link{localplot.stlgcppm}
+#' \link{stlgcppm}, \link{print.stlgcppm}, \link{localsummary},
+#' \link{plot.stlgcppm}, \link{localplot}
 #'
 #'
 #'
 #' @examples
 #' \dontrun{
 #' 
-#' catsub <- stp(greececatalog$df[1:100, ])
+#' catsub <- stp(greececatalog$df[1:200, ])
 #' 
 #' lgcp1 <- stlgcppm(catsub)
 #'
@@ -90,6 +90,6 @@ summary.stlgcppm <- function(object, ...){
   }
   cat("--------------------------------------------------\n")
   cat("Model fitted in ")
-  cat(object$time)
+  cat(object$time, "\n")
 }
 

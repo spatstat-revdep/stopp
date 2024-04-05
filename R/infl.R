@@ -44,7 +44,7 @@ infl <- function(x, id = NULL){
 
   if(!inherits(x,"localdiag")) stop("class(x) must be localdiag")
   
-  normalize <- function(x){(x - min(x)) / ((max(x) - min(x)) + 0.0001) }
+  # normalize <- function(x){(x - min(x)) / ((max(x) - min(x)) + 0.0001) }
 
   if(is.null(id)){
     id <- x$ids
@@ -63,16 +63,34 @@ infl <- function(x, id = NULL){
   }
 
   if(inherits(x$X, "stlp")){
+    
     for(i in id){
-      graphics::image(normalize(x$listas[[i]]$Kinhom),
-            main = paste("id", i),col = grDevices::hcl.colors(12, "YlOrRd",
-                                                              rev = TRUE))
+      fields::image.plot(
+        # normalize(x$listas[[i]]$Kinhom)
+        x$listas[[i]]$Kinhom
+        , xlab = "r",
+                      ylab = "h", #zlim = range(normalize(x$listas[[i]]$Kinhom)),
+            main = paste("id", i),
+            col = grDevices::hcl.colors(12, "YlOrRd",  rev = TRUE),
+            axes = FALSE)
+      axis(1, at = seq(0, 1, l = length(x$dist)), labels = round(x$dist, 3))
+      axis(2, at = seq(0, 1, l = length(x$times)), labels = round(x$times, 3))
+      box()
     }
   } else {
     for(i in id){
-      graphics::image(normalize(x$listas[, , i]),
-            main = paste("id", i), col = grDevices::hcl.colors(12, "YlOrRd",
-                                                               rev = TRUE))
+      fields::image.plot(
+        # normalize(x$listas[, , i]),
+        x$listas[, , i],
+        xlab = "r",
+                      ylab = "h", #zlim = range(normalize(x$listas[, , i])),
+                      main = paste("id", i),
+                      col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
+                      axes = FALSE)
+      
+      axis(1, at = seq(0, 1, l = length(x$dist)), labels = round(x$dist, 3))
+      axis(2, at = seq(0, 1, l = length(x$times)), labels = round(x$times, 3))
+      box()
     }
   }
 

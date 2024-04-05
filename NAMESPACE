@@ -11,7 +11,7 @@ importFrom("graphics", "image", "abline", "axis", "barplot", "box", "hist", "par
 importFrom("utils", "txtProgressBar")
 importFrom("stlnpp", "as.stlpp", "as.lpp.stlpp", "rpoistlpp")
 importFrom("spatstat.geom", "domain", "npoints", "pairdist", "box3", "progressreport", "ppp", "colourmap", "unmark", "owin", "volume", "as.psp", "pp3", "marks")
-importFrom("spatstat.linnet", "default.linnet.tolerance", "countends", "pairdist.lpp", "runiflpp", "lppm", "linequad", "lpp")
+importFrom("spatstat.linnet", "default.linnet.tolerance", "countends", "pairdist.lpp", "runiflpp", "lppm", "linequad", "lpp", "as.linnet")
 importFrom("spatstat.explore", "dkernel", "Smooth")
 importFrom("spatstat.random", "datagen.runifpointOnLines")
 importFrom("spatstat.model", "ppm")
@@ -22,19 +22,24 @@ importFrom("KernSmooth", "dpik")
 importFrom("optimx", "optimx")
 importFrom("parallel", "parSapply", "makeCluster", "clusterExport", "stopCluster")
 
-export(display, globaldiag, infl, localdiag,
-       localplot.locstppm, localplot.stlgcppm, localSTLKinhom, localSTLginhom,
-       localsummary.locstppm, localsummary.stlgcppm, localtest, locstppm,
+export(globaldiag, infl, localdiag,
+       localplot, localSTLKinhom, localSTLginhom,
+       localsummary, localtest, locstppm,
        plot.localdiag, plot.localtest, plot.locstppm, plot.stcov, plot.sepstlppm,
-       plot.sepstppm, plot.stlgcppm, plot.stlp, plot.stlpm, plot.stp, plot.stppm, plot.stpm,
-       print.localdiag, print.localtest, print.locstppm, print.stcov, print.stlgcppm,
+       plot.sepstppm, plot.stlgcppm, plot.stlp, plot.stlpm, plot.stp, plot.stppm, 
+       plot.stpm, print.lista, print.localdiag, print.localtest, print.locstppm,
+       print.sepstlppm, print.sepstppm, print.stcov, print.stlgcppm,
        print.stlp, print.stlpm, print.stp, print.stppm,
        rETASlp, rETASp, rstlpp, rstpp, sepstlppm, sepstppm, stlgcppm, stp, stppm,
-       summary.localdiag, summary.localtest, summary.locstppm, 
-       summary.stlgcppm, summary.stcov,
+       summary.lista, summary.localdiag, summary.localtest, summary.locstppm, 
+       summary.sepstlppm, summary.sepstppm, summary.stlgcppm, summary.stcov,
        summary.stlp, summary.stlpm, summary.stp, summary.stppm, stcov, stpm)
 
-
+S3method(localplot, locstppm)
+S3method(localplot, stlgcppm)
+S3method(localsummary, locstppm)
+S3method(localsummary, stlgcppm)
+S3method(plot, lista)
 S3method(plot, localdiag)
 S3method(plot, localtest)
 S3method(plot, locstppm)
@@ -48,9 +53,12 @@ S3method(plot, stpm)
 S3method(plot, stppm)
 S3method(plot, sepstlppm)
 S3method(plot, sepstppm)
+S3method(print, lista)
 S3method(print, localdiag)
 S3method(print, localtest)
 S3method(print, locstppm)
+S3method(print, sepstlppm)
+S3method(print, sepstppm)
 S3method(print, stcov)
 S3method(print, stlgcppm)
 S3method(print, stlp)
@@ -58,9 +66,12 @@ S3method(print, stlpm)
 S3method(print, stp)
 S3method(print, stpm)
 S3method(print, stppm)
+S3method(summary, lista)
 S3method(summary, localdiag)
 S3method(summary, localtest)
 S3method(summary, locstppm)
+S3method(summary, sepstlppm)
+S3method(summary, sepstppm)
 S3method(summary, stcov)
 S3method(summary, stlgcppm)
 S3method(summary, stlp)

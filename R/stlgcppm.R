@@ -81,15 +81,15 @@
 #' @author Nicoletta D'Angelo, Giada Adelfio, and Marianna Siino
 #'
 #' @seealso
-#' \link{print.stlgcppm}, \link{summary.stlgcppm}, \link{localsummary.stlgcppm},
-#'  \link{plot.stlgcppm}, \link{localplot.stlgcppm}
+#' \link{print.stlgcppm}, \link{summary.stlgcppm}, \link{localsummary},
+#'  \link{plot.stlgcppm}, \link{localplot}
 #'
 #'
 #' @examples
 #'
 #' \dontrun{
 #' 
-#' catsub <- stp(greececatalog$df[1:100, ])
+#' catsub <- stp(greececatalog$df[1:200, ])
 #' 
 #' lgcp1 <- stlgcppm(catsub)
 #' 
@@ -270,26 +270,45 @@ stlgcppm <- function(X, formula = ~ 1, verbose = TRUE,
   us0 <- vals_s[2]
   vt0 <- vals_t[2]
   
-  g0 <- if(first == "global"){
-    stpp::LISTAhat(xyt = as.stpp(X), lambda = pred_global, s.region = s.region, t.region = t.region,
-                   dist = u, times = v, ks = "epanech", hs = us0, kt = "box",
-                   ht = vt0)
+  if(first == "global"){
+    if(second == "global"){
+      g0 <- stpp::PCFhat(xyt = as.stpp(X), lambda = pred_global, s.region = s.region, t.region = t.region,
+                           dist = u, times = v, ks = "epanech", hs = us0, kt = "box",
+                           ht = vt0)
+    } else {
+      g0 <- stpp::LISTAhat(xyt = as.stpp(X), lambda = pred_global, s.region = s.region, t.region = t.region,
+                             dist = u, times = v, ks = "epanech", hs = us0, kt = "box",
+                             ht = vt0)
+    }
+    
   } else {
-    stpp::LISTAhat(xyt = as.stpp(X), lambda = pred_local, s.region = s.region, t.region = t.region,
-                   dist = u, times = v, ks = "epanech", hs = us0, kt = "box",
-                   ht = vt0)
+    if(second == "global"){
+      g0 <- stpp::PCFhat(xyt = as.stpp(X), lambda = pred_local, s.region = s.region, t.region = t.region,
+                           dist = u, times = v, ks = "epanech", hs = us0, kt = "box",
+                           ht = vt0)
+    } else {
+      g0 <- stpp::LISTAhat(xyt = as.stpp(X), lambda = pred_local, s.region = s.region, t.region = t.region,
+                             dist = u, times = v, ks = "epanech", hs = us0, kt = "box",
+                             ht = vt0)
+    }
   }
   
   max_dist <- max(dist(s.region))
   max_dist_t <- max(diff(t.region))
   
-  nonpar_g_st_finite <- is.finite(g0$list.LISTA)
-  g0$list.LISTA[!nonpar_g_st_finite] <- 0
+  if(second == "local"){
+    nonpar_g_st_finite <- is.finite(g0$list.LISTA)
+    g0$list.LISTA[!nonpar_g_st_finite] <- 0
+  } else {
+    nonpar_g_st_finite <- is.finite(g0$pcf)
+    g0$pcf[!nonpar_g_st_finite] <- 0
+  }
+  
   
   if(cov == "separable"){
     
     if(is.null(min_vals)) min_vals <- c(0.01, 0.001, 0.01)#c(0.01, 0.001, 20)
-    if(is.null(max_vals)) max_vals <-  c(50, 10, 1500)
+    if(is.null(max_vals)) max_vals <-  c(50, 8, 1500)
     
     start_par <- c(log(nX) / 2, max_dist / 100, max_dist_t / 100)
     
@@ -301,7 +320,7 @@ stlgcppm <- function(X, formula = ~ 1, verbose = TRUE,
                                        fn = g.sep_st_exp_exp2,
                                        useq = g0$dist,
                                        vseq = g0$times,
-                                       ghat = g0$list.LISTA,
+                                       ghat = g0$pcf,
                                        transform = NULL,
                                        power = 1, method = c("nlm"),
                                        lower = min_vals,
@@ -369,7 +388,7 @@ stlgcppm <- function(X, formula = ~ 1, verbose = TRUE,
                                   fn = g_st,
                                   useq = g0$dist,
                                   vseq = g0$times,
-                                  ghat = g0$list.LISTA,
+                                  ghat = g0$pcf,
                                   transform = NULL,
                                   power = 1,
                                   method = c("nlm"),
@@ -436,7 +455,7 @@ stlgcppm <- function(X, formula = ~ 1, verbose = TRUE,
                                     fn = g_st_iaco,
                                     useq = g0$dist,
                                     vseq = g0$times,
-                                    ghat = g0$list.LISTA,
+                                    ghat = g0$pcf,
                                     transform = NULL,
                                     power = 1,
                                     method = c("nlm"),

@@ -20,7 +20,7 @@ The function prints the main information on the fitted model.
 \examples{
 \dontrun{
 
-catsub <- stp(greececatalog$df[1:100, ])
+catsub <- stp(greececatalog$df[1:200, ])
 
 lgcp1 <- stlgcppm(catsub)
 
@@ -36,8 +36,8 @@ D'Angelo, N., Adelfio, G., and Mateu, J. (2023). Locally weighted minimum contra
 Siino, M., Adelfio, G., and Mateu, J. (2018). Joint second-order parameter estimation for spatio-temporal log-Gaussian Cox processes. Stochastic environmental research and risk assessment, 32(12), 3525-3539.
 }
 \seealso{
-\link{stlgcppm}, \link{print.stlgcppm}, \link{localsummary.stlgcppm},
-\link{plot.stlgcppm}, \link{localplot.stlgcppm}
+\link{stlgcppm}, \link{print.stlgcppm}, \link{localsummary},
+\link{plot.stlgcppm}, \link{localplot}
 }
 \author{
 Nicoletta D'Angelo and Giada Adelfio

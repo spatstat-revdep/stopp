@@ -589,6 +589,625 @@ is.stlp <- function(x){
 
 
 
+localplot.stlgcppm <- function(x, par = TRUE){
+  if (!inherits(x, c("stlgcppm"))) stop("x should be from class stlgcppm")
+  
+  if(inherits(x$IntCoefs, "numeric") & inherits(x$CovCoefs, "numeric")){
+    stop("No local parameters to plot")
+  }
+  
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  
+  if(!inherits(x$IntCoefs, "numeric")){
+    nn <- length(names(x$IntCoefs))
+    
+    if(par == T){
+      par(mfrow = c(1, nn))
+    } else{
+      par(mfrow = c(1, 1))
+      par(ask = TRUE)
+    }
+    
+    par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 0))
+    plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                      theta = - 45, phi = 20,
+                      col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                          range = range(x$IntCoefs$`(Intercept)`)),
+                                 "stuff")$outputs,
+                      ticktype = "detailed", pch = 19,
+                      colvar = x$IntCoefs$`(Intercept)`,
+                      xlab="x",ylab="y",zlab="t",
+                      main = c("Intercept"))
+    par(mar = c(5, 4, 4, 2) + 0.1)
+    if(par != TRUE){
+      par(ask = FALSE)
+    }
+    
+    if(nn > 1){
+      for(i in 2:nn){
+        
+        id <- x$IntCoefs[, i]
+        
+        if(par != TRUE){
+          par(ask = TRUE)
+        }
+        par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, -1))
+        plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                          theta = - 45, phi = 20,
+                          col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                              range = range(id)),
+                                     "stuff")$outputs,
+                          ticktype = "detailed", pch = 19,
+                          colvar = id,
+                          xlab="x",ylab="y",zlab="t",
+                          main = names(x$IntCoefs)[i])
+        par(mar = c(5, 4, 4, 2) + 0.1)
+        if(par != TRUE){
+          par(ask = FALSE)
+        }
+        
+      }
+    }
+    
+    
+  }
+  
+  
+  if(!inherits(x$CovCoefs, "numeric")){
+    
+    if(ncol(x$CovCoefs) == 3){
+      if(par == T){
+        par(mfrow = c(1, 3))
+      } else{
+        par(mfrow = c(1, 1))
+      }
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 1))
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$sigma)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$sigma,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(sigma))
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$alpha)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$alpha,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(alpha))
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 0))
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$beta)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$beta,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(beta))
+      par(mar = c(5, 4, 4, 2) + 0.1)
+      if(par != TRUE){
+        par(ask = FALSE)
+      }
+      
+    } else {
+      if(par == TRUE){
+        par(mfrow = c(2, 3))
+      } else{
+        par(mfrow = c(1, 1))
+      }
+      
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 1))
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$sigma)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$sigma,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(sigma))
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$alpha)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$alpha,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(alpha))
+      par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 0))
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$beta)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$beta,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(beta))
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$gamma_s)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$gamma_s,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(gamma))
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$gamma_t)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$gamma_t,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(gamma[t]))
+      par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 0))
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(x$CovCoefs$delta)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = x$CovCoefs$delta,
+                        xlab="x",ylab="y",zlab="t",
+                        main = expression(delta))
+      par(mar = c(5, 4, 4, 2) + 0.1)
+      if(par != TRUE){
+        par(ask = FALSE)
+      }
+    }
+  }
+  
+}
+
+localplot.locstppm <- function(x, par = TRUE){
+  if (!inherits(x, c("locstppm"))) stop("x should be from class locstppm")
+  
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  
+  nn <- length(names(x$IntCoefs))
+  
+  if(par == TRUE){
+    par(mfrow = c(1, nn))
+  } else{
+    par(mfrow = c(1, 1))
+    par(ask = TRUE)
+  }
+  
+  par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 0))
+  plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                    theta = - 45, phi = 20,
+                    col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                        range = range(x$IntCoefs_local[, 1])),
+                               "stuff")$outputs,
+                    ticktype = "detailed", pch = 19,
+                    colvar = x$IntCoefs_local[, 1],
+                    xlab="x",ylab="y",zlab="t",
+                    main = c("Intercept"))
+  par(mar = c(5, 4, 4, 2) + 0.1)
+  if(par != TRUE){
+    par(ask = FALSE)
+  }
+  
+  if(nn > 1){
+    for(i in 2:nn){
+      
+      id <- x$IntCoefs_local[, i]
+      
+      if(par != TRUE){
+        par(ask = TRUE)
+      }
+      par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, -1))
+      plot3D::scatter3D(x$X$df$x, x$X$df$y, x$X$df$t,
+                        theta = - 45, phi = 20,
+                        col = attr(spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                                            range = range(id)),
+                                   "stuff")$outputs,
+                        ticktype = "detailed", pch = 19,
+                        colvar = id,
+                        xlab="x",ylab="y",zlab="t",
+                        main = names(x$IntCoefs_local)[i])
+      par(mar = c(5, 4, 4, 2) + 0.1)
+      if(par != TRUE){
+        par(ask = FALSE)
+      }
+      
+    }
+  }
+  
+}
+
+localsummary.stlgcppm <- function(x,
+                                  scaler = c("silverman", "IQR", "sd", "var"),
+                                  do.points = TRUE,
+                                  print.bw = FALSE,
+                                  zap = 0.00001,
+                                  par = TRUE){
+  if(!inherits(x,"stlgcppm")) stop("class(x) must be stlgcppm")
+  
+  if(inherits(x$IntCoefs, "numeric")){
+    if(x$formula == "~1"){
+      stop("No inhomogeneous intensity to summarise")
+    } else {
+      stop("No inhomogeneous intensity made by local parameters")
+    }
+  }
+  
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  
+  mod_Min <- mod_1stQu <- mod_Median <- mod_3rdQu <- mod_Max <- x$mod_global
+  
+  mod_Min$coefficients <- apply(x$IntCoefs, 2, summary)[1, ]
+  mod_1stQu$coefficients <- apply(x$IntCoefs, 2, summary)[2, ]
+  mod_Median$coefficients <- apply(x$IntCoefs, 2, summary)[3, ]
+  mod_3rdQu$coefficients <- apply(x$IntCoefs, 2, summary)[5, ]
+  mod_Max$coefficients <- apply(x$IntCoefs, 2, summary)[6, ]
+  
+  mark_int <- x$l
+  l_Min <- predict(mod_Min, newdata = x$newdata)
+  l_1stQu <- predict(mod_1stQu, newdata = x$newdata)
+  l_Median <- predict(mod_Median, newdata = x$newdata)
+  l_3rdQu <- predict(mod_3rdQu, newdata = x$newdata)
+  l_Max <- predict(mod_Max, newdata = x$newdata)
+  
+  ppx_int <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_int,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_Min <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Min,
+                                                 window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_1stQu <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_1stQu,
+                                                   window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_Median <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Median,
+                                                    window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_3rdQu <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_3rdQu,
+                                                   window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_Max <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Max,
+                                                 window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  
+  sig <- sparr::OS(unmark(ppx_int), scaler = scaler)
+  
+  s_int <- spatstat.explore::Smooth(ppx_int, sigma = sig)
+  s_Min <- spatstat.explore::Smooth(ppx_Min, sigma = sig)
+  s_1stQu <- spatstat.explore::Smooth(ppx_1stQu, sigma = sig)
+  s_Median <- spatstat.explore::Smooth(ppx_Median, sigma = sig)
+  s_3rdQu <- spatstat.explore::Smooth(ppx_3rdQu, sigma = sig)
+  s_Max <- spatstat.explore::Smooth(ppx_Max, sigma = sig)
+  
+  g00 <- spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                  range = c(min(s_int, s_Min$v[1], s_1stQu$v[1], s_Median$v[1],
+                                                s_3rdQu$v[1], s_Max$v[1]),
+                                            max(s_int, s_Min$v[1], s_1stQu$v[1], s_Median$v[1],
+                                                s_3rdQu$v[1], s_Max$v[1])))
+  
+  if(par == T){
+    par(mfrow = c(2, 3))
+  } else {
+    par(mfrow = c(1, 1))
+    par(ask = FALSE)
+  }
+  
+  if(x$formula == "~1"){
+    if(par != T){
+      par(ask = TRUE)
+    }
+    par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 1))
+    plot(s_int,
+         col = g00,
+         main = c("First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_int), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Min,
+         col = g00,
+         main = paste("Min. First-order Intensity in space \n lambda = ", round(s_Min$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Min), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_1stQu,
+         col = g00,
+         main = paste("1st Qu. First-order Intensity in space \n lambda = ",  round(s_1stQu$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_1stQu), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Median,
+         col = g00,
+         main = paste("Median First-order Intensity in space \n lambda = ",  round(s_Median$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Median), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_3rdQu,
+         col = g00,
+         main = paste("3rd Qu. First-order Intensity in space \n lambda = ",  round(s_3rdQu$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_3rdQu), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Max,
+         col = g00,
+         main = paste("Max. First-order Intensity in space \n lambda = ",  round(s_Max$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Max), add = T)}
+    par(mar = c(5, 4, 4, 2) + 0.1)
+    if(par != T){
+      par(ask = FALSE)
+    }
+  } else {
+    if(par != T){
+      par(ask = TRUE)
+    }
+    par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 1))
+    plot(s_int, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_int)),
+         main = c("First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_int), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Min, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_Min)),
+         main = c("Min. First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Min), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_1stQu, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_1stQu)),
+         main = c("1st Qu. First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_1stQu), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Median, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_Median)),
+         main = c("Median First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Median), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_3rdQu, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_3rdQu)),
+         main = c("3rd Qu. First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_3rdQu), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Max, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_Max)),
+         main = c("Max. First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Max), add = T)}
+    par(mar = c(5, 4, 4, 2) + 0.1)
+    if(par != T){
+      par(ask = FALSE)
+    }
+  }
+  
+  
+  if(print.bw == T){print(sig)}
+}
+
+localsummary.locstppm <- function(x,
+                                  scaler = c("silverman", "IQR", "sd", "var"),
+                                  do.points = TRUE,
+                                  print.bw = FALSE,
+                                  zap = 0.00001,
+                                  par = TRUE){
+  if(!inherits(x,"locstppm")) stop("class(x) must be locstppm")
+  
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  
+  mod_Min <- mod_1stQu <- mod_Median <- mod_3rdQu <- mod_Max <- x$mod_global
+  
+  mod_Min$coefficients <- apply(x$IntCoefs_local, 2, summary)[1, ]
+  mod_1stQu$coefficients <- apply(x$IntCoefs_local, 2, summary)[2, ]
+  mod_Median$coefficients <- apply(x$IntCoefs_local, 2, summary)[3, ]
+  mod_3rdQu$coefficients <- apply(x$IntCoefs_local, 2, summary)[5, ]
+  mod_Max$coefficients <- apply(x$IntCoefs_local, 2, summary)[6, ]
+  
+  mark_int <- x$l_local
+  l_Min <- predict(mod_Min, newdata = x$newdata)
+  l_1stQu <- predict(mod_1stQu, newdata = x$newdata)
+  l_Median <- predict(mod_Median, newdata = x$newdata)
+  l_3rdQu <- predict(mod_3rdQu, newdata = x$newdata)
+  l_Max <- predict(mod_Max, newdata = x$newdata)
+  
+  ppx_int <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_int,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_Min <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Min,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_1stQu <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_1stQu,
+                                  window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_Median <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Median,
+                                   window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_3rdQu <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_3rdQu,
+                                  window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_Max <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = l_Max,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  
+  sig <- sparr::OS(unmark(ppx_int), scaler = scaler)
+  
+  s_int <- spatstat.explore::Smooth(ppx_int, sigma = sig)
+  s_Min <- spatstat.explore::Smooth(ppx_Min, sigma = sig)
+  s_1stQu <- spatstat.explore::Smooth(ppx_1stQu, sigma = sig)
+  s_Median <- spatstat.explore::Smooth(ppx_Median, sigma = sig)
+  s_3rdQu <- spatstat.explore::Smooth(ppx_3rdQu, sigma = sig)
+  s_Max <- spatstat.explore::Smooth(ppx_Max, sigma = sig)
+  
+  g00 <- spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                  range = c(min(s_int, s_Min$v[1], s_1stQu$v[1], s_Median$v[1],
+                                                s_3rdQu$v[1], s_Max$v[1]),
+                                            max(s_int, s_Min$v[1], s_1stQu$v[1], s_Median$v[1],
+                                                s_3rdQu$v[1], s_Max$v[1])))
+  
+  if(par == T){
+    par(mfrow = c(2, 3))
+  } else {
+    par(mfrow = c(1, 1))
+    par(ask = FALSE)
+  }
+  
+  if(x$formula == "~1"){
+    if(par != T){
+      par(ask = TRUE)
+    }
+    par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 1))
+    plot(s_int,
+         col = g00,
+         main = c("First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_int), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Min,
+         col = g00,
+         main = paste("Min. First-order Intensity in space \n lambda = ", round(s_Min$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Min), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_1stQu,
+         col = g00,
+         main = paste("1st Qu. First-order Intensity in space \n lambda = ",  round(s_1stQu$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_1stQu), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Median,
+         col = g00,
+         main = paste("Median First-order Intensity in space \n lambda = ",  round(s_Median$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Median), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_3rdQu,
+         col = g00,
+         main = paste("3rd Qu. First-order Intensity in space \n lambda = ",  round(s_3rdQu$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_3rdQu), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Max,
+         col = g00,
+         main = paste("Max. First-order Intensity in space \n lambda = ",  round(s_Max$v[1], 2)))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Max), add = T)}
+    par(mar = c(5, 4, 4, 2) + 0.1)
+    if(par != T){
+      par(ask = FALSE)
+    }
+  } else {
+    if(par != T){
+      par(ask = TRUE)
+    }
+    par(mar = c(5, 4, 4, 2) + 0.1 - c(2, 1 , 1, 1))
+    plot(s_int, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_int)),
+         main = c("First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_int), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Min, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_Min)),
+         main = c("Min. First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Min), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_1stQu, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_1stQu)),
+         main = c("1st Qu. First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_1stQu), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Median, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_Median)),
+         main = c("Median First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Median), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_3rdQu, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_3rdQu)),
+         main = c("3rd Qu. First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_3rdQu), add = T)}
+    if(par != T){
+      par(ask = TRUE)
+    }
+    plot(s_Max, zap = zap,
+         col = spatstat.geom::colourmap(grDevices::hcl.colors(100, "YlOrRd", rev = TRUE),
+                                        range = range(s_Max)),
+         main = c("Max. First-order Intensity in space \n Density Kernel Smoothing"))
+    if(do.points == T){plot(spatstat.geom::unmark(ppx_Max), add = T)}
+    par(mar = c(5, 4, 4, 2) + 0.1)
+    if(par != T){
+      par(ask = FALSE)
+    }
+  }
+  
+  
+  if(print.bw == T){print(sig)}
+}
+
 
 
 

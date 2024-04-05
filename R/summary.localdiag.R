@@ -57,5 +57,5 @@ summary.localdiag <- function(object, ...){
     cat("--------------------------------------\n")
   }
   cat(paste("Analysed pattern X:",nrow(object$X$df), "points \n"))
-  cat(paste(length(object$ids), "outlying points"))
+  cat(paste(length(object$ids), "outlying points"), "\n")
 }

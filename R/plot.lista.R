@@ -7,7 +7,8 @@
 #' LISTA functions. 
 #' 
 #' @param x An object of class \code{lista} 
-#' @param id The id of the LISTA to display.
+#' @param id The id of the LISTA to display
+#' @param ... additional unused argument
 #'
 #' @export
 #'
@@ -30,7 +31,7 @@
 #'
 #' k <- localSTLKinhom(stlp1, lambda = lambda, normalize = TRUE)
 #' 
-#' display(k, id = 1:8)
+#' plot(k, id = 1:9)
 #'
 #' }
 #'
@@ -40,7 +41,7 @@
 #'
 #' D’Angelo, N., Adelfio, G.,  and Mateu, J. (2022). Local inhomogeneous second-order characteristics for spatio-temporal point processes on linear networks. Stat Papers. https://doi.org/10.1007/s00362-022-01338-4
 #'
-display <- function(x, id){
+plot.lista <- function(x, id, ...){
   
   if(!inherits(x,"lista")) stop("class(x) must be lista")
   if(missing(id)) stop("Specify which lista function to plot")
@@ -56,10 +57,17 @@ display <- function(x, id){
     oldpar <- par(mfrow = c(b, a))
     on.exit(par(oldpar))
   }
-  
+  nd <- length(x[[1]]$r)
+  nt <- length(x[[1]]$t)
     for(j in id){
-      inhom <- list(x = x[[j]]$r, y = x[[j]]$t, z = x[[j]][[1]])
-      fields::image.plot(inhom, main = paste("id", j), col = hcl.colors(12, "YlOrRd", rev = TRUE))
+      # inhom <- list(x = x[[j]]$r, y = x[[j]]$t, z = x[[j]][[1]])
+      fields::image.plot(x[[j]][[1]], main = paste("id", j), xlab = "r",
+                      ylab = "h", 
+                         col = hcl.colors(12, "YlOrRd", rev = TRUE),
+                      axes = FALSE)
+      axis(1, at = seq(0, 1, l = nd), labels = round(x[[j]]$r, 3))
+      axis(2, at = seq(0, 1, l = nt), labels = round(x[[j]]$t, 3))
+      box()
     }
   
 }

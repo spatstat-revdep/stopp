@@ -114,20 +114,26 @@ globaldiag <- function(X, intensity, samescale = TRUE){
                      ylab = "h",
                      col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
                      zlim = lims,
-                     legend.mar =  12)
+                     legend.mar =  12, axes = FALSE)
+  axis(1, at = seq(0, 1, l = length(dist)), labels = round(dist, 3))
+  axis(2, at = seq(0, 1, l = length(times)), labels = round(times, 3))
   box()
   fields::image.plot(dist, times, theo, main = "Theoretical", xlab = "r",
                      ylab = "h",
                      col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
                      zlim = lims,
-                     legend.mar =  12)
+                     legend.mar =  12, axes = FALSE)
+  axis(1, at = seq(0, 1, l = length(dist)), labels = round(dist, 3))
+  axis(2, at = seq(0, 1, l = length(times)), labels = round(times, 3))
   box()
 
   fields::image.plot(dist, times, diffK, main = "Difference", xlab = "r",
                      ylab = "h",
                      col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
                      zlim = lims,
-                     legend.mar =  15)
+                     legend.mar =  15, axes = FALSE)
+  axis(1, at = seq(0, 1, l = length(dist)), labels = round(dist, 3))
+  axis(2, at = seq(0, 1, l = length(times)), labels = round(times, 3))
   box()
 
   paste("Sum of squared differences = ", round(sum(diffK ^ 2 / (est)), 3))

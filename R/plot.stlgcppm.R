@@ -25,13 +25,13 @@
 #'
 #' @seealso
 #' \link{stlgcppm}, \link{print.stlgcppm}, \link{summary.stlgcppm},
-#' \link{localsummary.stlgcppm}, \link{localplot.stlgcppm}
+#' \link{localsummary}, \link{localplot}
 #'
 #'
 #'
 #' @examples
 #' \dontrun{
-#' catsub <- stp(greececatalog$df[1:100, ])
+#' catsub <- stp(greececatalog$df[1:200, ])
 #' 
 #' lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
 #'

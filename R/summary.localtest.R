@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @author Nicoletta D'Angelo
-#'
+#'                           
 #' @seealso
 #' \link{localtest}, \link{print.localtest},
 #' \link{plot.localtest}
@@ -55,5 +55,6 @@ summary.localtest <- function(object, ...){
   }
   cat(paste("Background pattern X:",nrow(object$X$df), " \n"))
   cat(paste("Alternative pattern Z:",nrow(object$Z$df), " \n  \n"))
-  cat(paste(nrow(object$Xsig$df), "significant points at alpha =", object$alpha))
+  cat(paste(nrow(object$Xsig$df), "significant points at alpha =",
+            object$alpha), "\n")
 }

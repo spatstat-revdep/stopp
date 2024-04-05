@@ -17,7 +17,7 @@
 #' @param r values of argument r where pair correlation function will be evaluated. optional.
 #' @param t values of argument t where pair correlation function will be evaluated. optional.
 #' @param nxy pixel array dimensions. optional.
-#' @return A list of class \code{glista}.
+#' @return A list of class \code{lista}.
 #' The objects are of class \code{sumstlpp} (Moradi and Mateu, 2020).
 #' @export
 #'
@@ -32,7 +32,7 @@
 #' df_net <- data.frame(x = runif(25, 0, 0.85), y = runif(25, 0, 0.85), t = runif(25))
 #' stlp1 <- stp(df_net, L = chicagonet)
 #' lambda <- rep(diff(range(stlp1$df$x)) * diff(range(stlp1$df$y)) 
-#' * diff(range(stlp1$df$t)) / volume(stlp1$L),
+#' * diff(range(stlp1$df$t)) / spatstat.geom::volume(stlp1$L),
 #' nrow(stlp1$df))
 #' 
 #' g <- localSTLginhom(stlp1, lambda = lambda, normalize = TRUE)
@@ -50,7 +50,9 @@ localSTLginhom = function(x, lambda, normalize = FALSE, r = NULL, t = NULL, nxy 
 {
   if (!inherits(x, "stlp"))
     stop("x should be from class stlp")
-
+  
+  x$L <- spatstat.linnet::as.linnet(x$L, sparse = FALSE)
+  
   X <- as.stlpp(x)
 
   Y <- stlnpp::as.lpp.stlpp(X)
@@ -130,3 +132,10 @@ localSTLginhom = function(x, lambda, normalize = FALSE, r = NULL, t = NULL, nxy 
   class(gout) <- "lista"
   return(gout)
 }
+
+
+
+
+
+
+

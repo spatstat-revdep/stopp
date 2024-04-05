@@ -20,7 +20,7 @@ localSTLginhom(x, lambda, normalize = FALSE, r = NULL, t = NULL, nxy = 10)
 \item{nxy}{pixel array dimensions. optional.}
 }
 \value{
-A list of class \code{glista}.
+A list of class \code{lista}.
 The objects are of class \code{sumstlpp} (Moradi and Mateu, 2020).
 }
 \description{
@@ -40,7 +40,7 @@ set.seed(2)
 df_net <- data.frame(x = runif(25, 0, 0.85), y = runif(25, 0, 0.85), t = runif(25))
 stlp1 <- stp(df_net, L = chicagonet)
 lambda <- rep(diff(range(stlp1$df$x)) * diff(range(stlp1$df$y)) 
-* diff(range(stlp1$df$t)) / volume(stlp1$L),
+* diff(range(stlp1$df$t)) / spatstat.geom::volume(stlp1$L),
 nrow(stlp1$df))
 
 g <- localSTLginhom(stlp1, lambda = lambda, normalize = TRUE)

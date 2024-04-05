@@ -1,0 +1,66 @@
+#' Summary plots of the fitted coefficient of a local spatio-temporal Poisson process or a local LGCP model
+#'
+#' The function breaks up the contribution of the local estimates
+#' to the fitted intensity, by plotting the overall intensity and the
+#' density kernel smoothing of some artificial intensities, obtained by
+#' imputing the quartiles of the local parameters' distributions.
+#'
+#' @param x An object of class \code{locstppm} or \code{stlgcppm}
+#' @param scaler Optional. Controls the value for a scalar representation of the
+#'  spatial scale of the data.
+#'  Either a character string, \code{"silverman"} (default), \code{"IQR"},
+#'   \code{"sd"}, or \code{"var"};
+#'  or positive numeric value(s). See \link[sparr]{OS}.
+#' @param do.points Add points to plot
+#' @param print.bw It prints the estimated oversmoothing (\link[sparr]{OS}) bandwidth selector
+#' @param zap Noise threshold factor (default to 0.00001). A numerical value greater than or equal to 1.
+#'  If the range of pixel values is less than \code{zap * .Machine$double.eps},
+#'   the image will be treated as constant. This avoids displaying images which
+#'   should be constant but contain small numerical errors.
+#' @param par Default to \code{TRUE}.
+#'
+#' @export
+#'
+#' @author Nicoletta D'Angelo and Giada Adelfio
+#'
+#' @seealso
+#' \link{locstppm}, \link{stlgcppm}
+#'
+#'
+#' @examples
+#' \dontrun{
+#' 
+#' # Local spatio-temporal Poisson process model
+#' 
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
+#'              par = c(0.005, 5), seed = 2)
+#' inh_local <- locstppm(inh, formula = ~ x)
+#' 
+#' localsummary(inh_local)
+#' 
+#' # Local LGCP
+#' 
+#' catsub <- stp(greececatalog$df[1:200, ])
+#' 
+#' lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
+#'
+#' localsummary(lgcp_loc)
+#'
+#'}
+#'
+#'
+#' @references
+#' D'Angelo, N., Adelfio, G., and Mateu, J. (2023). Locally weighted minimum contrast estimation for spatio-temporal log-Gaussian Cox processes. Computational Statistics & Data Analysis, 180, 107679.
+#'
+#' Davies, T.M. and Hazelton, M.L. (2010). Adaptive kernel estimation of spatial relative risk, Statistics in Medicine, 29(23) 2423-2437.
+#'
+#' Terrell, G.R. (1990). The maximal smoothing principle in density estimation, Journal of the American Statistical Association, 85, 470-477.
+#'
+localsummary <- function(x, scaler = c("silverman", "IQR", "sd", "var"),
+                                  do.points = TRUE,
+                                  print.bw = FALSE,
+                                  zap = 0.00001,
+                                  par = TRUE){
+  if (!inherits(x, c("stlgcppm", "locstppm"))) stop("x should be either from class stlgcppm or locstppm")
+  UseMethod("localsummary")
+}

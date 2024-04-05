@@ -148,7 +148,13 @@ localdiag <- function(X, intensity, p = 0.95){
     local_k_1
   }
 
-  out <- list(X = X, listas = listas, ids = id_points, x2 = x2, p = p)
+  out <- if(any(class(X) == "stp")){
+    list(X = X, listas = listas, ids = id_points, x2 = x2, p = p, 
+         dist = local_k_1$dist, times = local_k_1$times)
+  } else if(!any(class(X) == "stp")) {
+    list(X = X, listas = listas, ids = id_points, x2 = x2, p = p, 
+         dist = local_k_1[[1]]$r, times = local_k_1[[1]]$t)
+  }
   class(out) <- "localdiag"
 
   return(out)

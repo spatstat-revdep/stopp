@@ -43,7 +43,7 @@ The function plots the fitted intensity, displayed both in space and in space an
 }
 \examples{
 \dontrun{
-catsub <- stp(greececatalog$df[1:100, ])
+catsub <- stp(greececatalog$df[1:200, ])
 
 lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
 
@@ -65,7 +65,7 @@ Terrell, G.R. (1990). The maximal smoothing principle in density estimation, Jou
 }
 \seealso{
 \link{stlgcppm}, \link{print.stlgcppm}, \link{summary.stlgcppm},
-\link{localsummary.stlgcppm}, \link{localplot.stlgcppm}
+\link{localsummary}, \link{localplot}
 }
 \author{
 Nicoletta D'Angelo and Giada Adelfio
