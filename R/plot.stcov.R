@@ -16,7 +16,6 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #'
 #' set.seed(2)
 #' df <- data.frame(runif(100), runif(100), runif(100), rpois(100, 15))
@@ -24,11 +23,9 @@
 #' cov <- stcov(df, interp = FALSE)
 #' 
 #' plot(cov)
-#' }
 #'
 plot.stcov <- function(x, ...){
-  if(!inherits(x, "stcov")) stop("class(x) must be stcov")
-  
+
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
   
@@ -38,7 +35,9 @@ plot.stcov <- function(x, ...){
                         ticktype = "detailed",
                         colvar = x$df[, 4],
                         xlab = "x", ylab = "y", zlab = "t",
-                        main = paste(names[4]))
+                        main = paste(names[4]),
+                        col = grDevices::hcl.colors(12, 
+                                                    "ag_Sunset", rev = TRUE))
     
   
 }

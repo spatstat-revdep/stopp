@@ -7,7 +7,6 @@
 rstpp(
   lambda = 500,
   nsim = 1,
-  seed = NULL,
   verbose = FALSE,
   par = NULL,
   minX = 0,
@@ -22,8 +21,6 @@ rstpp(
 \item{lambda}{Expected number of points to simulate}
 
 \item{nsim}{Number of patterns to simulate. Default to 1.}
-
-\item{seed}{Seed to set, if ones wished to reproduce the analyses}
 
 \item{verbose}{Default to \code{FALSE}}
 
@@ -50,20 +47,21 @@ This function creates a \code{stp} object, simulating a  spatio-temporal point p
 homogeneous or inhomogeneous intensity
 }
 \examples{
-\dontrun{
 
 # homogeneous Poisson processes
-h1 <- rstpp(lambda = 500, seed = 2)
+set.seed(2)
+h1 <- rstpp(lambda = 500)
 
-h2 <- rstpp(lambda = 500, seed = 2, minX = 0,
+set.seed(2)
+h2 <- rstpp(lambda = 500, minX = 0,
              maxX = 2, minY = 3, maxY = 5, minT = 1, maxT = 9)
 
-h3 <- rstpp(lambda = 900, nsim = 3, seed = 2, verbose = TRUE)
+set.seed(2)
+h3 <- rstpp(lambda = 900, nsim = 3, verbose = TRUE)
 
 # inhomogeneous Poisson process
-inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-             seed = 2)
-}
+set.seed(2)
+inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6))
 
 }
 \seealso{

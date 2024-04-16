@@ -19,7 +19,6 @@
 #'
 #'
 #' @examples
-#' \dontrun{
 #' 
 #' catsub <- stp(greececatalog$df[1:200, ])
 #' 
@@ -27,7 +26,6 @@
 #'
 #' summary(lgcp1)
 #' 
-#'}
 #'
 #'
 #' @references
@@ -37,8 +35,7 @@
 #'
 #'
 summary.stlgcppm <- function(object, ...){
-  if (!inherits(object, c("stlgcppm"))) stop("X should be from class stlgcppm")
-  
+
   cat("\nJoint minimum contrast fit \n")
   cat("for a log-Gaussian Cox process with \n")
   if(inherits(object$IntCoefs, "numeric")){ cat("global ")} else { cat("local ")}

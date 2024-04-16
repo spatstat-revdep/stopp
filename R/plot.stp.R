@@ -23,7 +23,6 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #'
 #' set.seed(2)
 #' df <- data.frame(cbind(runif(100), runif(100), runif(100)))
@@ -46,11 +45,9 @@
 #' stp2 <- stp(data.frame(cbind(runif(100), runif(100), round(runif(100) * 100))))
 #' plot(stp2)
 #' 
-#' }
 #'
 plot.stp <- function(x, tcum = TRUE, marg = TRUE, col = 1, ...)
 {
-  if(!inherits(x,"stp")) stop("class(x) must be stp")
 
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))

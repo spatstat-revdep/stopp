@@ -1,0 +1,64 @@
+#' Print global diagnostics of a spatio-temporal point process first-order intensity
+#'
+#' @description
+#' This function performs global diagnostics of a model fitted for the
+#' first-order intensity of a  spatio-temporal point pattern, by returning
+#' the sum of the squared differences between the estimated 
+#' and the theoretical K-functions obtained through \code{globaldiag}.
+#'
+#'
+#' @param x A \code{globaldiag} object
+#' @param ... additional unused argument
+#'
+#' @return It returns the sum of the squared differences between the estimated 
+#' and the theoretical K-functions obtained through \code{globaldiag}
+#'
+#'
+#'
+#' @export
+#'
+#' @author Nicoletta D'Angelo 
+#'
+#' @seealso
+#' \link{globaldiag}, \link{plot.globaldiag},
+#' \link{summary.globaldiag}
+#'
+#'
+#'
+#'
+#' @examples
+#'
+#' set.seed(2)
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
+#'                par = c(.3, 6))
+#' 
+#' mod1 <- stppm(inh, formula = ~ 1)
+#' mod2 <- stppm(inh, formula = ~ x)
+#' 
+#' g1 <- globaldiag(inh, mod1$l)
+#' g2 <- globaldiag(inh, mod2$l)
+#' 
+#' g1
+#' g2
+#'
+#'
+#'
+#' @references
+#' Adelfio, G., Siino, M., Mateu, J., and Rodríguez-Cortés, F. J. (2020). Some properties of local weighted second-order statistics for spatio-temporal point processes. Stochastic Environmental Research and Risk Assessment, 34(1), 149-168.
+#'
+#' D’Angelo, N., Adelfio, G.  and Mateu, J. (2022) Local inhomogeneous second-order characteristics for spatio-temporal point processes on linear networks. Stat Papers. https://doi.org/10.1007/s00362-022-01338-4
+#'
+#' Gabriel, E., and Diggle, P. J. (2009). Second‐order analysis of inhomogeneous spatio‐temporal point process data. Statistica Neerlandica, 63(1), 43-51.
+#'
+#' Gabriel, E., Rowlingson, B. S., & Diggle, P. J. (2013). stpp: An R Package for Plotting, Simulating and Analyzing Spatio-Temporal Point Patterns. Journal of Statistical Software, 53(2), 1–29. https://doi.org/10.18637/jss.v053.i02
+#'
+#' Moradi M, Cronie O, and Mateu J (2020). stlnpp: Spatio-temporal analysis of point patterns on linear networks.
+#'
+#' Moradi, M. M., and Mateu, J. (2020). First-and second-order characteristics of spatio-temporal point processes on linear networks. Journal of Computational and Graphical Statistics, 29(3), 432-443.
+#'
+#'
+print.globaldiag <- function(x, ...){
+  
+  cat(paste0("Sum of squared differences : ", round(x$squared.diff, 3)))
+  
+}

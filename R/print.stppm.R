@@ -17,15 +17,13 @@
 #'
 #'
 #' @examples
-#' \dontrun{
 #' 
-#' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#'              seed = 2)
+#' set.seed(2)
+#' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6))
 #' inh1 <- stppm(pin, formula = ~ x)
 #' 
 #' inh1
 #' 
-#'}
 #'
 #'
 #' @references
@@ -34,8 +32,7 @@
 #'
 #'
 print.stppm <- function(x, ...){
-  if (!inherits(x, c("stppm"))) stop("X should be from class stppm")
-  
+
   if(length(x$IntCoefs) == 1){
     cat("Homogeneous Poisson process \n")
     cat("with Intensity: ")

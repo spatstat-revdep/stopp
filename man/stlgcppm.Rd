@@ -8,6 +8,7 @@ stlgcppm(
   X,
   formula = ~1,
   verbose = TRUE,
+  seed = NULL,
   cov = c("separable", "gneiting", "iaco-cesare"),
   first = c("global", "local"),
   second = c("global", "local"),
@@ -29,6 +30,9 @@ The current version only supports formulas depending on the spatial and temporal
 first-order intensity.}
 
 \item{verbose}{Default to TRUE}
+
+\item{seed}{The seed used for the simulation of the dummy points. Default to
+\code{NULL}.}
 
 \item{cov}{Covariance function to be fitted for the second-order intensity function.
 Default to \code{separable}. Other options are \code{gneiting} and \code{iaco-cesare}".}
@@ -107,13 +111,11 @@ we consider LGCPs with intensity
 }
 \examples{
 
-\dontrun{
 
 catsub <- stp(greececatalog$df[1:200, ])
 
 lgcp1 <- stlgcppm(catsub)
 
-}
 
 
 }

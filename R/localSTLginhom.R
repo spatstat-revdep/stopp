@@ -27,7 +27,6 @@
 #'
 #' @examples
 #'
-#'\dontrun{
 #' set.seed(2)
 #' df_net <- data.frame(x = runif(25, 0, 0.85), y = runif(25, 0, 0.85), t = runif(25))
 #' stlp1 <- stp(df_net, L = chicagonet)
@@ -37,7 +36,6 @@
 #' 
 #' g <- localSTLginhom(stlp1, lambda = lambda, normalize = TRUE)
 #'
-#'}
 #'
 #'
 #'
@@ -50,6 +48,36 @@ localSTLginhom = function(x, lambda, normalize = FALSE, r = NULL, t = NULL, nxy 
 {
   if (!inherits(x, "stlp"))
     stop("x should be from class stlp")
+  
+  nx <- nrow(x$df)
+  
+  if (!is.numeric(lambda)) {
+    stop("lambda should be a numeric vector")
+  } else {
+    if(length(lambda) != nx) {
+      stop("lambda should be the same length as the number of points in x")
+    }
+  } 
+  
+  if (!is.null(r)){
+    if(!is.numeric(r)) {
+      stop("r should be a numeric vector")
+    } 
+  }
+  
+  if (!is.null(t)){
+    if(!is.numeric(t)) {
+      stop("t should be a numeric vector")
+    } 
+  }
+  
+  if (!is.numeric(nxy)) {
+    stop("nxy should be a numeric value")
+  } else {
+    if(nxy <= 0) {
+      stop("nxy should be nxy > 0")
+    }
+  } 
   
   x$L <- spatstat.linnet::as.linnet(x$L, sparse = FALSE)
   

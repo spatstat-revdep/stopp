@@ -17,7 +17,6 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #'
 #' df <- data.frame(cbind(runif(100), runif(100), runif(100), rpois(100, 15),
 #' rpois(100, 30)))
@@ -36,11 +35,9 @@
 #' stpm2 <- stpm(rbind(dfA, dfB), names = c("continuous", "dichotomous"))
 #' 
 #' plot(stpm2)
-#' }
 #'
 plot.stpm <- function(x, ...){
-  if(!inherits(x,"stpm")) stop("class(x) must be stpm")
-  
+
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
   
@@ -68,17 +65,21 @@ plot.stpm <- function(x, ...){
                         ticktype = "detailed",
                         colvar = x$df[, i],
                         xlab = "x", ylab = "y", zlab = "t",
-                        main = paste(names[i]))
+                        main = paste(names[i]),
+                        col = grDevices::hcl.colors(12, 
+                                                    "ag_Sunset", rev = TRUE))
     } else {
       plot3D::scatter3D(x$df[, 1], x$df[, 2], x$df[, 3],
                         theta = - 45, phi = 20, pch = 20,
                         ticktype = "detailed",
                         colvar = as.integer(x$df[, i]),
-                        col = 1:length(levels(x$df[, i])) + 4,
+                        # col = 1:length(levels(x$df[, i])) + 4,
                         xlab = "x", ylab = "y", zlab = "t",
                         colkey = list(at = unique(as.integer(x$df[, i])), 
                              labels = c(levels(x$df[, i]))),
-                        main = paste(names[i]))
+                        main = paste(names[i]),
+                        col = grDevices::hcl.colors(length(levels(x$df[, i])), 
+                                                    "Dark 3"))
     }
     
   }

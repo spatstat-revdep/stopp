@@ -26,7 +26,6 @@ object is created instead.
 }
 \examples{
 
-\dontrun{
 
 set.seed(2)
 df <- data.frame(cbind(runif(100), runif(100), runif(100), rpois(100, 15),
@@ -52,7 +51,6 @@ dfL <- data.frame(cbind(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100),
 
 stlpm1 <- stpm(dfL, L = chicagonet)
 
-}
 
 
 }

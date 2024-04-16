@@ -3,7 +3,7 @@
 #' @description
 #' This function performs global diagnostics of a model fitted for the
 #' first-order intensity of a  spatio-temporal point pattern, by returning
-#' the plots of the inhomogeneous K-function weighted by the
+#' the inhomogeneous K-function weighted by the
 #' provided intensity to diagnose, its theoretical value,
 #' and their difference.
 #'
@@ -19,18 +19,20 @@
 #'  \link{STLKinhom}  of the \code{stlnpp} package (Moradi et al., 2020).
 #'
 #'
-#' @param X A \code{stp} object
+#' @param x A \code{stp} object
 #' @param intensity A vector of intensity values, of the same length as the number
-#' of point in \code{X}
-#' @param samescale Logical value. It indicates whether to plot the observed
-#' and the theoretical K-function in the same or
-#' different scale. Default to \code{TRUE}.
+#' of point in \code{x}
 #'
-#'
-#' @return It plots three panels: the observed K-function, as returned by \link{STLKinhom};
-#' the theoretical one; their difference. The function also prints the sum of
-#'  squared differences between the observed and theoretical
-#' K-function on the console.
+#' @return A list of class \code{globaldiag}, containing
+#' \describe{
+#' \item{\code{x}}{The observed point pattern}
+#' \item{\code{dist}}{The spatial ranges of the K-function}
+#' \item{\code{times}}{The temporal ranges of the K-function}
+#' \item{\code{est}}{The estimated K-function weighted by the intensity function in input}
+#' \item{\code{theo}}{The theoretical K-function}
+#' \item{\code{diffK}}{The difference between the estimated and the theoretical K-functions}
+#' \item{\code{squared.diff}}{The sum of the squared differences between the estimated and the theoretical K-functions}
+#' }
 #'
 #'
 #'
@@ -39,25 +41,23 @@
 #' @author Nicoletta D'Angelo and Giada Adelfio
 #'
 #' @seealso
-#' \link{infl}, \link{plot.localdiag}, \link{print.localdiag},
-#' \link{summary.localdiag}, \link{localdiag},
+#' \link{plot.globaldiag}, \link{print.globaldiag},
+#' \link{summary.globaldiag}
 #'
 #'
 #'
 #'
 #' @examples
-#' \donttest{
 #'
-#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'                par = c(.3, 6), seed = 2)
+#' set.seed(2)
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(.3, 6))
 #' 
 #' mod1 <- stppm(inh, formula = ~ 1)
 #' mod2 <- stppm(inh, formula = ~ x)
 #' 
-#' globaldiag(inh, mod1$l)
-#' globaldiag(inh, mod2$l)
+#' g1 <- globaldiag(inh, mod1$l)
+#' g2 <- globaldiag(inh, mod2$l)
 #' 
-#' }
 #'
 #'
 #'
@@ -75,23 +75,30 @@
 #' Moradi, M. M., and Mateu, J. (2020). First-and second-order characteristics of spatio-temporal point processes on linear networks. Journal of Computational and Graphical Statistics, 29(3), 432-443.
 #'
 #'
-globaldiag <- function(X, intensity, samescale = TRUE){
+globaldiag <- function(x, intensity){
   
-  if (!inherits(X, c("stp", "stlp"))) stop("X should be either from class stp or stlp")
+  if (!inherits(x, c("stp", "stlp"))) stop("x should be either from class stp or stlp")
+  
+  nx <- nrow(x$df)
+  
+  if (!is.numeric(intensity)) {
+    stop("intensity should be a numeric vector")
+  } else {
+    if(length(intensity) != nx) {
+      stop("intensity should be the same length as the number of points in x")
+    }
+  } 
 
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
-
-  if(any(class(X) == "stp")) {
-    Kfunct <- stpp::STIKhat(xyt = as.stpp(X), lambda = intensity)
+  if(any(class(x) == "stp")) {
+    Kfunct <- stpp::STIKhat(xyt = as.stpp(x), lambda = intensity)
 
     est <- Kfunct$Khat
     theo <- Kfunct$Ktheo
 
     dist <- Kfunct$dist
     times <- Kfunct$times
-  } else if(any(class(X) == "stlp")){
-    Kfunct <- stlnpp::STLKinhom(X = as.stlpp(X), lambda = intensity)
+  } else if(any(class(x) == "stlp")){
+    Kfunct <- stlnpp::STLKinhom(x = as.stlpp(x), lambda = intensity)
 
     est <- Kfunct$Kinhom
     theo <- Kfunct$Ktheo
@@ -101,41 +108,13 @@ globaldiag <- function(X, intensity, samescale = TRUE){
   }
 
   diffK <- est - theo
-
-  lims <- if(samescale){
-    range(c(as.numeric(est), as.numeric(theo), as.numeric(diffK)))
-  } else {
-    NULL
-  }
-
-  par(mfrow = c(1, 3))
-
-  fields::image.plot(dist, times, est, main = "Estimated", xlab = "r",
-                     ylab = "h",
-                     col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
-                     zlim = lims,
-                     legend.mar =  12, axes = FALSE)
-  axis(1, at = seq(0, 1, l = length(dist)), labels = round(dist, 3))
-  axis(2, at = seq(0, 1, l = length(times)), labels = round(times, 3))
-  box()
-  fields::image.plot(dist, times, theo, main = "Theoretical", xlab = "r",
-                     ylab = "h",
-                     col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
-                     zlim = lims,
-                     legend.mar =  12, axes = FALSE)
-  axis(1, at = seq(0, 1, l = length(dist)), labels = round(dist, 3))
-  axis(2, at = seq(0, 1, l = length(times)), labels = round(times, 3))
-  box()
-
-  fields::image.plot(dist, times, diffK, main = "Difference", xlab = "r",
-                     ylab = "h",
-                     col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
-                     zlim = lims,
-                     legend.mar =  15, axes = FALSE)
-  axis(1, at = seq(0, 1, l = length(dist)), labels = round(dist, 3))
-  axis(2, at = seq(0, 1, l = length(times)), labels = round(times, 3))
-  box()
-
-  paste("Sum of squared differences = ", round(sum(diffK ^ 2 / (est)), 3))
+  squared.diff <- sum(diffK ^ 2 / (est))
+  
+  out <- list(x = x, dist = dist, times = times, est = est, theo = theo,
+              diffK = diffK, squared.diff = squared.diff)
+  
+  class(out) <- "globaldiag"
+  
+  return(out)
 
 }

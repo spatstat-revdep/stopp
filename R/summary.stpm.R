@@ -13,7 +13,6 @@
 #' 
 #' @examples
 #'
-#' \dontrun{
 #' set.seed(2)
 #' df <- data.frame(cbind(runif(100), runif(100), runif(100), rpois(100, 15),
 #' rpois(100, 30)))
@@ -24,6 +23,7 @@
 #' 
 #' ## Categorical marks
 #' 
+#' set.seed(2)
 #' dfA <- data.frame(x = runif(100), y = runif(100), t = runif(100), 
 #'                   m1 = rnorm(100), m2 = rep(c("C"), times = 100))
 #' dfB <- data.frame(x = runif(50), y = runif(50), t = runif(50), 
@@ -32,10 +32,8 @@
 #' stpm2 <- stpm(rbind(dfA, dfB), names = c("continuous", "dichotomous"))
 #' 
 #' summary(stpm2)
-#' }
 #'
 summary.stpm <- function (object, ...) 
 {
-  if(!inherits(object, "stpm")) stop("class(object) must be stpm")
   summary(object$df)
 }

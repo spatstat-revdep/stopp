@@ -14,7 +14,6 @@
 #'
 #'
 #' @examples
-#' \dontrun{
 #'
 #' crimesub <- stpm(valenciacrimes$df[101:200, ],
 #'            names = colnames(valenciacrimes$df)[-c(1:3)],
@@ -25,13 +24,10 @@
 #'                   
 #' plot(mod1)
 #'
-#' }
 plot.sepstlppm <- function(x,
                           do.points = TRUE,
                           par = TRUE,
                           ...){
-
-  if (!inherits(x, "sepstlppm")) stop("x should an object of class sepstlppm")
 
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))

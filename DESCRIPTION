@@ -1,8 +1,8 @@
 Package: stopp
 Title: Spatio-Temporal Point Pattern Methods, Model Fitting,
         Diagnostics, Simulation, Local Tests
-Version: 0.2.1
-Date: 2024-04-05
+Version: 0.2.2
+Date: 2024-04-16
 Type: Package
 Authors@R: c(person(given = "Nicoletta", family = "D'Angelo", email = "nicoletta.dangelo@unipa.it", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8878-5986")),
 	     person(given = "Giada", family = "Adelfio", role = "aut", comment = c(ORCID = "0000-0002-3194-4296")))
@@ -18,9 +18,9 @@ LazyData: true
 Author: Nicoletta D'Angelo [aut, cre] (<https://orcid.org/0000-0002-8878-5986>),
   Giada Adelfio [aut] (<https://orcid.org/0000-0002-3194-4296>)
 Maintainer: Nicoletta D'Angelo <nicoletta.dangelo@unipa.it>
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2024-04-05 14:05:36 UTC; nicol
+Packaged: 2024-04-16 14:55:10 UTC; nicol
 Repository: CRAN
-Date/Publication: 2024-04-05 15:00:02 UTC
+Date/Publication: 2024-04-16 15:10:02 UTC

@@ -12,36 +12,31 @@
   return(w)
 }
 
-
-
 .default.ncube <- function(X){
   guess.ngrid <- floor((splancs::npts(X) / 2) ^ (1 / 3))
   max(5, guess.ngrid)
 }
 
-
-
 density.new.var  <-function(x,np,gx){
   nx  <-  length(x)
-  n =length(gx)
-  h<-numeric(nx)
-  mat.d=as.matrix(dist((x),upper=TRUE,diag=TRUE))
-  diag(mat.d)=999999
-  if(missing(np))  np=trunc(nx/2)
+  n <- length(gx)
+  h <- numeric(nx)
+  mat.d <- as.matrix(dist((x), upper = TRUE, diag = TRUE))
+  diag(mat.d) <- Inf 
+  if(missing(np))  np <- trunc(nx / 2)
 
 
   for(i in 1:ncol(mat.d)){
-    o=order(mat.d[,i])
-    pp=o[np]
-    h[i]=mat.d[pp,i]
+    o <- order(mat.d[,i])
+    pp <- o[np]
+    h[i] <- mat.d[pp, i]
   }
-  h   <-  h/4
+  h <- h / 4
 
-  ax  <-  outer(gx,x,"-")/h
-  z   <-  rowSums(matrix(dnorm(ax),n,nx)/(nx*h))
-  return(list(x=gx,z=z,h=h))
+  ax <- outer(gx, x, "-") / h
+  z <- rowSums(matrix(dnorm(ax), n, nx) / (nx * h))
+  return(list(x = gx, z = z, h = h))
 }
-
 
 g_st <- function(param, useq, vseq, ghat, transform, power){
   uv <- expand.grid(useq, vseq)
@@ -53,17 +48,15 @@ g_st <- function(param, useq, vseq, ghat, transform, power){
   return(sum((((ghat2)) ^ power - (g.parametric) ^ power) ^ 2))
 }
 
-g_st_iaco <-function (param, useq, vseq,ghat, transform, power)
-{ uv<-expand.grid(useq,vseq)
-g.parametric <- exp((as.numeric(param[1])*
+g_st_iaco <- function (param, useq, vseq,ghat, transform, power){
+  uv<-expand.grid(useq,vseq)
+  g.parametric <- exp((as.numeric(param[1])*
                        (1+(uv[,1]/as.numeric(param[2]))^as.numeric(param[4])+
                           (uv[,2]/as.numeric(param[3]))^as.numeric(param[5]))^(-as.numeric(param[6]))
 ))
-ghat2<-as.vector(ghat)
-return(sum((((ghat2))^power - (g.parametric)^power)^2))
+ghat2 <- as.vector(ghat)
+return(sum((((ghat2)) ^ power - (g.parametric) ^ power) ^ 2))
 }
-
-
 
 .grid1.index <- function(x, xrange, nx) {
   i <- ceiling(nx * (x - xrange[1]) / diff(xrange))
@@ -71,7 +64,6 @@ return(sum((((ghat2))^power - (g.parametric)^power)^2))
   i <- pmin.int(i, nx)
   i
 }
-
 
 .grid.index <- function(x, y, t, xrange, yrange, trange, nx, ny, nt) {
 
@@ -82,16 +74,12 @@ return(sum((((ghat2))^power - (g.parametric)^power)^2))
   return(list(ix = ix, iy = iy, it = it, index = as.integer((iy - 1) * nx + ix + (it - 1) * nx * ny)))
 }
 
-
-
 g.sep_st_exp_exp2 <- function(param, useq, vseq, ghat, transform, power){
   uv <- expand.grid(useq, vseq)
   g.parametric <- exp(param[1] * exp( - uv[, 2] / param[3]) * exp( - uv[, 1] / param[2]))
   ghat2 <- as.vector(ghat)
   return(sum((ghat2 ^ power - g.parametric ^ power) ^ 2))
 }
-
-
 
 kde2d.new.var <- function(x, y, gx = x, gy = y, np, var.bin = TRUE, y.var = TRUE, hx, hy){
 
@@ -105,8 +93,8 @@ kde2d.new.var <- function(x, y, gx = x, gy = y, np, var.bin = TRUE, y.var = TRUE
     if(!y.var){
       mat.d <- as.matrix(dist(cbind(x), upper = TRUE, diag = TRUE))
     }
-    diag(mat.d) <- 999999
-    if(missing(np))  np <- trunc(nx / 2)#
+    diag(mat.d) <- Inf 
+    if(missing(np))  np <- trunc(nx / 2)
     np <- trunc(np)
     if(np <= 1) np <- 1
     for(i in 1:ncol(mat.d)){
@@ -134,15 +122,12 @@ kde2d.new.var <- function(x, y, gx = x, gy = y, np, var.bin = TRUE, y.var = TRUE
 
 }
 
-
-
 norm2_etas <- function(n = 1, d = 1, q = 2, x0, y0){
-  theta   = runif(n, max = 2 * pi)
-  U       = runif(n)
-  R       = sqrt(d * (U ^ (1 / (1 - q)) - 1))
+  theta <- runif(n, max = 2 * pi)
+  U <- runif(n)
+  R <- sqrt(d * (U ^ (1 / (1 - q)) - 1))
   return(cbind(x0 + R * cos(theta), y0 + R * sin(theta)))
 }
-
 
 permutest.stlp <- function(perm, Q_n, Xi, L0, method){
   n_perm <- length(perm)
@@ -164,8 +149,6 @@ permutest.stlp <- function(perm, Q_n, Xi, L0, method){
   lista_0
 }
 
-
-
 permutest.stp <- function(perm, Q_n, Xi, method){
 
   n_perm <- length(perm)
@@ -186,9 +169,6 @@ permutest.stp <- function(perm, Q_n, Xi, method){
   }
   lista_0
 }
-
-
-
 
 STLginhom_i <- function(X, lambda, normalize = FALSE, r = NULL, t = NULL, nxy = 10)
 {
@@ -261,9 +241,6 @@ STLginhom_i <- function(X, lambda, normalize = FALSE, r = NULL, t = NULL, nxy = 
 
   return(arr)
 }
-
-
-
 
 STLKinhom_i <- function(X, lambda = lambda, normalize = FALSE, r = NULL, t = NULL,
                         nxy = 10)
@@ -344,7 +321,6 @@ distD <- function(A, B, d){
   a
 }
 
-
 idw3D <- function(points, covs, p, iid, d, parallel, cl){
   nV <- dim(covs)[1]
   wi <- vector(length = nV)
@@ -360,7 +336,6 @@ idw3D <- function(points, covs, p, iid, d, parallel, cl){
   wi
 }
 
-
 interp3D <- function(points, covs, p, d, verbose = FALSE, parallel, cl){
   nU <- dim(points)[1]
   gu <- vector(length = nU)
@@ -370,8 +345,6 @@ interp3D <- function(points, covs, p, d, verbose = FALSE, parallel, cl){
   gu <- apply(wi, 2 , function(p) sum(p * covs[, 4]) / sum(p))
   gu 
 }
-
-
 
 interpMin <- function(dati, covariate, parallel = parallel, cl = cl){
   # dati e covariate sono due matrici con 3 colonne l'uno (x,y,z) e righe diverse
@@ -387,7 +360,6 @@ interpMin <- function(dati, covariate, parallel = parallel, cl = cl){
   gu <- covariate[, 4][id]
   gu
 }
-
 
 cartesian_3d_N_Mark <- function(pp3_obj, box_3d, list_levels_marks) {
   
@@ -489,8 +461,6 @@ dummy.marked.result <- function(X, formula, dummy_points, Wdum, Wdat, ndata, ndu
   return(result.dummy.marked)
 }
 
-
-
 interp.covariate <- function(X, dummy_points, covs, formula, parallel, interp,
                              xx, xy, xt, ncores, verbose) {
   dati.interpolati <- rbind(X[,1:3], dummy_points)
@@ -538,16 +508,6 @@ interp.covariate <- function(X, dummy_points, covs, formula, parallel, interp,
   return(dati.interpolati)
 }
 
-
-
-
-
-
-
-
-
-
-
 as.stpp <- function(x){
   if(!inherits(x,"stp")) stop("class(x) must be stp")
   
@@ -557,13 +517,11 @@ as.stpp <- function(x){
   return(out)
 }
 
-
 as.stp <- function(x){
   if(!inherits(x,"stpp")) stop("class(x) must be stpp")
   
   stp(cbind(x[, 1], x[, 2], x[, 3]))
 }
-
 
 as.stlpp <- function(x){
   if(!inherits(x,"stlp")) stop("class(x) must be stlp")
@@ -577,7 +535,6 @@ as.stlp <- function(x){
   stp(cbind(x$data$x, x$data$y, x$data$t), x$domain)
 }
 
-
 is.stp <- function(x){
   inherits(x,"stp")
 }
@@ -586,12 +543,8 @@ is.stlp <- function(x){
   inherits(x,"stlp")
 }
 
-
-
-
 localplot.stlgcppm <- function(x, par = TRUE){
-  if (!inherits(x, c("stlgcppm"))) stop("x should be from class stlgcppm")
-  
+
   if(inherits(x$IntCoefs, "numeric") & inherits(x$CovCoefs, "numeric")){
     stop("No local parameters to plot")
   }
@@ -805,8 +758,7 @@ localplot.stlgcppm <- function(x, par = TRUE){
 }
 
 localplot.locstppm <- function(x, par = TRUE){
-  if (!inherits(x, c("locstppm"))) stop("x should be from class locstppm")
-  
+
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
   
@@ -868,8 +820,7 @@ localsummary.stlgcppm <- function(x,
                                   print.bw = FALSE,
                                   zap = 0.00001,
                                   par = TRUE){
-  if(!inherits(x,"stlgcppm")) stop("class(x) must be stlgcppm")
-  
+
   if(inherits(x$IntCoefs, "numeric")){
     if(x$formula == "~1"){
       stop("No inhomogeneous intensity to summarise")
@@ -1045,8 +996,7 @@ localsummary.locstppm <- function(x,
                                   print.bw = FALSE,
                                   zap = 0.00001,
                                   par = TRUE){
-  if(!inherits(x,"locstppm")) stop("class(x) must be locstppm")
-  
+
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
   

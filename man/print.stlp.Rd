@@ -19,14 +19,12 @@ the temporal time period.
 }
 \examples{
 
-\dontrun{
 
 set.seed(2)
 df_net <- data.frame(cbind(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100)))
 
 stlp1 <- stp(df_net, L = chicagonet)
 stlp1
-}
 
 }
 \seealso{

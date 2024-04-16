@@ -28,7 +28,6 @@ marginal spatial and temporal coordinates.
 }
 \examples{
 
-\dontrun{
 
 set.seed(2)
 df <- data.frame(cbind(runif(100), runif(100), runif(100)))
@@ -51,7 +50,6 @@ set.seed(2)
 stp2 <- stp(data.frame(cbind(runif(100), runif(100), round(runif(100) * 100))))
 plot(stp2)
 
-}
 
 }
 \seealso{

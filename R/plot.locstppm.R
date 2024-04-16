@@ -26,14 +26,14 @@
 #'
 #'
 #' @examples
-#' \dontrun{
+#' 
+#' set.seed(2)
 #' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'              par = c(0.005, 5), seed = 2)
+#'              par = c(0.005, 5))
 #' inh_local <- locstppm(inh, formula = ~ x)
 #' 
 #' plot(inh_local)
 #'
-#'}
 #'
 #'
 #'
@@ -54,8 +54,6 @@ plot.locstppm <- function(x,
                           par = TRUE,
                           ...){
   
-  if(!inherits(x,"locstppm")) stop("class(x) must be locstppm")
-
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
 

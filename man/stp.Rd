@@ -25,8 +25,6 @@ object is created instead.
 }
 \examples{
 
-\dontrun{
-
 set.seed(2)
 df <- data.frame(runif(100), runif(100), runif(100))
 
@@ -36,8 +34,6 @@ set.seed(2)
 df_net <- data.frame(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100))
 
 stlp1 <- stp(df_net, L = chicagonet)
-
-}
 
 
 }

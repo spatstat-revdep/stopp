@@ -20,7 +20,6 @@ An object of class \code{sepstlppm}
 Fit a separable spatio-temporal Poisson process model on a linear network
 }
 \examples{
-\dontrun{
 
 crimesub <- stpm(valenciacrimes$df[101:200, ],
            names = colnames(valenciacrimes$df)[-c(1:3)],
@@ -30,5 +29,4 @@ mod1 <- sepstlppm(crimesub, spaceformula = ~x ,
                   timeformula = ~ day)
 
 
-}
 }

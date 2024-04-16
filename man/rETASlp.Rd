@@ -14,8 +14,7 @@ rETASlp(
   t.lag = 200,
   covsim = FALSE,
   L,
-  all.marks = FALSE,
-  seed = NULL
+  all.marks = FALSE
 )
 }
 \arguments{
@@ -41,8 +40,6 @@ magnitude.}
 \item{all.marks}{Logical value indicating whether to store
 all the simulation information as marks in the \code{stlpm} object.
 If \code{FALSE} (default option) only the magnitude is returned.}
-
-\item{seed}{Seed to set, if ones wished to reproduce the analyses}
 }
 \value{
 A \code{stlpm} object
@@ -104,10 +101,9 @@ values of magnitude are surely recorded in the catalogue.
 }
 \examples{
 
-\dontrun{
+set.seed(95)
 X <- rETASlp(pars = c(0.1293688525, 0.003696, 0.013362, 1.2,0.424466,  1.164793),
-     seed = 95, L = chicagonet)
-}
+     L = chicagonet)
 
 }
 \references{

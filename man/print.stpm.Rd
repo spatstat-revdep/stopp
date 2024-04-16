@@ -18,7 +18,6 @@ the temporal time period; information on marks.
 }
 \examples{
 
-\dontrun{
 set.seed(2)
 df <- data.frame(cbind(runif(100), runif(100), runif(100), rpois(100, 15),
 rpois(100, 30)))
@@ -26,7 +25,6 @@ rpois(100, 30)))
 stpm1 <- stpm(df)
 
 summary(stpm1)
-}
 
 
 }

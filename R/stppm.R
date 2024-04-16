@@ -76,14 +76,13 @@
 #'
 #' @examples
 #'
-#' \dontrun{
-#' 
-#' ph <- rstpp(lambda = 200, seed = 2)
+#' set.seed(2)
+#' ph <- rstpp(lambda = 200)
 #' hom1 <- stppm(ph, formula = ~ 1)
 #' 
 #' ## Inhomogeneous
-#' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#'              seed = 2)
+#' set.seed(2)
+#' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6))
 #' inh1 <- stppm(pin, formula = ~ x)
 #' 
 #' ## Inhomogeneous depending on external covariates
@@ -116,7 +115,6 @@
 #' inh4 <- stppm(stpm1, formula = ~ x + s(m1, bs = "re"), marked = TRUE)
 #' 
 #' 
-#' }
 #'
 #' @references
 #' Baddeley, A. J., Møller, J., and Waagepetersen, R. (2000). Non-and semi-parametric estimation of interaction in inhomogeneous point patterns. Statistica Neerlandica, 54(3):329–350
@@ -125,7 +123,7 @@
 #'
 #' D'Angelo, N., Adelfio, G., and Mateu, J. (2023). Locally weighted minimum contrast estimation for spatio-temporal log-Gaussian Cox processes. Computational Statistics & Data Analysis, 180, 107679.
 #'
-stppm <- function(X, formula, covs = NULL, marked = F, spatial.cov = F,
+stppm <- function(X, formula, covs = NULL, marked = FALSE, spatial.cov = FALSE,
                   verbose = FALSE, mult = 4, interp = TRUE,
                   parallel = FALSE, sites = 1, seed = NULL, ncube = NULL,
                   grid = FALSE, ncores = 2, lsr = FALSE){
@@ -133,6 +131,32 @@ stppm <- function(X, formula, covs = NULL, marked = F, spatial.cov = F,
   if (!inherits(X, c("stp", "stpm"))) stop("x should be either of class stp or stpm")
   
   time1 <- Sys.time()
+  
+  if (!is.numeric(mult)) {
+    stop("mult should be a numeric value")
+  } else {
+    if(mult <= 0) {
+      stop("mult should be mult > 0")
+    }
+  } 
+  
+  if (!is.numeric(sites)) {
+    stop("sites should be a numeric value")
+  } else {
+    if(sites <= 0) {
+      stop("sites should be sites > 0")
+    }
+  } 
+  
+  if(!is.null(ncube)){
+    if(!is.numeric(ncube)) {
+    stop("ncube should be a numeric value")
+  } else {
+    if(ncube <= 0) {
+      stop("ncube should be ncube > 0")
+    }
+  } }
+  
   X0 <- X
   X <- X$df
   
@@ -164,7 +188,8 @@ stppm <- function(X, formula, covs = NULL, marked = F, spatial.cov = F,
       df0 <- expand.grid(x0, y0, t0)
       dummy_points <- stp(cbind(df0$Var1, df0$Var2, df0$Var3))$df
     } else {
-      dummy_points <- rstpp(lambda = rho, nsim = 1, seed = seed, verbose = F,
+      if(!is.null(seed)) set.seed(seed)
+      dummy_points <- rstpp(lambda = rho, nsim = 1, verbose = F,
                             minX = s.region[1, 1], maxX = s.region[2, 1],
                             minY = s.region[1, 2], maxY = s.region[3, 2],
                             minT = t.region[1], maxT = t.region[2])$df

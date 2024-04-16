@@ -12,7 +12,6 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #' set.seed(2)
 #' df_net <- data.frame(x = runif(25, 0, 0.85), y = runif(25, 0, 0.85), t = runif(25))
 #' stlp1 <- stp(df_net, L = chicagonet)
@@ -23,13 +22,11 @@
 #' k <- localSTLKinhom(stlp1, lambda = lambda, normalize = TRUE)
 #' 
 #' k
-#' }
 #'
 #'
 print.lista <- function (x, ...) 
 {
-  if (!inherits(x, c("lista"))) stop("X should be from class lista")
-  
+
   cat("LISTA functions on a linear network \n")
   {
     cat("computed at", paste0(length(x), " ", "points"), "\n")

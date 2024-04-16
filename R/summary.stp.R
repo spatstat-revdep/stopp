@@ -16,7 +16,6 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #'
 #' set.seed(2)
 #' df <- data.frame(cbind(runif(100), runif(100), runif(100)))
@@ -24,13 +23,10 @@
 #' stp1 <- stp(df)
 #' summary(stp1)
 #'
-#' }
 #'
 #'
 summary.stp <- function(object, ...)
 {
-  if (!inherits(object, c("stp"))) stop("class(object) must be stp")
-
   summary(object$df)
 }
 

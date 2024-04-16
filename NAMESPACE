@@ -25,20 +25,14 @@ importFrom("parallel", "parSapply", "makeCluster", "clusterExport", "stopCluster
 export(globaldiag, infl, localdiag,
        localplot, localSTLKinhom, localSTLginhom,
        localsummary, localtest, locstppm,
-       plot.localdiag, plot.localtest, plot.locstppm, plot.stcov, plot.sepstlppm,
-       plot.sepstppm, plot.stlgcppm, plot.stlp, plot.stlpm, plot.stp, plot.stppm, 
-       plot.stpm, print.lista, print.localdiag, print.localtest, print.locstppm,
-       print.sepstlppm, print.sepstppm, print.stcov, print.stlgcppm,
-       print.stlp, print.stlpm, print.stp, print.stppm,
        rETASlp, rETASp, rstlpp, rstpp, sepstlppm, sepstppm, stlgcppm, stp, stppm,
-       summary.lista, summary.localdiag, summary.localtest, summary.locstppm, 
-       summary.sepstlppm, summary.sepstppm, summary.stlgcppm, summary.stcov,
-       summary.stlp, summary.stlpm, summary.stp, summary.stppm, stcov, stpm)
+       stcov, stpm)
 
 S3method(localplot, locstppm)
 S3method(localplot, stlgcppm)
 S3method(localsummary, locstppm)
 S3method(localsummary, stlgcppm)
+S3method(plot, globaldiag)
 S3method(plot, lista)
 S3method(plot, localdiag)
 S3method(plot, localtest)
@@ -53,6 +47,7 @@ S3method(plot, stpm)
 S3method(plot, stppm)
 S3method(plot, sepstlppm)
 S3method(plot, sepstppm)
+S3method(print, globaldiag)
 S3method(print, lista)
 S3method(print, localdiag)
 S3method(print, localtest)
@@ -66,6 +61,7 @@ S3method(print, stlpm)
 S3method(print, stp)
 S3method(print, stpm)
 S3method(print, stppm)
+S3method(summary, globaldiag)
 S3method(summary, lista)
 S3method(summary, localdiag)
 S3method(summary, localtest)

@@ -13,19 +13,16 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #' set.seed(2)
 #' df <- data.frame(runif(100), runif(100), runif(100), rpois(100, 15))
 #'
 #' cov <- stcov(df, interp = FALSE)
 #' cov
-#' }
 #'
 #'
 print.stcov <- function (x, ...) 
 {
-  if (!inherits(x, c("stcov"))) stop("X should be from class stcov")
-  
+
   cat("Spatio-temporal covariate \n")
   {
     cat("observed at", paste0(nrow(x$df), " ", "sites"), "\n")

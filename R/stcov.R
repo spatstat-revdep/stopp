@@ -34,6 +34,7 @@
 #' @param mult The multiplicand of the number of points in the default for \code{nx}.
 #' @param p Power of IDW distances.
 #' @param names Factor string to name the covariate.
+#' @param verbose Default to FALSE. If TRUE, the elapsed minutes are printed.
 #'
 #' @return A \code{stpm} object, to be imputed as list object in \code{stppm}.
 #' 
@@ -43,20 +44,45 @@
 #' 
 #' @examples
 #'
-#' \dontrun{
 #'
 #' set.seed(2)
 #' df <- data.frame(runif(100), runif(100), runif(100), rpois(100, 15))
 #'
 #' cov <- stcov(df, interp = FALSE)
 #'
-#' }
 #' 
-stcov <- function(x, interp = TRUE, nx = NULL, mult = 1, p = 81, names = NULL){
+stcov <- function(x, interp = TRUE, nx = NULL, mult = 1, p = 81, names = NULL,
+                  verbose = FALSE){
   # cov must be a dataframe - x, y, t, cov
   if(!inherits(x, "data.frame")) stop("class(x) must be data.frame")
   if(!is.numeric(x[, 4])) stop("The covariate must be continuous")
-  time1 <- Sys.time()
+  if(verbose) time1 <- Sys.time()
+  
+  if (!is.numeric(mult)) {
+    stop("mult should be a numeric value")
+  } else {
+    if(mult <= 0) {
+      stop("mult should be mult > 0")
+    }
+  } 
+  
+  if(!is.null(nx)){
+  if (!is.numeric(nx)) {
+    stop("nx should be a numeric value")
+  } else {
+    if(nx <= 0) {
+      stop("nx should be npx0 > 0")
+    }
+  } }
+  
+  if (!is.numeric(p)) {
+    stop("p should be a numeric value")
+  } else {
+    if(p <= 0) {
+      stop("p should be p > 0")
+    }
+  } 
+  
   if(interp){
     s.region <- splancs::sbox(cbind(x[, 1], x[, 2]), xfrac = 0.01, yfrac = 0.01)
     xr = range(x[, 3], na.rm = TRUE)
@@ -93,10 +119,12 @@ stcov <- function(x, interp = TRUE, nx = NULL, mult = 1, p = 81, names = NULL){
       out <- list(df = df)
   }
   
-  time2 <- Sys.time()
-  if(interp) print(paste0(round(as.numeric(difftime(time1 = time2, 
-                                         time2 = time1, units = "mins")), 3),
-               " minutes"))
+  if(verbose){
+    time2 <- Sys.time()
+    print(paste0(round(as.numeric(difftime(time1 = time2, 
+                                           time2 = time1, units = "mins")), 3),
+                 " minutes"))
+  } 
   class(out) <- "stcov"
   return(out)
 }

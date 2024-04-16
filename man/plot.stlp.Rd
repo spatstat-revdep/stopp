@@ -31,7 +31,6 @@ marginal spatial and temporal coordinates.
 }
 \examples{
 
-\dontrun{
 
 set.seed(2)
 df_net <- data.frame(cbind(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100)))
@@ -40,7 +39,6 @@ stlp1 <- stp(df_net, L = chicagonet)
 
 plot(stlp1)
 
-}
 }
 \seealso{
 \link{stp}, \link{summary.stlp}, \link{print.stlp}

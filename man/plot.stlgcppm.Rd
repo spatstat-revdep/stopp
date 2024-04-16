@@ -42,7 +42,7 @@ The function plots the fitted intensity, displayed both in space and in space an
  mean of the random intensity, displayed both in space and in space and time.
 }
 \examples{
-\dontrun{
+\donttest{
 catsub <- stp(greececatalog$df[1:200, ])
 
 lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")

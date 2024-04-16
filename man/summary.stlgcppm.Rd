@@ -18,7 +18,6 @@ The function Summarises the main information on the fitted model.
  their distributions.
 }
 \examples{
-\dontrun{
 
 catsub <- stp(greececatalog$df[1:200, ])
 
@@ -26,7 +25,6 @@ lgcp1 <- stlgcppm(catsub)
 
 summary(lgcp1)
 
-}
 
 
 }

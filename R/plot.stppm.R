@@ -28,15 +28,14 @@
 #'
 #'
 #' @examples
-#' \dontrun{
 #'
+#' set.seed(2)
 #' pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#' nsim = 1, seed = 2, verbose = T)
+#' nsim = 1, verbose = TRUE)
 #' inh1 <- stppm(pin, formula = ~ x)
 #'
 #' plot(inh1)
 #'
-#'}
 #'
 #'
 #'
@@ -57,8 +56,6 @@ plot.stppm <- function(x,
                        par = TRUE,
                        ...){
   
-  if(!inherits(x,"stppm")) stop("class(x) must be stppm")
-
   if(inherits(x$IntCoefs, "numeric") & length(x$IntCoefs) == 1){
     stop("Constant intensity, no plot to show")
   }

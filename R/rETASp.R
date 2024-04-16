@@ -72,7 +72,6 @@
 #' @param all.marks Logical value indicating whether to store
 #' all the simulation information as marks in the \code{stpm} object.
 #' If \code{FALSE} (default option) only the magnitude is returned.
-#' @param seed Seed to set, if ones wished to reproduce the analyses
 #' @return A \code{stpm} object
 #' @export
 #'
@@ -81,15 +80,13 @@
 #'
 #' @examples
 #'
-#'\dontrun{
+#' set.seed(95)
 #' X <- rETASp(pars = c(0.1293688525, 0.003696, 0.013362, 1.2,0.424466,  1.164793),
 #'          betacov = 0.5, 
-#'          xmin = 600, xmax = 2200, ymin = 4000, ymax = 5300,
-#'          seed = 95)
+#'          xmin = 600, xmax = 2200, ymin = 4000, ymax = 5300)
 #' 
 #' plot(X)
 #' 
-#'}
 #'
 #' @references
 #' Adelfio, G., and Chiodi, M. (2021). Including covariates in a space-time point process with application to seismicity. Statistical Methods & Applications, 30(3), 947-971.
@@ -99,9 +96,8 @@
 rETASp <-function(pars=NULL,
                            betacov=0.39,m0=2.5,b=1.0789,tmin=0,t.lag=200,
                   xmin=0,xmax=1,ymin=0,ymax=1,
-                  covsim=FALSE, all.marks = FALSE,
-                  seed = NULL){
-  set.seed(seed)
+                  covsim=FALSE, all.marks = FALSE){
+                    
   if(is.null(pars)) stop("Please provide some parameters")
   
   cat=NULL

@@ -7,7 +7,6 @@
 #' @param lambda Expected number of points to simulate
 #' @param par Parameters of the reference intensity
 #' @param nsim Number of patterns to simulate. Default to 1.
-#' @param seed Seed to set, if ones wished to reproduce the analyses
 #' @param verbose Default to \code{FALSE}
 #' @param minX Minimum of x coordinate range
 #' @param maxX Maximum of x coordinate range
@@ -26,22 +25,23 @@
 #'
 #'
 #' @examples
-#' \dontrun{
 #'
 #' # homogeneous Poisson processes
-#' h1 <- rstpp(lambda = 500, seed = 2)
+#' set.seed(2)
+#' h1 <- rstpp(lambda = 500)
 #'
-#' h2 <- rstpp(lambda = 500, seed = 2, minX = 0,
+#' set.seed(2)
+#' h2 <- rstpp(lambda = 500, minX = 0,
 #'              maxX = 2, minY = 3, maxY = 5, minT = 1, maxT = 9)
 #'
-#' h3 <- rstpp(lambda = 900, nsim = 3, seed = 2, verbose = TRUE)
+#' set.seed(2)
+#' h3 <- rstpp(lambda = 900, nsim = 3, verbose = TRUE)
 #'
 #' # inhomogeneous Poisson process
-#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-#'              seed = 2)
-#' }
+#' set.seed(2)
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6))
 #'
-rstpp <- function(lambda = 500, nsim = 1, seed = NULL, verbose = FALSE,  par = NULL,
+rstpp <- function(lambda = 500, nsim = 1, verbose = FALSE,  par = NULL,
                   minX = 0, maxX = 1, minY = 0, maxY = 1, minT = 0, maxT = 1){
   
   
@@ -52,7 +52,6 @@ rstpp <- function(lambda = 500, nsim = 1, seed = NULL, verbose = FALSE,  par = N
   
   if(nsim != 1){pp0 <- list(l = nsim)}
   
-  set.seed(seed)
   for(i in 1:nsim){
     if(verbose == T) progressreport(i, nsim)
     lam = lambda(x = 1, y = 1, t = 1, a = par)

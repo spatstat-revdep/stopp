@@ -15,14 +15,12 @@
 The function prints the main information of the fitted model.
 }
 \examples{
-\dontrun{
 crimesub <- stpm(valenciacrimes$df[101:200, ],
            names = colnames(valenciacrimes$df)[-c(1:3)])
 
 mod1 <- sepstppm(crimesub, spaceformula = ~x ,
                   timeformula = ~ day)
 mod1
-}
 
 
 

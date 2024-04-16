@@ -44,7 +44,6 @@ the user is asked for input, before a new figure is drawn.}
 The function plots the fitted intensity, displayed both in space and in space and time.
 }
 \examples{
-\dontrun{
 
 crimesub <- stpm(valenciacrimes$df[1:100, ],
            names = colnames(valenciacrimes$df)[-c(1:3)])
@@ -54,7 +53,6 @@ mod1 <- sepstppm(crimesub, spaceformula = ~x ,
                   
 plot(mod1)
 
-}
 }
 \author{
 Nicoletta D'Angelo

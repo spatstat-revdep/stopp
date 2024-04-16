@@ -18,13 +18,11 @@ the temporal time period; information on the covariate values.
 }
 \examples{
 
-\dontrun{
 set.seed(2)
 df <- data.frame(runif(100), runif(100), runif(100), rpois(100, 15))
 
 cov <- stcov(df, interp = FALSE)
 cov
-}
 
 
 }

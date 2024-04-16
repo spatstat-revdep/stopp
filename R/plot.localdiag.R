@@ -30,10 +30,9 @@
 #'
 #' @examples
 #'
-#' \dontrun{
-#'
+#' set.seed(2)
 #' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'              par = c(.3, 6), seed = 2)
+#'              par = c(.3, 6))
 #' 
 #' mod1 <- stppm(inh, formula = ~ 1)
 #' 
@@ -42,7 +41,6 @@
 #' plot(resmod1)
 #' plot(resmod1, marg = FALSE)
 #'
-#' }
 #'
 #'
 #' @references
@@ -52,8 +50,6 @@
 #'
 plot.localdiag <- function(x, marg = TRUE, col = "grey", col2 = "red",
                            cols = "lightgrey", ...){
-  if (!inherits(x, c("localdiag"))) stop("x should be from class localdiag")
-  
 
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))

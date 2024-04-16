@@ -28,12 +28,12 @@
 #'
 #'
 #' @examples
-#' \dontrun{
-#' 
+#' \donttest{
 #' # Local spatio-temporal Poisson process model
 #' 
+#' set.seed(2)
 #' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'              par = c(0.005, 5), seed = 2)
+#'              par = c(0.005, 5))
 #' inh_local <- locstppm(inh, formula = ~ x)
 #' 
 #' localsummary(inh_local)
@@ -45,8 +45,7 @@
 #' lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
 #'
 #' localsummary(lgcp_loc)
-#'
-#'}
+#' }
 #'
 #'
 #' @references
@@ -61,6 +60,5 @@ localsummary <- function(x, scaler = c("silverman", "IQR", "sd", "var"),
                                   print.bw = FALSE,
                                   zap = 0.00001,
                                   par = TRUE){
-  if (!inherits(x, c("stlgcppm", "locstppm"))) stop("x should be either from class stlgcppm or locstppm")
   UseMethod("localsummary")
 }

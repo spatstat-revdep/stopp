@@ -16,8 +16,7 @@ rETASp(
   ymin = 0,
   ymax = 1,
   covsim = FALSE,
-  all.marks = FALSE,
-  seed = NULL
+  all.marks = FALSE
 )
 }
 \arguments{
@@ -49,8 +48,6 @@ magnitude.}
 \item{all.marks}{Logical value indicating whether to store
 all the simulation information as marks in the \code{stpm} object.
 If \code{FALSE} (default option) only the magnitude is returned.}
-
-\item{seed}{Seed to set, if ones wished to reproduce the analyses}
 }
 \value{
 A \code{stpm} object
@@ -108,15 +105,13 @@ values of magnitude are surely recorded in the catalogue.
 }
 \examples{
 
-\dontrun{
+set.seed(95)
 X <- rETASp(pars = c(0.1293688525, 0.003696, 0.013362, 1.2,0.424466,  1.164793),
          betacov = 0.5, 
-         xmin = 600, xmax = 2200, ymin = 4000, ymax = 5300,
-         seed = 95)
+         xmin = 600, xmax = 2200, ymin = 4000, ymax = 5300)
 
 plot(X)
 
-}
 
 }
 \references{

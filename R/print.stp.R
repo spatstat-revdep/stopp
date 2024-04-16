@@ -16,7 +16,6 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #'
 #' set.seed(2)
 #' df <- data.frame(cbind(runif(100), runif(100), runif(100)))
@@ -24,15 +23,13 @@
 #' stp1 <- stp(df)
 #' stp1
 #'
-#' }
 #'
 #'
 #'
 #'
 print.stp <- function(x, ...)
 {
-  if (!inherits(x, c("stp"))) stop("X should be from class stp")
-  
+
   cat("Spatio-temporal point pattern \n")
   {cat(paste0(nrow(x$df)," ", "points"),"\n")}
   print(spatstat.geom::owin(range(x$df$x), range(x$df$y)), prefix = "Enclosing window: ")

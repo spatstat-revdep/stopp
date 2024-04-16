@@ -21,9 +21,8 @@
 #'
 #' @examples
 #'
-#' \donttest{
-#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'              par = c(.3, 6), seed = 2)
+#' set.seed(2)
+#' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(.3, 6))
 #' 
 #' mod1 <- stppm(inh, formula = ~ 1)
 #' 
@@ -31,7 +30,6 @@
 #' 
 #' infl(resmod1)
 #'
-#' }
 #'
 #'
 #' @references
@@ -43,6 +41,12 @@
 infl <- function(x, id = NULL){
 
   if(!inherits(x,"localdiag")) stop("class(x) must be localdiag")
+  
+  if (!is.null(id)){
+    if(!is.numeric(id)) {
+      stop("id should be a numeric vector")
+    } 
+  }
   
   # normalize <- function(x){(x - min(x)) / ((max(x) - min(x)) + 0.0001) }
 

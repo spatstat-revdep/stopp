@@ -7,7 +7,6 @@
 rstlpp(
   lambda = 500,
   nsim = 1,
-  seed = NULL,
   verbose = FALSE,
   par = NULL,
   minX = 0,
@@ -23,8 +22,6 @@ rstlpp(
 \item{lambda}{Expected number of points to simulate}
 
 \item{nsim}{Number of patterns to simulate. Default to 1.}
-
-\item{seed}{Seed to set, if ones wished to reproduce the analyses}
 
 \item{verbose}{Default to \code{FALSE}}
 
@@ -54,13 +51,13 @@ a linear network
 homogeneous or inhomogeneous intensity
 }
 \examples{
-\dontrun{
 
-h1 <- rstlpp(lambda = 500, seed = 2, L = chicagonet)
+set.seed(2)
+h1 <- rstlpp(lambda = 500, L = chicagonet)
 
+set.seed(2)
 inh <- rstlpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(4, 1.5),
-        seed = 2, L = chicagonet)
-}
+        L = chicagonet)
 
 
 }

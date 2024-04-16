@@ -19,7 +19,6 @@ mark values.
 }
 \examples{
 
-\dontrun{
 
 df <- data.frame(cbind(runif(100), runif(100), runif(100), rpois(100, 15),
 rpois(100, 30)))
@@ -38,7 +37,6 @@ dfB <- data.frame(x = runif(50), y = runif(50), t = runif(50),
 stpm2 <- stpm(rbind(dfA, dfB), names = c("continuous", "dichotomous"))
 
 plot(stpm2)
-}
 
 }
 \seealso{

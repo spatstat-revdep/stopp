@@ -18,7 +18,6 @@ mark values.
 }
 \examples{
 
-\dontrun{
 set.seed(2)
 df <- data.frame(x = runif(100, 0, 0.8), y = runif(100, 0, 0.8), t = runif(100), m = rpois(100, 15))
 
@@ -26,7 +25,6 @@ stlpm1 <- stpm(df, L = chicagonet)
 
 plot(stlpm1)
 
-}
 
 }
 \seealso{

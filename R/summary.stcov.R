@@ -14,16 +14,13 @@
 #' 
 #' @examples
 #'
-#' \dontrun{
 #' set.seed(2)
 #' df <- data.frame(runif(100), runif(100), runif(100), rpois(100, 15))
 #'
 #' cov <- stcov(df, interp = FALSE)
 #' summary(cov)
-#' }
 #'
 summary.stcov <- function (object, ...) 
 {
-  if(!inherits(object, "stcov")) stop("class(object) must be stcov")
   summary(object$df)
 }

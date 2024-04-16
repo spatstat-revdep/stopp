@@ -15,7 +15,6 @@
 The function summarises the main information of the fitted model.
 }
 \examples{
-\dontrun{
 crimesub <- stpm(valenciacrimes$df[101:200, ],
            names = colnames(valenciacrimes$df)[-c(1:3)],
 L = valencianet)
@@ -24,7 +23,6 @@ mod1 <- sepstlppm(crimesub, spaceformula = ~x ,
                   timeformula = ~ day)
                   
 summary(mod1)
-}
 
 
 

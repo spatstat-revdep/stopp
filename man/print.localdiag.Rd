@@ -22,9 +22,9 @@ It prints the main information on the result of the local diagnostics
 }
 \examples{
 
-\dontrun{
+set.seed(2)
 inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-             par = c(.3, 6), seed = 2)
+             par = c(.3, 6))
 
 mod1 <- stppm(inh, formula = ~ 1)
 
@@ -32,7 +32,6 @@ resmod1 <- localdiag(inh, mod1$l, p = .9)
 
 resmod1
 
-}
 
 
 }

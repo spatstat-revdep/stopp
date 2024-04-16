@@ -73,7 +73,6 @@
 #' @param all.marks Logical value indicating whether to store
 #' all the simulation information as marks in the \code{stlpm} object.
 #' If \code{FALSE} (default option) only the magnitude is returned.
-#' @param seed Seed to set, if ones wished to reproduce the analyses
 #' @return A \code{stlpm} object
 #' @export
 #'
@@ -82,10 +81,9 @@
 #'
 #' @examples
 #'
-#'\dontrun{
+#' set.seed(95)
 #' X <- rETASlp(pars = c(0.1293688525, 0.003696, 0.013362, 1.2,0.424466,  1.164793),
-#'      seed = 95, L = chicagonet)
-#'}
+#'      L = chicagonet)
 #'
 #' @references
 #' Adelfio, G., and Chiodi, M. (2021). Including covariates in a space-time point process with application to seismicity. Statistical Methods & Applications, 30(3), 947-971.
@@ -102,9 +100,7 @@ rETASlp <- function(pars = NULL
                         , tmin = 0
                         , t.lag = 200
                         , covsim = FALSE
-                        , L, all.marks = FALSE,
-                    seed = NULL){
-  set.seed(seed)
+                        , L, all.marks = FALSE){
   if(is.null(pars)) stop("Please provide some parameters")
   
   cat = NULL

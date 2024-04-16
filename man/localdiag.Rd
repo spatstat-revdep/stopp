@@ -4,13 +4,13 @@
 \alias{localdiag}
 \title{Local diagnostics of spatio-temporal point process models}
 \usage{
-localdiag(X, intensity, p = 0.95)
+localdiag(x, intensity, p = 0.95)
 }
 \arguments{
-\item{X}{Either a \code{stp} or a \code{stlp} object}
+\item{x}{Either a \code{stp} or a \code{stlp} object}
 
 \item{intensity}{A vector of intensity values, of the same length as the number
-of point in \code{X}}
+of point in \code{x}}
 
 \item{p}{The percentile to consider as threshold for the outlying points.
 Default to 0.95.}
@@ -18,7 +18,7 @@ Default to 0.95.}
 \value{
 A list object of class \code{localdiag}, containing
 \describe{
-\item{\code{X}}{The \code{stp} object provided as input}
+\item{\code{x}}{The \code{stp} object provided as input}
 \item{\code{listas}}{The LISTA functions, in a list object}
 \item{\code{ids}}{The ids of the points identified as outlying}
 \item{\code{x2}}{A vector with the individual contributions to the Chi-squared statistics,
@@ -80,15 +80,14 @@ in  \link{localSTLKinhom}.
 }
 \examples{
 
-\dontrun{
+set.seed(2)
 inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-             par = c(.3, 6), seed = 2)
+             par = c(.3, 6))
 
 mod1 <- stppm(inh, formula = ~ 1)
 
 resmod1 <- localdiag(inh, mod1$l, p = .9)
 
-}
 
 
 }

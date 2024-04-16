@@ -26,6 +26,8 @@
 #' @param mult The multiplicand of the number of data points,
 #'  for setting the number of dummy
 #' points to generate for the quadrature scheme
+#' @param seed The seed used for the simulation of the dummy points. Default to
+#'  \code{NULL}.
 #' @param hs Character string indicating whether to select fixed or variable bandwidths
 #' for the kernel weights to be used in the log-likelihood.
 #' In any of those cases, the well-supported rule-of-thumb for choosing the
@@ -63,12 +65,11 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' set.seed(2)
 #' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'              par = c(0.005, 5), seed = 2)
+#'              par = c(0.005, 5))
 #' inh_local <- locstppm(inh, formula = ~ x)
 #' 
-#' }
 #'
 #'
 #' @references
@@ -77,12 +78,36 @@
 #' D'Angelo, N., Adelfio, G., and Mateu, J. (2023). Locally weighted minimum contrast estimation for spatio-temporal log-Gaussian Cox processes. Computational Statistics & Data Analysis, 180, 107679.
 #'
 #'
-locstppm <- function(X, formula, verbose = TRUE, mult = 4, 
+locstppm <- function(X, formula, verbose = TRUE, mult = 4, seed = NULL,
                      hs = c("global", "local"), npx0 = 10, npt0 = 10){
   
   if (!inherits(X, c("stp"))) stop("X should be from class stp")
   
   time1 <- Sys.time()
+  
+  if (!is.numeric(mult)) {
+    stop("mult should be a numeric value")
+  } else {
+    if(mult <= 0) {
+      stop("mult should be mult > 0")
+    }
+  } 
+  
+  if (!is.numeric(npx0)) {
+    stop("npx0 should be a numeric value")
+  } else {
+    if(npx0 <= 0) {
+      stop("npx0 should be npx0 > 0")
+    }
+  } 
+  
+  if (!is.numeric(npt0)) {
+    stop("npt0 should be a numeric value")
+  } else {
+    if(npt0 <= 0) {
+      stop("npt0 should be npt0 > 0")
+    }
+  } 
   
   hs <- match.arg(hs)
   nX <- nrow(X$df)
@@ -100,7 +125,8 @@ locstppm <- function(X, formula, verbose = TRUE, mult = 4,
 
   rho <- mult * HomLambda
 
-  dummy_points <- rstpp(lambda = rho, nsim = 1, seed = 2, verbose = F,
+  set.seed(seed)
+  dummy_points <- rstpp(lambda = rho, nsim = 1, verbose = F,
                         minX = s.region[1, 1], maxX = s.region[2, 1],
                         minY = s.region[1, 2], maxY = s.region[3, 2],
                         minT = t.region[1], maxT = t.region[2])$df

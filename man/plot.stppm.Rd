@@ -40,15 +40,14 @@ If the range of pixel values is less than \code{zap * .Machine$double.eps},
 The function plots the fitted intensity, displayed both in space and in space and time.
 }
 \examples{
-\dontrun{
 
+set.seed(2)
 pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-nsim = 1, seed = 2, verbose = T)
+nsim = 1, verbose = TRUE)
 inh1 <- stppm(pin, formula = ~ x)
 
 plot(inh1)
 
-}
 
 
 

@@ -8,7 +8,6 @@
 #' @param lambda Expected number of points to simulate
 #' @param par Parameters of the reference intensity
 #' @param nsim Number of patterns to simulate. Default to 1.
-#' @param seed Seed to set, if ones wished to reproduce the analyses
 #' @param verbose Default to \code{FALSE}
 #' @param minX Minimum of x coordinate range
 #' @param maxX Maximum of x coordinate range
@@ -24,16 +23,16 @@
 #' @author Nicoletta D'Angelo
 #'
 #' @examples
-#' \dontrun{
 #'
-#' h1 <- rstlpp(lambda = 500, seed = 2, L = chicagonet)
+#' set.seed(2)
+#' h1 <- rstlpp(lambda = 500, L = chicagonet)
 #'
+#' set.seed(2)
 #' inh <- rstlpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(4, 1.5),
-#'         seed = 2, L = chicagonet)
-#' }
+#'         L = chicagonet)
 #'
 #'
-rstlpp <- function(lambda = 500, nsim = 1, seed = NULL, verbose = FALSE,  par = NULL,
+rstlpp <- function(lambda = 500, nsim = 1, verbose = FALSE,  par = NULL,
                   minX = 0, maxX = 1, minY = 0, maxY = 1, minT = 0, maxT = 1, L){
 
 
@@ -44,7 +43,6 @@ rstlpp <- function(lambda = 500, nsim = 1, seed = NULL, verbose = FALSE,  par = 
 
   if(nsim != 1){pp0 <- list(l = nsim)}
 
-  set.seed(seed)
   for(i in 1:nsim){
     if(verbose == T) progressreport(i, nsim)
     lam = lambda(x = 1, y = 1, t = 1, a = par)

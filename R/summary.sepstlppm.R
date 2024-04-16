@@ -15,7 +15,6 @@
 #'
 #'
 #' @examples
-#' \dontrun{
 #' crimesub <- stpm(valenciacrimes$df[101:200, ],
 #'            names = colnames(valenciacrimes$df)[-c(1:3)],
 #' L = valencianet)
@@ -24,14 +23,11 @@
 #'                   timeformula = ~ day)
 #'                   
 #' summary(mod1)
-#'}
 #'
 #'
 #'
 summary.sepstlppm <- function(object, ...){
-  if(!inherits(object, "sepstlppm")) stop("class(object) must be sepstlppm")
-  
-  
+
   cat("Fitted separable spatio-temporal Poisson process model \n")
   cat("on a linear network \n \n")
   cat("with spatial estimates: \n \n")

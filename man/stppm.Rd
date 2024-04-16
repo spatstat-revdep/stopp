@@ -8,8 +8,8 @@ stppm(
   X,
   formula,
   covs = NULL,
-  marked = F,
-  spatial.cov = F,
+  marked = FALSE,
+  spatial.cov = FALSE,
   verbose = FALSE,
   mult = 4,
   interp = TRUE,
@@ -101,14 +101,13 @@ version of the quadrature scheme by Berman and Turner (1992).
 }
 \examples{
 
-\dontrun{
-
-ph <- rstpp(lambda = 200, seed = 2)
+set.seed(2)
+ph <- rstpp(lambda = 200)
 hom1 <- stppm(ph, formula = ~ 1)
 
 ## Inhomogeneous
-pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-             seed = 2)
+set.seed(2)
+pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6))
 inh1 <- stppm(pin, formula = ~ x)
 
 ## Inhomogeneous depending on external covariates
@@ -141,7 +140,6 @@ stpm1 <- stpm(rbind(dfA, dfB))
 inh4 <- stppm(stpm1, formula = ~ x + s(m1, bs = "re"), marked = TRUE)
 
 
-}
 
 }
 \references{

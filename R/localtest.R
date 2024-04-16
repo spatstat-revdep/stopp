@@ -66,10 +66,12 @@
 #'
 #'
 #'
-#'\dontrun{
+#'\donttest{
+#'
+#' set.seed(2)
 #' X <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)},
-#'             par = c(.005, 5), seed = 2)
-#' Z <- rstpp(lambda = 30, seed = 2)
+#'             par = c(.005, 5))
+#' Z <- rstpp(lambda = 30)
 #' 
 #' test <- localtest(X, Z, method = "K", k = 3)
 #'
@@ -88,7 +90,23 @@
 localtest <- function(X, Z, method = c("K", "g"), k, alpha = 0.05, verbose = TRUE){
   
   if (!inherits(X, c("stp", "stlp"))) stop("X should be either from class stp or stlp")
+  
+  if (!is.numeric(k)) {
+    stop("k should be a numeric value")
+  } else {
+    if(k <= 2) {
+      stop("k should be k >= 3")
+    }
+  } 
 
+  if (!is.numeric(alpha)) {
+    stop("alpha should be a numeric value")
+  } else {
+    if(alpha > 1 | alpha < 0) {
+      stop("alpha should be a probability and therefore 0 <= alpha <= 1")
+    }
+  } 
+  
   method <- match.arg(method)
   
   nX <- nrow(X$df)

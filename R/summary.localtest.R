@@ -21,11 +21,12 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #'
+#' set.seed(2)
 #' X <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)},
-#'             par = c(.005, 5), seed = 2)
-#' Z <- rstpp(lambda = 30, seed = 2)
+#'             par = c(.005, 5))
+#' Z <- rstpp(lambda = 30)
 #' 
 #' test <- localtest(X, Z, method = "K", k = 3)
 #'
@@ -42,8 +43,7 @@
 #'
 #'
 summary.localtest <- function(object, ...){
-  if (!inherits(object, c("localtest"))) stop("X should be from class localtest")
-  
+
   if(inherits(object$Xsig, "stlp")){
     cat("Test for local differences between two \n")
     cat("spatio-temporal point patterns on a linear network \n")

@@ -16,14 +16,14 @@ The function summarises the main information on the distribution of the paramete
  of a fitted local spatio-temporal Poisson process model.
 }
 \examples{
-\dontrun{
+
+set.seed(2)
 inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-             par = c(0.005, 5), seed = 2)
+             par = c(0.005, 5))
 inh_local <- locstppm(inh, formula = ~ x)
 
 summary(inh_local)
 
-}
 
 
 }

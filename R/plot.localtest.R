@@ -29,11 +29,12 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' 
+#' set.seed(2)
 #' X <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)},
-#'             par = c(.005, 5), seed = 2)
-#' Z <- rstpp(lambda = 30, seed = 2)
+#'             par = c(.005, 5))
+#' Z <- rstpp(lambda = 30)
 #' 
 #' test <- localtest(X, Z, method = "K", k = 3) 
 #' 
@@ -48,9 +49,6 @@
 #' Siino, M., Rodríguez‐Cortés, F. J., Mateu, J. ,and Adelfio, G. (2018). Testing for local structure in spatiotemporal point pattern data. Environmetrics, 29(5-6), e2463.
 #'
 plot.localtest <- function(x, col = "grey", cols = "lightgrey", col2 = "red", ...){
-  
-  if (!inherits(x, c("localtest"))) stop("x should be from class localtest")
-  
 
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))

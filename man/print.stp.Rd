@@ -18,7 +18,6 @@ the temporal time period.
 }
 \examples{
 
-\dontrun{
 
 set.seed(2)
 df <- data.frame(cbind(runif(100), runif(100), runif(100)))
@@ -26,7 +25,6 @@ df <- data.frame(cbind(runif(100), runif(100), runif(100)))
 stp1 <- stp(df)
 stp1
 
-}
 
 
 

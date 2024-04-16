@@ -14,14 +14,12 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #'
 #' set.seed(2)
 #' df_net <- data.frame(cbind(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100)))
 #'
 #' stlp1 <- stp(df_net, L = chicagonet)
 #' stlp1
-#' }
 #'
 #' @seealso
 #' \link{stp}, \link{plot.stlp}, \link{summary.stlp}
@@ -29,8 +27,7 @@
 #'
 print.stlp <- function(x, ...)
 {
-  if (!inherits(x, c("stlp"))) stop("X should be from class stlp")
-  
+
   cat("Spatio-temporal point pattern on a linear network \n")
   {cat(paste0(nrow(x$df)," ", "points"),"\n")}
   print(x$L)

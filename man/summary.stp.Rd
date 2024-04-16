@@ -18,7 +18,6 @@ stored in the \code{stp} object.
 }
 \examples{
 
-\dontrun{
 
 set.seed(2)
 df <- data.frame(cbind(runif(100), runif(100), runif(100)))
@@ -26,7 +25,6 @@ df <- data.frame(cbind(runif(100), runif(100), runif(100)))
 stp1 <- stp(df)
 summary(stp1)
 
-}
 
 
 }

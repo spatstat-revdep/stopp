@@ -13,17 +13,15 @@
 #' 
 #' @examples
 #'
-#' \dontrun{
 #' set.seed(2)
-#' df <- data.frame(x = runif(100, 0, 0.8), y = runif(100, 0, 0.8), t = runif(100), m = rpois(100, 15))
+#' df <- data.frame(x = runif(100, 0, 0.8), y = runif(100, 0, 0.8),
+#'  t = runif(100), m = rpois(100, 15))
 #'
 #' stlpm1 <- stpm(df, L = chicagonet)
 #'
 #' summary(stlpm1)
-#' }
 #'
 summary.stlpm <- function (object, ...) 
 {
-  if(!inherits(object, "stlpm")) stop("class(object) must be stlpm")
   summary(object$df)
 }

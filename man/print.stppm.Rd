@@ -15,15 +15,13 @@
 The function prints the main information of the fitted model.
 }
 \examples{
-\dontrun{
 
-pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6),
-             seed = 2)
+set.seed(2)
+pin <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, par = c(2, 6))
 inh1 <- stppm(pin, formula = ~ x)
 
 inh1
 
-}
 
 
 }

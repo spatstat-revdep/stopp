@@ -21,9 +21,9 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' set.seed(2)
 #' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'              par = c(.3, 6), seed = 2)
+#'              par = c(.3, 6))
 #' 
 #' mod1 <- stppm(inh, formula = ~ 1)
 #' 
@@ -31,7 +31,6 @@
 #' 
 #' resmod1
 #' 
-#' }
 #'
 #'
 #' @references
@@ -41,8 +40,7 @@
 #'
 #'
 print.localdiag <- function(x, ...){
-  if(!inherits(x,"localdiag")) stop("class(x) must be localdiag")
-  
+
   if(inherits(x$X, "stlp")){
     cat(paste("Points outlying from the", x$p , "percentile\n"))
     cat("of the analysed spatio-temporal point pattern on a linear network \n")

@@ -17,14 +17,14 @@
 #'
 #'
 #' @examples
-#' \dontrun{
+#' 
+#' set.seed(2)
 #' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'              par = c(0.005, 5), seed = 2)
+#'              par = c(0.005, 5))
 #' inh_local <- locstppm(inh, formula = ~ x)
 #' 
 #' inh_local
 #'
-#' }
 #'
 #'
 #' @references
@@ -33,8 +33,7 @@
 #'
 #'
 print.locstppm <- function(x, ...){
-  if(!inherits(x,"locstppm")) stop("class(x) must be locstppm")
-  
+
   if(ncol(x$IntCoefs_local) == 1){
     cat("Homogeneous Poisson process \n")
     cat("with median Intensity: ")

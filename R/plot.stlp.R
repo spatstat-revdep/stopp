@@ -25,7 +25,6 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #'
 #' set.seed(2)
 #' df_net <- data.frame(cbind(runif(100, 0, 0.85), runif(100, 0, 0.85), runif(100)))
@@ -34,10 +33,8 @@
 #' 
 #' plot(stlp1)
 #'
-#' }
 plot.stlp <- function(x, tcum = TRUE, marg = TRUE, col = 1, cols = "grey", ...)
 {
-  if(!inherits(x,"stlp")) stop("class(x) must be stlp")
   
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))

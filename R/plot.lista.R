@@ -20,7 +20,6 @@
 #'
 #' @examples
 #'
-#' \donttest{
 #' 
 #' set.seed(2)
 #' df_net <- data.frame(x = runif(25, 0, 0.85), y = runif(25, 0, 0.85), t = runif(25))
@@ -33,7 +32,6 @@
 #' 
 #' plot(k, id = 1:9)
 #'
-#' }
 #'
 #'
 #' @references
@@ -43,7 +41,6 @@
 #'
 plot.lista <- function(x, id, ...){
   
-  if(!inherits(x,"lista")) stop("class(x) must be lista")
   if(missing(id)) stop("Specify which lista function to plot")
   
   n <- length(id)
@@ -60,7 +57,6 @@ plot.lista <- function(x, id, ...){
   nd <- length(x[[1]]$r)
   nt <- length(x[[1]]$t)
     for(j in id){
-      # inhom <- list(x = x[[j]]$r, y = x[[j]]$t, z = x[[j]][[1]])
       fields::image.plot(x[[j]][[1]], main = paste("id", j), xlab = "r",
                       ylab = "h", 
                          col = hcl.colors(12, "YlOrRd", rev = TRUE),

@@ -21,7 +21,6 @@ LISTA functions.
 }
 \examples{
 
-\donttest{
 
 set.seed(2)
 df_net <- data.frame(x = runif(25, 0, 0.85), y = runif(25, 0, 0.85), t = runif(25))
@@ -34,7 +33,6 @@ k <- localSTLKinhom(stlp1, lambda = lambda, normalize = TRUE)
 
 plot(k, id = 1:9)
 
-}
 
 
 }

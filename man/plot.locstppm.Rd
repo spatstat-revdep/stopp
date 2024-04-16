@@ -40,14 +40,14 @@ If the range of pixel values is less than \code{zap * .Machine$double.eps},
 The function plots the local fitted intensity, displayed both in space and in space and time.
 }
 \examples{
-\dontrun{
+
+set.seed(2)
 inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-             par = c(0.005, 5), seed = 2)
+             par = c(0.005, 5))
 inh_local <- locstppm(inh, formula = ~ x)
 
 plot(inh_local)
 
-}
 
 
 

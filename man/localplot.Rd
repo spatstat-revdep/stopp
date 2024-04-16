@@ -15,12 +15,13 @@ localplot(x, par = TRUE)
 The function plots the local estimates of a fitted local spatio-temporal Poisson process or local LGCP model
 }
 \examples{
-\dontrun{
 
+\donttest{
 # Local spatio-temporal Poisson process model
 
+set.seed(2)
 inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-             par = c(0.005, 5), seed = 2)
+             par = c(0.005, 5))
 inh_local <- locstppm(inh, formula = ~ x)
 
 localplot(inh_local)
@@ -31,7 +32,6 @@ catsub <- stp(greececatalog$df[1:200, ])
 lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
 
 localplot(lgcp_loc)
-
 
 }
 

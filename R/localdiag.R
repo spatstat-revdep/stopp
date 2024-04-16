@@ -54,15 +54,15 @@
 #'  documented
 #' in  \link{localSTLKinhom}.
 #'
-#' @param X Either a \code{stp} or a \code{stlp} object
+#' @param x Either a \code{stp} or a \code{stlp} object
 #' @param intensity A vector of intensity values, of the same length as the number
-#' of point in \code{X}
+#' of point in \code{x}
 #' @param p The percentile to consider as threshold for the outlying points.
 #' Default to 0.95.
 #'
 #' @return A list object of class \code{localdiag}, containing
 #' \describe{
-#' \item{\code{X}}{The \code{stp} object provided as input}
+#' \item{\code{x}}{The \code{stp} object provided as input}
 #' \item{\code{listas}}{The LISTA functions, in a list object}
 #' \item{\code{ids}}{The ids of the points identified as outlying}
 #' \item{\code{x2}}{A vector with the individual contributions to the Chi-squared statistics,
@@ -83,15 +83,14 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' set.seed(2)
 #' inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-#'              par = c(.3, 6), seed = 2)
+#'              par = c(.3, 6))
 #' 
 #' mod1 <- stppm(inh, formula = ~ 1)
 #' 
 #' resmod1 <- localdiag(inh, mod1$l, p = .9)
 #' 
-#' }
 #'
 #'
 #' @references
@@ -101,36 +100,52 @@
 #'
 #' Gabriel, E., Rowlingson, B. S., and Diggle, P. J. (2013). stpp: An R Package for Plotting, Simulating and Analyzing Spatio-Temporal Point Patterns. Journal of Statistical Software, 53(2), 1–29. https://doi.org/10.18637/jss.v053.i02
 #'
-localdiag <- function(X, intensity, p = 0.95){
+localdiag <- function(x, intensity, p = 0.95){
   
-  if (!inherits(X, c("stp", "stlp"))) stop("X should be either from class stp or stlp")
+  if (!inherits(x, c("stp", "stlp"))) stop("x should be either from class stp or stlp")
 
-  nn <- nrow(X$df)
+  nx <- nrow(x$df)
+  
+  if (!is.numeric(intensity)) {
+    stop("intensity should be a numeric vector")
+  } else {
+    if(length(intensity) != nx) {
+      stop("intensity should be the same length as the number of points in x")
+    }
+  } 
+  
+  if (!is.numeric(p)) {
+    stop("p should be a numeric value")
+  } else {
+    if(p > 1 | p < 0) {
+      stop("p should be a probability and therefore 0 <= p <= 1")
+    }
+  } 
 
-  if(any(class(X) == "stp")){
-    u <- seq(min(X$df$x, X$df$y), min(X$df$x, X$df$y) / 4, length = 51)
-    v <- seq(min(X$df$t), (max(X$df$t) - min(X$df$t)) / 4, length = 51)
+  if(any(class(x) == "stp")){
+    u <- seq(min(x$df$x, x$df$y), min(x$df$x, x$df$y) / 4, length = 51)
+    v <- seq(min(x$df$t), (max(x$df$t) - min(x$df$t)) / 4, length = 51)
     correction_g = "isotropic"
-    local_k_1 <- KLISTAhat(xyt = as.stpp(X), dist = u, times = v,
+    local_k_1 <- KLISTAhat(xyt = as.stpp(x), dist = u, times = v,
                            correction = correction_g, lambda = intensity)
     theo_local_k <- local_k_1$klistatheo
-  } else if(!any(class(X) == "stp")) {
-    local_k_1 <- localSTLKinhom(x = X, lambda = intensity)
+  } else if(!any(class(x) == "stp")) {
+    local_k_1 <- localSTLKinhom(x = x, lambda = intensity)
     theo_local_k <- local_k_1[[1]]$Ktheo
   }
 
 
-  if(any(class(X) == "stp")) diff_1_local <- array(NA, c(length(u), length(v), nn))
+  if(any(class(x) == "stp")) diff_1_local <- array(NA, c(length(u), length(v), nx))
 
-  x2 <- vector(length = nn)
+  x2 <- vector(length = nx)
 
-  if(any(class(X) == "stp")){
-    for(i in 1:nn){
+  if(any(class(x) == "stp")){
+    for(i in 1:nx){
       diff_1_local[, , i] <- local_k_1$list.KLISTA[, , i] - theo_local_k#
       x2[i] <- sum(diff_1_local[, , i] ^ 2 / (theo_local_k + 0.1))
     }
-  } else if(!any(class(X) == "stp")) {
-    for(i in 1:nn){
+  } else if(!any(class(x) == "stp")) {
+    for(i in 1:nx){
       x2[i] <- sum((local_k_1[[i]]$Kinhom - theo_local_k ^ 2) / theo_local_k)
     }
   }
@@ -142,17 +157,17 @@ localdiag <- function(X, intensity, p = 0.95){
 
   id_points <- which(x2 > quantile(x2, p = p))
 
-  listas <- if(any(class(X) == "stp")){
+  listas <- if(any(class(x) == "stp")){
     local_k_1$list.KLISTA
-  } else if(!any(class(X) == "stp")) {
+  } else if(!any(class(x) == "stp")) {
     local_k_1
   }
 
-  out <- if(any(class(X) == "stp")){
-    list(X = X, listas = listas, ids = id_points, x2 = x2, p = p, 
+  out <- if(any(class(x) == "stp")){
+    list(X = x, listas = listas, ids = id_points, x2 = x2, p = p, 
          dist = local_k_1$dist, times = local_k_1$times)
-  } else if(!any(class(X) == "stp")) {
-    list(X = X, listas = listas, ids = id_points, x2 = x2, p = p, 
+  } else if(!any(class(x) == "stp")) {
+    list(X = x, listas = listas, ids = id_points, x2 = x2, p = p, 
          dist = local_k_1[[1]]$r, times = local_k_1[[1]]$t)
   }
   class(out) <- "localdiag"

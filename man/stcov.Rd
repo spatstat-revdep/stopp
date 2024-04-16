@@ -4,7 +4,15 @@
 \alias{stcov}
 \title{Create \code{stcov} objects and interpolate spatio-temporal covariates on a regular grid}
 \usage{
-stcov(x, interp = TRUE, nx = NULL, mult = 1, p = 81, names = NULL)
+stcov(
+  x,
+  interp = TRUE,
+  nx = NULL,
+  mult = 1,
+  p = 81,
+  names = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{x}{A data.frame with four columns, containing the spatio-temporal coordinates
@@ -21,6 +29,8 @@ The default is \code{floor((mult * nrow(cov)) ^ (1/3))}.}
 \item{p}{Power of IDW distances.}
 
 \item{names}{Factor string to name the covariate.}
+
+\item{verbose}{Default to FALSE. If TRUE, the elapsed minutes are printed.}
 }
 \value{
 A \code{stpm} object, to be imputed as list object in \code{stppm}.
@@ -50,14 +60,12 @@ with \deqn{d(x_k-x_j) = ||x_k-x_j||} the Euclidean distance from \eqn{x_k}
 }
 \examples{
 
-\dontrun{
 
 set.seed(2)
 df <- data.frame(runif(100), runif(100), runif(100), rpois(100, 15))
 
 cov <- stcov(df, interp = FALSE)
 
-}
 
 }
 \seealso{

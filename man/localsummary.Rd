@@ -40,12 +40,12 @@ density kernel smoothing of some artificial intensities, obtained by
 imputing the quartiles of the local parameters' distributions.
 }
 \examples{
-\dontrun{
-
+\donttest{
 # Local spatio-temporal Poisson process model
 
+set.seed(2)
 inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-             par = c(0.005, 5), seed = 2)
+             par = c(0.005, 5))
 inh_local <- locstppm(inh, formula = ~ x)
 
 localsummary(inh_local)
@@ -57,7 +57,6 @@ catsub <- stp(greececatalog$df[1:200, ])
 lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
 
 localsummary(lgcp_loc)
-
 }
 
 

@@ -9,6 +9,7 @@ locstppm(
   formula,
   verbose = TRUE,
   mult = 4,
+  seed = NULL,
   hs = c("global", "local"),
   npx0 = 10,
   npt0 = 10
@@ -27,6 +28,9 @@ The current version only supports formulas depending on the spatial and temporal
 \item{mult}{The multiplicand of the number of data points,
  for setting the number of dummy
 points to generate for the quadrature scheme}
+
+\item{seed}{The seed used for the simulation of the dummy points. Default to
+\code{NULL}.}
 
 \item{hs}{Character string indicating whether to select fixed or variable bandwidths
 for the kernel weights to be used in the log-likelihood.
@@ -75,12 +79,11 @@ framework by D'Angelo et al. (2023).
 }
 \examples{
 
-\dontrun{
+set.seed(2)
 inh <- rstpp(lambda = function(x, y, t, a) {exp(a[1] + a[2]*x)}, 
-             par = c(0.005, 5), seed = 2)
+             par = c(0.005, 5))
 inh_local <- locstppm(inh, formula = ~ x)
 
-}
 
 
 }

@@ -30,7 +30,7 @@
 #'
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' catsub <- stp(greececatalog$df[1:200, ])
 #' 
 #' lgcp_loc <- stlgcppm(catsub, formula = ~ x, first = "local")
@@ -60,8 +60,6 @@ plot.stlgcppm <- function(x,
                           par = TRUE,
                           ...){
   
-  if(!inherits(x,"stlgcppm")) stop("class(x) must be stlgcppm")
-
   if(inherits(x$CovCoefs, "numeric") & inherits(x$IntCoefs, "numeric") & length(x$IntCoefs) == 1){
     stop("Constant intensity, no plot to show")
   }

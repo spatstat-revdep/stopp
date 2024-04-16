@@ -30,6 +30,8 @@
 #' \code{x}, \code{y}, \code{t}. Default to \code{formula = ~ 1} which provides an homogeneous
 #' first-order intensity.
 #' @param verbose Default to TRUE
+#' @param seed The seed used for the simulation of the dummy points. Default to
+#'  \code{NULL}.
 #' @param cov Covariance function to be fitted for the second-order intensity function.
 #' Default to \code{separable}. Other options are \code{gneiting} and \code{iaco-cesare}".
 #' @param first Character string indicating whether to fit a first-order intensity function
@@ -87,13 +89,11 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #' 
 #' catsub <- stp(greececatalog$df[1:200, ])
 #' 
 #' lgcp1 <- stlgcppm(catsub)
 #' 
-#'}
 #'
 #'
 #' @references
@@ -108,11 +108,11 @@
 #'
 #' Siino, M., Adelfio, G., and Mateu, J. (2018). Joint second-order parameter estimation for spatio-temporal log-Gaussian Cox processes. Stochastic environmental research and risk assessment, 32(12), 3525-3539.
 #'
-stlgcppm <- function(X, formula = ~ 1, verbose = TRUE,
+stlgcppm <- function(X, formula = ~ 1, verbose = TRUE, seed = NULL,
                      cov = c("separable", "gneiting", "iaco-cesare"),
-                     first = c("global", "local"), second = c("global", "local"), mult = 4,
-                     hs = c("global", "local"), npx0 = 10, npt0 = 10, itnmax = 100,
-                     min_vals = NULL, max_vals = NULL){
+                     first = c("global", "local"), second = c("global", "local"), 
+                     mult = 4, hs = c("global", "local"), npx0 = 10, npt0 = 10, 
+                     itnmax = 100, min_vals = NULL, max_vals = NULL){
   
   if (!inherits(X, c("stp"))) stop("X should be from class stp")
   
@@ -122,6 +122,38 @@ stlgcppm <- function(X, formula = ~ 1, verbose = TRUE,
   first <- match.arg(first)
   second <- match.arg(second)
   hs <- match.arg(hs)
+  
+  if (!is.numeric(mult)) {
+    stop("mult should be a numeric value")
+  } else {
+    if(mult <= 0) {
+      stop("mult should be mult > 0")
+    }
+  } 
+  
+  if (!is.numeric(npx0)) {
+    stop("npx0 should be a numeric value")
+  } else {
+    if(npx0 <= 0) {
+      stop("npx0 should be npx0 > 0")
+    }
+  } 
+  
+  if (!is.numeric(npt0)) {
+    stop("npt0 should be a numeric value")
+  } else {
+    if(npt0 <= 0) {
+      stop("npt0 should be npt0 > 0")
+    }
+  } 
+  
+  if (!is.numeric(itnmax)) {
+    stop("itnmax should be a numeric value")
+  } else {
+    if(itnmax <= 0) {
+      stop("itnmax should be itnmax > 0")
+    }
+  } 
   
   nX <- nrow(X$df)
   
@@ -138,7 +170,8 @@ stlgcppm <- function(X, formula = ~ 1, verbose = TRUE,
   
   rho <- mult * HomLambda
   
-  dummy_points <- rstpp(lambda = rho, nsim = 1, seed = 2, verbose = F,
+  set.seed(seed)
+  dummy_points <- rstpp(lambda = rho, nsim = 1, verbose = F, 
                         minX = s.region[1, 1], maxX = s.region[2, 1],
                         minY = s.region[1, 2], maxY = s.region[3, 2],
                         minT = t.region[1], maxT = t.region[2])$df

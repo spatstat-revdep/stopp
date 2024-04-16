@@ -18,7 +18,6 @@
 #' 
 #' @examples
 #'
-#' \dontrun{
 #'
 #' set.seed(2)
 #' df <- data.frame(cbind(runif(100), runif(100), runif(100), rpois(100, 15),
@@ -44,12 +43,14 @@
 #' 
 #' stlpm1 <- stpm(dfL, L = chicagonet)
 #' 
-#' }
 #'
 #'
 stpm <- function(df, names = NULL, L) {
+  if (!inherits(df, c("matrix", "data.frame"))){
+    stop("df should be either a matrix or a data.frame")
+  } 
   
-  df <- data.frame(df)
+  if (!inherits(df, c("data.frame"))) df <- data.frame(df)
   if(is.null(names)){
     nm <- ncol(df) - 3
     colnames(df) <- c("x", "y", "t", paste0("m", 1:nm)) 
@@ -60,6 +61,11 @@ stpm <- function(df, names = NULL, L) {
     out <- list(df = df)
     class(out) <- "stpm"
   } else {
+    
+    if (!inherits(L, c("linnet"))){
+      stop("L should be a linnet object")
+    } 
+    
     suppressWarnings(lpp_new <- spatstat.linnet::lpp(df, L))
     df_new <- data.frame(x = lpp_new$data[, 1], y = lpp_new$data[, 2 ])
     df[, 1:2] <- df_new
