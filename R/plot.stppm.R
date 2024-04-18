@@ -65,8 +65,8 @@ plot.stppm <- function(x,
 
   mark_int <- x$l
 
-  ppx_int <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_int,
-                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_int <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_int,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
   sig <- sparr::OS(unmark(ppx_int), scaler = scaler)
 
   if(par == T){

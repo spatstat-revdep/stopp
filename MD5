@@ -1,4 +1,4 @@
-81e3dfa5e09f94dcdd0dfa24e541fac6 *DESCRIPTION
+09f76a947748edbe5e423126382d620d *DESCRIPTION
 6722c515408b7c136ea62e82a73499be *NAMESPACE
 ad4e733f50d8f5d2cc0fa8563fb289e7 *R/globaldiag.R
 45ee588d5deb5b7795655ea489d2b546 *R/infl.R
@@ -14,16 +14,16 @@ e0cd45a4cd2d2fa6e403c1d16f9aaec3 *R/plot.globaldiag.R
 ff66d87bd65c2660f060afe7f31a60ad *R/plot.lista.R
 06a53700e8f4787650f02dae530970d5 *R/plot.localdiag.R
 fd73d1cd740fca90657bb1aa5860b32b *R/plot.localtest.R
-012280608ef819db27ca58138d4a8e1d *R/plot.locstppm.R
+6e4eac8794c7cdd60c38fd8175886932 *R/plot.locstppm.R
 5a125e84ee633cd74bfde02b8d17621c *R/plot.sepstlppm.R
 45a1142a62bc07e83f271a1111968ba8 *R/plot.sepstppm.R
 d46293fc901bf11976f83803bef61abb *R/plot.stcov.R
-0e9e098f92e137036bab5d5dd0ecfe8f *R/plot.stlgcppm.R
+4df622dcf881704cd77681c1854b7511 *R/plot.stlgcppm.R
 a4d88044ef3901b821305d61472833cb *R/plot.stlp.R
 e7368215197fbcdcad01ac3c8496b044 *R/plot.stlpm.R
 4b92335125cb9ffe7fcd945214623348 *R/plot.stp.R
 4a37d60b2bfa3727f235d34676f1dfb2 *R/plot.stpm.R
-891da0cd3094477c6927852ed6cff1ee *R/plot.stppm.R
+e98c98eb86fbf41ba287cee5f7c2634b *R/plot.stppm.R
 31b386ced872943a2e211d0ce66f1670 *R/print.globaldiag.R
 25ce418d555980d9893855f7b1bb6db4 *R/print.lista.R
 a8bc9b971b4a73ee8d754e3823d19f39 *R/print.localdiag.R

@@ -70,10 +70,10 @@ plot.stlgcppm <- function(x,
   mark_int <- x$l
   mark_all <- x$mu
 
-  ppx_int <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_int,
-                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
-  ppx_all <- spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_all,
-                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y)))
+  ppx_int <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_int,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
+  ppx_all <- suppressWarnings(spatstat.geom::ppp(x$X$df$x, x$X$df$y, marks = mark_all,
+                                window = spatstat.geom::owin(range(x$X$df$x), range(x$X$df$y))))
   sig <- sparr::OS(unmark(ppx_int), scaler = scaler)
 
   if(inherits(x$CovCoefs, "numeric")){
