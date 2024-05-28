@@ -13,7 +13,7 @@ Depends: R (>= 4.0.0)
 Imports: stats, graphics, KernSmooth, MASS, fields, optimx, plot3D,
         sparr, spatstat.explore, spatstat.geom, spatstat.linnet,
         spatstat.random, splancs, spatstat.model, spatstat.utils,
-        stlnpp, stpp, mgcv
+        stlnpp, stpp, mgcv, spatstat.univar
 LazyData: true
 Author: Nicoletta D'Angelo [aut, cre] (<https://orcid.org/0000-0002-8878-5986>),
   Giada Adelfio [aut] (<https://orcid.org/0000-0002-3194-4296>)
